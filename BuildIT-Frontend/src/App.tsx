@@ -22,11 +22,11 @@ function App() {
             <Route path="features" element={<Features />} />
             <Route path="statistics" element={<Statistics />} />
             <Route path="diagrams" element={<Diagrams />} />
-            <Route path="team" element={<Team />} />
-
-            <Route path=":board_name" element={<Board />} />
+            <Route path="team" element={<Team />} />            
           </Route>
 
+          <Route path="/:project_tagname/:board_name" element={<Board />} />
+          
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

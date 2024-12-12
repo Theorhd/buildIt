@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -16,25 +17,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-nav {
-  background-color: #1e1e1e;
-  height: 100vh;
-}
-.nav-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-}
-nav > a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 10px;
-}
-nav > a > img {
-  width: 40px;
-}
 a {
   font-weight: 500;
   color: #646cff;
