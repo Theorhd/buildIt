@@ -35,7 +35,7 @@ export default function Header() {
           className={({ isActive }) => (isActive ? "active" : "")}
         >
           <img src={logo} className="logo" alt="BuildIT logo" />
-          <h1>BUILDIT</h1>
+          <h1 className="text-4xl text-primary ml-2 mt-2 mb-2">BUILD<span className="text-secondary">IT</span></h1>
         </NavLink>
         <div className="nav-link">
           <span>Vos projets</span>
