@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import logo from '/buildit-logo.png';
+import { useTranslation } from 'react-i18next';
 
 const projects = [
   {
@@ -27,6 +28,9 @@ const projects = [
 ]
 
 export default function Header() {
+
+  const { t } = useTranslation();
+
   return (
       <header>
         <nav>
@@ -35,7 +39,7 @@ export default function Header() {
             <h1>BUILDIT</h1>
           </NavLink>
           <div className="nav-link">
-            <span>Vos projets</span>
+            <span>{t('Your projects')}</span>
           </div>
           
           {projects && projects.length > 0 && projects.map((project) => (
