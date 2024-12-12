@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="home-main bg-bgSecondary h-screen flex flex-col items-center justify-center">
       {/* Logo et titre */}
-      <div className="logo flex items-center mb-10">
+      <div className="logo flex items-center mb-14">
         <img src={logo} alt="BuildIT logo" className="h-20" />
         <h1 className="text-6xl text-primary ml-2 font-bold">
           BUILD<span className="text-secondary">IT</span>
