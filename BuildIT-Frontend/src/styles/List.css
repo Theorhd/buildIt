@@ -1,0 +1,25 @@
+.list {
+  display: flex;
+  margin-left: 50px;
+  padding: 20px;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--primary-color);
+  width: 25%;
+  border-radius: 6px;
+}
+.list-title {
+  color: var(--secondary-color);
+}
+.list-add-task {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  background-color: ;
+}
+.list-input {
+  background-color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  color: var(--primary-color);
+}
