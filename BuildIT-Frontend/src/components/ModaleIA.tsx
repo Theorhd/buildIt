@@ -23,7 +23,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
         {/* Bouton de fermeture */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white focus:outline-none border-none"
+          className="absolute top-4 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
         >
           &#x2715;
         </button>
