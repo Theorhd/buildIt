@@ -5,7 +5,6 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   color: var(--primary-color);
-  width: 25%;
   border-radius: 6px;
 }
 .list-title {
@@ -21,5 +20,5 @@
   background-color: var(--bg-primary);
   border: none;
   border-radius: 6px;
-  color: var(--primary-color);
+  width: 150px;
 }

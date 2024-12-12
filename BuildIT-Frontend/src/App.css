@@ -1,17 +1,15 @@
 :root {
   --primary-color: #f4f4f4;
   --secondary-color: #34d399;
-  --bg-primary: #313131;
-  --bg-secondary: #1e1e1e;
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #313131;
   font-family: "Roboto", sans-serif;
 }
 
 body {
-  box-sizing: border-box;
   background-color: var(--bg-secondary);
   color: var(--primary-color);
   font-family: "Montserrat", sans-serif;
-  display: inline-block;
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
