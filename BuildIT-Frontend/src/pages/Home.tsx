@@ -1,6 +1,7 @@
 import { useState } from "react";
 import logo from "/buildit-logo.png";
 import ModaleIA from "../components/ModaleIA";
+import "../App.css";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la modale
