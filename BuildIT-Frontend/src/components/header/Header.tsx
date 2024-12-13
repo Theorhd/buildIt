@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import logo from '/buildit-logo.png';
 import { useTranslation } from 'react-i18next';
+import ModaleIA from "../ModaleIA";
+import { useState } from 'react';
 
 import {
   ChevronLeftIcon,
@@ -11,6 +13,7 @@ import Navbar from "./Navbar";
 export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boolean, toggleNavbar: () => void }) {
 
   const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <header className='h-full bg-bgPrimary flex flex-col justify-between select-none'>
@@ -29,7 +32,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
       
           <div className="flex justify-between items-center px-4 py-2">
             <span>{t('Your projects')}</span>
-            <PlusIcon className="w-4 h-4 cursor-pointer" title="Create new project"/>
+            <PlusIcon className="w-4 h-4 cursor-pointer" title="Create new project" onClick={ () => setIsModalOpen(true) }/>
           </div>
           
           <Navbar />
@@ -41,6 +44,12 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
           MB
         </div>
       </div>
+      {isModalOpen && (
+        <ModaleIA 
+          onSave={(data) => console.log(data)}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </header>
   );
 }
