@@ -38,8 +38,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
       openLoader();
       setTimeout(() => {
         openLoaded();
-        setTimeout(() => setStep(nextStep), 2000);
-      }, 3000);
+        setTimeout(() => setStep(nextStep), 1000);
+      }, 1000);
     };
 
     if (step === 1) {
@@ -52,7 +52,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
       console.log({ step, featuresSelected });
       showLoaderAndLoaded(5);
       handleSave();
-      setTimeout(() => onClose(), 5000);
+      setTimeout(() => onClose(), 2000);
     }
   };
 
