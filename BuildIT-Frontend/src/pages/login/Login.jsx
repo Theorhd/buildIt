@@ -23,7 +23,7 @@ const Login = () => {
             <div className='flex flex-col items-center justify-center'>
 
                 <form onSubmit={handleSubmit}>
-                    <div className='flex flex-col justify-center'>
+                    <div className='flex flex-col justify-center w-full'>
                         <label>Email:</label>
                         <input 
                             type="email" 
@@ -34,7 +34,7 @@ const Login = () => {
                             placeholder='a@a.com'
                         />
                     </div>
-                    <div className='flex flex-col justify-center mt-5'>
+                    <div className='flex flex-col justify-center mt-5 w-full'>
                         <label>Password:</label>
                         <input 
                             type="password" 
