@@ -14,6 +14,8 @@ body {
   padding: 0;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  scrollbar-color: rgb(113 113 122 / 0.5) transparent;
+  scrollbar-width: thin;
 }
 ul {
   list-style-type: none;

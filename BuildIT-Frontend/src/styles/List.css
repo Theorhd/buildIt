@@ -1,6 +1,5 @@
 .list {
   display: flex;
-  margin-left: 50px;
   padding: 20px;
   flex-direction: column;
   background-color: var(--bg-primary);
@@ -14,11 +13,12 @@
   display: flex;
   justify-content: center;
   gap: 5px;
-  background-color: ;
 }
 .list-input {
   background-color: var(--bg-primary);
   border: none;
   border-radius: 6px;
-  width: 150px;
+}
+:focus {
+  outline: none;
 }
