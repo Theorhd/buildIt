@@ -73,7 +73,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
       <div className="relative w-3/5 bg-bgPrimary p-6 rounded-lg shadow-lg max-w-lg">
         <button
           onClick={onClose}
