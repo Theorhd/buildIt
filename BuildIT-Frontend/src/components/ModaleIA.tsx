@@ -17,7 +17,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [frontend, setFrontend] = useState('');
   const [backend, setBackend] = useState('');
   const [database, setDatabase] = useState('');
-
+  {/* Step 3 - Features */}
+  const [featuresSelected, setFeaturesSelected] = useState<string[]>([]);
 
   const handleNext = () => {
     setStep(step + 1);
@@ -36,7 +37,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
       console.log({ step, frontend, backend, database });
       handleNext();
     } else if (step === 3) {
-      console.log({ step });
+      console.log({ step, featuresSelected });
+      handleSave();
     }
   };
 
@@ -57,7 +59,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   };
 
   const handleSave = () => {
-    onSave({ name, type, description, features, targets });
+    onSave({ name, type, description, features: featuresSelected.join(', '), targets });
     onClose();
   };
 
@@ -69,6 +71,12 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
     } else if (type === 'database') {
       setDatabase(value);
     }
+  };
+
+  const handleFeatureSelection = (feature: string) => {
+    setFeaturesSelected((prev) =>
+      prev.includes(feature) ? prev.filter((f) => f !== feature) : [...prev, feature]
+    );
   };
 
   return (
@@ -155,7 +163,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 {['React', 'Vue', 'Angular', 'Other'].map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary' : ''}`}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('frontend', stack)}
                   >
@@ -168,7 +176,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 {['NodeJS', 'Python', 'Java', 'Other'].map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary' : ''}`}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('backend', stack)}
                   >
@@ -181,7 +189,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 {['MongoDB', 'PostgreSQL', 'MySQL', 'Other'].map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary' : ''}`}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('database', stack)}
                   >
@@ -212,8 +220,34 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
 
         {step === 3 && (
           <>
-            <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Modale 3</h2>
+            <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your features</h2>
             {/* Modale Step 3 - Features */}
+            <div className='flex flex-col gap-4 h-80 p-4 rounded-lg overflow-y-auto'>
+              {['Features 1', 'Features 2', 'Features 3', 'Features 4', 'Features 5', 'Features 6', 'Features 7', 'Features 8', 'Features 9', 'Features 10', 'Features 11', 'Features 12', 'Features 13', 'Features 14', 'Features 15', 'Features 16', 'Features 17', 'Features 18', 'Features 19', 'FeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeatures'].map((feature) => (
+                <div
+                  key={feature}
+                  className={`features-card bg-bgSecondary p-4 rounded-lg shadow-lg text-wrap break-words hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${featuresSelected.includes(feature) ? 'bg-secondary scale-105' : ''}`}
+                  data-value={feature}
+                  onClick={() => handleFeatureSelection(feature)}
+                >
+                  <p>{feature}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <button
+                onClick={handlePrevious}
+                className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleSendToBack}
+                className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition ml-3"
+              >
+                Save
+              </button>
+            </div>
           </>
         )}
       </div>
