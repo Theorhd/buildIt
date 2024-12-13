@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ModaleIA.css';
+import './css/ModaleIA.css';
 
 { 
   /*
