@@ -10,6 +10,7 @@ import Team from "./pages/project/Team";
 import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
 import Register from "./pages/register/Register";
+import Login from "./pages/login/Login.jsx";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
