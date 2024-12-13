@@ -7,7 +7,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la modale
 
   return (
-    <div className="home-main bg-bgSecondary h-screen flex flex-col items-center justify-center">
+    <div className="home-main bg-bgSecondary h-full flex flex-col items-center justify-center">
       {/* Logo et titre */}
       <div className="logo flex items-center mb-14">
         <img src={logo} alt="BuildIT logo" className="h-20" />

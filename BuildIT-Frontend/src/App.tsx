@@ -10,7 +10,7 @@ import Team from "./pages/project/Team";
 import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
 import Register from "./pages/register/Register";
-import Login from "./pages/login/Login.jsx";
+import Login from "./pages/login/Login";
 
 function App() {
   return (
