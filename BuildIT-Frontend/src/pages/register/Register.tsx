@@ -48,7 +48,7 @@ const Register: React.FC = () => {
                         </div>
                     </div>
                     <div className='flex flex-col mt-5 items-center justify-center'>
-                        <button className='w-1/2 border-none hover:bg-secondary hover:shadow-lg hover:shadow-slate-700 transition-all'>Register</button>
+                        <button className='w-1/2 border-none hover:bg-secondary hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
             </div>

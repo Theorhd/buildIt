@@ -46,7 +46,7 @@ const Login = () => {
                         />
                     </div>
                     <div className='flex justify-center mt-5'>
-                        <button type="submit">Submit</button>
+                        <button type="submit" className='w-1/2 border-none hover:bg-secondary hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
             </div>
