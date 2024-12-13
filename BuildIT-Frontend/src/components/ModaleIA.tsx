@@ -61,6 +61,16 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
     onClose();
   };
 
+  const handleStackSelection = (type: string, value: string) => {
+    if (type === 'frontend') {
+      setFrontend(value);
+    } else if (type === 'backend') {
+      setBackend(value);
+    } else if (type === 'database') {
+      setDatabase(value);
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70">
       <div className="relative w-3/5 bg-bgPrimary p-6 rounded-lg shadow-lg max-w-lg">
@@ -142,48 +152,42 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
             <div className='flex flex-col gap-4'>
               <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="React" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-primary text-lg font-medium">React</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Vue" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-primary text-lg font-medium">Vue</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Angular" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-primary text-lg font-medium">Angular</h4>
-                </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-primary text-lg font-medium">Other</h4>
-                </div>
+                {['React', 'Vue', 'Angular', 'Other'].map((stack) => (
+                  <div
+                    key={stack}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary' : ''}`}
+                    data-value={stack}
+                    onClick={() => handleStackSelection('frontend', stack)}
+                  >
+                    <h4 className="text-primary text-lg font-medium">{stack}</h4>
+                  </div>
+                ))}
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="NodeJS" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">NodeJS</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Python" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">Python</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Java" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">Java</h4>
-                </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">Other</h4>
-                </div>
+                {['NodeJS', 'Python', 'Java', 'Other'].map((stack) => (
+                  <div
+                    key={stack}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary' : ''}`}
+                    data-value={stack}
+                    onClick={() => handleStackSelection('backend', stack)}
+                  >
+                    <h4 className="text-white text-lg font-medium">{stack}</h4>
+                  </div>
+                ))}
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="MongoDB" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">MongoDB</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="PostgreSQL" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">PostgreSQL</h4>
-                </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="MySQL" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">MySQL</h4>
-                </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
-                  <h4 className="text-white text-lg font-medium">Other</h4>
-                </div>
+                {['MongoDB', 'PostgreSQL', 'MySQL', 'Other'].map((stack) => (
+                  <div
+                    key={stack}
+                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary' : ''}`}
+                    data-value={stack}
+                    onClick={() => handleStackSelection('database', stack)}
+                  >
+                    <h4 className="text-white text-lg font-medium">{stack}</h4>
+                  </div>
+                ))}
               </div>
 
               {/* Buttons */}
