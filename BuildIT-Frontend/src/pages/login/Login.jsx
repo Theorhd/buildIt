@@ -30,7 +30,7 @@ const Login = () => {
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
                             required 
-                            className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary'
+                            className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary'
                             placeholder='a@a.com'
                         />
                     </div>
@@ -41,12 +41,12 @@ const Login = () => {
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)} 
                             required 
-                            className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary'
+                            className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary'
                             placeholder='********'
                         />
                     </div>
                     <div className='flex justify-center mt-5'>
-                        <button type="submit" className='w-1/2 border-none hover:bg-secondary hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
+                        <button type="submit" className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
             </div>

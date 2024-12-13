@@ -16,39 +16,39 @@ const Register: React.FC = () => {
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>First Name</label>
-                            <input type="text" placeholder='Frist Name' className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required/>
+                            <input type="text" placeholder='First name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Last Name</label>
-                            <input type="text" placeholder='Last Name' className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                            <input type="text" placeholder='Last name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>Username</label>
-                            <input type="text" placeholder="Username" className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                            <input type="text" placeholder="Username" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Phone Number</label>
-                            <input type="text" placeholder="Phone Number" className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                            <input type="text" placeholder="Phone number" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                     </div>
                     <div className='flex flex-col mb-2'>
                         <label>Email</label>
-                        <input type="email" placeholder="Email" className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                        <input type="email" placeholder="a@a.com" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>Password</label>
-                            <input type="password" placeholder="Password" className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                            <input type="password" placeholder="Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Confirm Password</label>
-                            <input type="password" placeholder="Confirm Password" className='w-full h-10 p-4 rounded-md cursor-auto shadow-md shadow-bgSecondary' required />
+                            <input type="password" placeholder="Confirm Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
                         </div>
                     </div>
                     <div className='flex flex-col mt-5 items-center justify-center'>
-                        <button className='w-1/2 border-none hover:bg-secondary hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
+                        <button className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
             </div>
