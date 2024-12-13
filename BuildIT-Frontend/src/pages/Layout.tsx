@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
-import Header from "../components/Header";
+import Header from "../components/header/Header";
 import { useState } from "react";
 import logo from '/buildit-logo.png';
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -27,7 +27,7 @@ export default function Layout() {
         } p-16 transition-all duration-300 ease-in-out`} id="content">
         <Outlet />
       </div>
-      <div className={`w-full absolute transition-all duration-300 ease-in-out`}>
+      <div className={`w-full absolute transition-all duration-300 ease-in-out select-none`}>
         <div className={`w-2/12 flex items-center justify-between p-4 transition-opacity duration-300 ease-in-out ${isNavbarOpen ? "opacity-0" : "opacity-100"}`}>
           <Link to="/" className="flex items-center">
             <img src={logo} className="w-8" alt="BuildIT logo" />
