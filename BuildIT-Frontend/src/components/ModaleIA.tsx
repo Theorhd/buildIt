@@ -40,6 +40,22 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
     }
   };
 
+  const handleLoader = () => {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64"></div>
+      </div>
+    );
+  };
+
+  const handleLoaded = () => {
+    return (
+      <div className="flex items-center justify-center">
+        <h1 className="text-white text-3xl">Loaded</h1>
+      </div>
+    );
+  };
+
   const handleSave = () => {
     onSave({ name, type, description, features, targets });
     onClose();
@@ -111,7 +127,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
             <div className="mt-6 text-center">
               <button
                 onClick={handleSendToBack}
-                className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
+                className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
               >
                 Next
               </button>
@@ -126,46 +142,46 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
             <div className='flex flex-col gap-4'>
               <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="React" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-primary text-lg font-medium">React</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Vue" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-primary text-lg font-medium">Vue</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Angular" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-primary text-lg font-medium">Angular</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer'>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setFrontend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-primary text-lg font-medium">Other</h4>
                 </div>
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="NodeJS" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">NodeJS</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Python" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">Python</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="Java" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">Java</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer'>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setBackend(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">Other</h4>
                 </div>
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="MongoDB" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">MongoDB</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="PostgreSQL" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">PostgreSQL</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer" data-value="MySQL" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">MySQL</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer'>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer' data-value="Other" onClick={(e) => setDatabase(e.currentTarget.getAttribute('data-value') || '')}>
                   <h4 className="text-white text-lg font-medium">Other</h4>
                 </div>
               </div>
@@ -174,13 +190,13 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               <div className="mt-6 text-center">
                 <button
                   onClick={handlePrevious}
-                  className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
+                  className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
                 >
                   Previous
                 </button>
                 <button
                   onClick={handleSendToBack}
-                  className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition ml-3"
+                  className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition ml-3"
                 >
                   Next
                 </button>
