@@ -49,6 +49,9 @@ const Login = () => {
                         <button type="submit" className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
+                <div>
+                    <p className='mt-5'>Don't have an account? <a href='/register' className='text-secondary'>Register</a></p>
+                </div>
             </div>
             </div>
         </div>

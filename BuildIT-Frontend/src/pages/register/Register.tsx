@@ -11,7 +11,7 @@ const Register: React.FC = () => {
             </div>
             <div className='main-div flex flex-col items-center justify-center bg-bgPrimary w-screen'> 
 			<h1 className='font-thin mb-10'>Create an account</h1>
-			<div className="registerForm flex">
+			<div className="registerForm flex flex-col">
                 <form action="" className="flex flex-col">
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
@@ -51,6 +51,7 @@ const Register: React.FC = () => {
                         <button className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
+                <p className='mt-5 flex items-center justify-center'>Already have an account ? <a href='/login' className='text-secondary ml-2'>Login</a></p>
             </div>
 		</div>
 
