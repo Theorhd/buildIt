@@ -1,0 +1,130 @@
+:root {
+    --primary-color: #f4f4f4;
+    --secondary-color: #34d399;
+    --bg-primary: #313131;
+    --bg-secondary: #1e1e1e;
+}
+
+.md {
+    line-height: 1.6;
+    margin-right: 20px;
+}
+  
+/* Titres */
+.md h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0.67em 0;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.3em;
+}
+
+.md h2 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0.75em 0;
+    border-bottom: 1px solid var(--primary-color);
+    padding-bottom: 0.3em;
+}
+
+.md h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.85em 0;
+}
+
+.md h4, .md h5, .md h6 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 1em 0;
+}
+
+/* Paragraphes */
+.md p {
+    margin: 1em 0;
+}
+
+/* Liens */
+.md a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.md a:hover {
+    text-decoration: underline;
+}
+
+/* Listes */
+.md ul {
+    list-style-type: disc;
+    padding-left: 40px;
+}
+
+.md ol {
+    list-style-type: decimal;
+    padding-left: 40px;
+}
+
+.md li {
+    margin: 0.5em 0;
+}
+
+/* Blocs de code */
+.md pre {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.md code {
+    padding: 2px 4px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Blockquotes */
+.md blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 15px;
+    color: var(--primary-color);
+    margin: 1em 0;
+    font-style: italic;
+}
+
+/* Tableaux */
+.md table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.md th,
+.md td {
+    border: 1px solid var(--primary-color);
+    padding: 10px;
+    text-align: left;
+}
+
+.md th {
+    background-color: var(--bg-secondary);
+    font-weight: bold;
+}
+
+/* Images */
+.md img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Titres en inline */
+.md strong {
+    font-weight: bold;
+}
+
+.md em {
+    font-style: italic;
+}
