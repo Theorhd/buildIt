@@ -88,6 +88,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 ></textarea>
               </div>
             </div>
+
+            {/* Button */}
             <div className="mt-6 text-center">
               <button
                 onClick={handleNext}
@@ -101,8 +103,72 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
 
         {step === 2 && (
           <>
-            <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Modale 2</h2>
+            <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your stack</h2>
             {/* Modale Step 2 - Stack */}
+            <div className='flex flex-col gap-4'>
+              <h3>Frontend Stack</h3>
+              <div className="frontend-stack-select flex">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">React</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">Vue</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">Angular</h4>
+                </div>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
+                  <h4 className="text-white text-lg font-medium">Other</h4>
+                </div>
+              </div>
+              <h3>Backend Stack</h3>
+              <div className="backend-stack-select flex">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">NodeJS</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">Python</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">Java</h4>
+                </div>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
+                  <h4 className="text-white text-lg font-medium">Other</h4>
+                </div>
+              </div>
+              <h3>Database Stack</h3>
+              <div className="database-stack-select flex">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">MongoDB</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">PostgreSQL</h4>
+                </div>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                  <h4 className="text-white text-lg font-medium">MySQL</h4>
+                </div>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
+                  <h4 className="text-white text-lg font-medium">Other</h4>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-6 text-center">
+                <button
+                  onClick={handlePrevious}
+                  className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition ml-3"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
           </>
         )}
 
