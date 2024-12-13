@@ -1,9 +1,15 @@
 import React from 'react';
+import logo from '../../../public/buildit-logo.png';
 
 const Register: React.FC = () => {
 	return (
-		<div className='flex flex-col items-center justify-center p-10 bg-bgPrimary h-screen'>
-			<h1 className='font-thin'>Register</h1>
+        <div>
+            <div className="logo flex items-center justify-center bg-bgPrimary h-20 p-5">
+                <img src={logo} alt="BuildIT Logo" className="w-12 h-12 object-contain" />
+                <h2 className='font-bold text-2xl ml-2 text-center'>BUILD<span className='text-secondary'>IT</span></h2>
+            </div>
+            <div className='flex flex-col items-center justify-center p-10 bg-bgPrimary w-full h-screen'> 
+			<h1 className='font-thin'>Create an account</h1>
 			<div className="registerForm flex">
                 <form action="" className="flex flex-col mt-5">
                     <div className='flex mt-2 mb-2'>
@@ -46,6 +52,8 @@ const Register: React.FC = () => {
                 </form>
             </div>
 		</div>
+
+        </div>
 	);
 };
 
