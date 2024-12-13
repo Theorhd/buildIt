@@ -7,11 +7,17 @@ interface ModaleIAProps {
 
 const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [step, setStep] = useState(1);
+  {/* Step 1 - Project */}
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [features, setFeatures] = useState('');
   const [targets, setTargets] = useState('');
+  {/* Step 2 - Stack */}
+  const [frontend, setFrontend] = useState('');
+  const [backend, setBackend] = useState('');
+  const [database, setDatabase] = useState('');
+
 
   const handleNext = () => {
     setStep(step + 1);
@@ -19,6 +25,16 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
 
   const handlePrevious = () => {
     setStep(step - 1);
+  };
+
+  const handleSendToBack = () => {
+    // Send data to backend
+    if (step === 1) {
+      console.log({ step, name, type, description, features, targets });
+      handleNext();
+    } else if (step === 2) {
+      console.log({ step, frontend, backend, database });
+    }
   };
 
   const handleSave = () => {
@@ -42,7 +58,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="w-1/2">
-                  <label className="block text-gray-300 font-medium mb-1">Project Name</label>
+                  <label className="block text-primary font-medium mb-1">Project Name</label>
                   <input
                     type="text"
                     value={name}
@@ -51,7 +67,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                   />
                 </div>
                 <div className="w-1/2">
-                  <label className="block text-gray-300 font-medium mb-1">Project Type</label>
+                  <label className="block text-primary font-medium mb-1">Project Type</label>
                   <input
                     type="text"
                     value={type}
@@ -61,7 +77,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 font-medium mb-1">Project detailed description</label>
+                <label className="block text-primary font-medium mb-1">Project detailed description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -70,7 +86,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 ></textarea>
               </div>
               <div>
-                <label className="block text-gray-300 font-medium mb-1">Project Features</label>
+                <label className="block text-primary font-medium mb-1">Project Features</label>
                 <textarea
                   value={features}
                   onChange={(e) => setFeatures(e.target.value)}
@@ -79,20 +95,19 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 ></textarea>
               </div>
               <div>
-                <label className="block text-gray-300 font-medium mb-1">Project Targets</label>
-                <textarea
+                <label className="block text-primary font-medium mb-1">Project Targets</label>
+                <input
                   value={targets}
                   onChange={(e) => setTargets(e.target.value)}
                   className="w-full p-2 bg-bgSecondary text-white rounded border-none border-gray-600 focus:outline-none"
-                  rows={3}
-                ></textarea>
+                ></input>
               </div>
             </div>
 
             {/* Button */}
             <div className="mt-6 text-center">
               <button
-                onClick={handleNext}
+                onClick={handleSendToBack}
                 className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
               >
                 Next
@@ -106,48 +121,48 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your stack</h2>
             {/* Modale Step 2 - Stack */}
             <div className='flex flex-col gap-4'>
-              <h3>Frontend Stack</h3>
+              <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
-                  <h4 className="text-white text-lg font-medium">React</h4>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
+                  <h4 className="text-primary text-lg font-medium">React</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
-                  <h4 className="text-white text-lg font-medium">Vue</h4>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
+                  <h4 className="text-primary text-lg font-medium">Vue</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
-                  <h4 className="text-white text-lg font-medium">Angular</h4>
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
+                  <h4 className="text-primary text-lg font-medium">Angular</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
-                  <h4 className="text-white text-lg font-medium">Other</h4>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all'>
+                  <h4 className="text-primary text-lg font-medium">Other</h4>
                 </div>
               </div>
-              <h3>Backend Stack</h3>
+              <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">NodeJS</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">Python</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">Java</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all'>
                   <h4 className="text-white text-lg font-medium">Other</h4>
                 </div>
               </div>
-              <h3>Database Stack</h3>
+              <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">MongoDB</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">PostgreSQL</h4>
                 </div>
-                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3">
+                <div className="card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all">
                   <h4 className="text-white text-lg font-medium">MySQL</h4>
                 </div>
-                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3'>
+                <div className='card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all'>
                   <h4 className="text-white text-lg font-medium">Other</h4>
                 </div>
               </div>
@@ -161,7 +176,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                   Previous
                 </button>
                 <button
-                  onClick={handleNext}
+                  onClick={handleSendToBack}
                   className="bg-secondary text-white px-6 py-2 full-rounded border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition ml-3"
                 >
                   Next
