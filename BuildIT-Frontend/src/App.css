@@ -28,3 +28,12 @@ body {
 &:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
+
+title::after {
+  content: attr(title);
+  position: absolute;
+  top: -100%;
+  left: 0;
+  border: 1px solid var(--bg-primary);
+  background-color: var(--bg-secondary);
+}
