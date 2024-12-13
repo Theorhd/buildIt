@@ -1,4 +1,15 @@
 import React, { useState } from 'react';
+import './ModaleIA.css';
+
+{ 
+  /*
+  Prochaines étapes sur les modales:
+  - Rendre obligatoire la saisie des champs
+  - Ajouter les appels au backend Django pour envoyer les datas et récupérer les réponses de l'IA
+  - Mettre en place le système de traitement des réponses de l'IA afin d'afficher les éléments correctement
+  - Optimisation du code
+  */
+ }
 
 interface ModaleIAProps {
   onSave: (data: { name: string; type: string; description: string; features: string; targets: string }) => void;
@@ -7,70 +18,52 @@ interface ModaleIAProps {
 
 const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [step, setStep] = useState(1);
-  {/* Step 1 - Project */}
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [features, setFeatures] = useState('');
   const [targets, setTargets] = useState('');
-  {/* Step 2 - Stack */}
   const [frontend, setFrontend] = useState('');
   const [backend, setBackend] = useState('');
   const [database, setDatabase] = useState('');
-  {/* Step 3 - Features */}
   const [featuresSelected, setFeaturesSelected] = useState<string[]>([]);
 
-  const handleNext = () => {
-    setStep(step + 1);
-  };
-
-  const handlePrevious = () => {
-    setStep(step - 1);
-  };
+  const handleNext = () => setStep(step + 1);
+  const handlePrevious = () => setStep(step - 1);
+  const openLoader = () => setStep(4);
+  const openLoaded = () => setStep(5);
 
   const handleSendToBack = () => {
-    // Send data to backend
+    const showLoaderAndLoaded = (nextStep: number) => {
+      openLoader();
+      setTimeout(() => {
+        openLoaded();
+        setTimeout(() => setStep(nextStep), 2000);
+      }, 3000);
+    };
+
     if (step === 1) {
       console.log({ step, name, type, description, features, targets });
-      handleNext();
+      showLoaderAndLoaded(2);
     } else if (step === 2) {
       console.log({ step, frontend, backend, database });
-      handleNext();
+      showLoaderAndLoaded(3);
     } else if (step === 3) {
       console.log({ step, featuresSelected });
+      showLoaderAndLoaded(5);
       handleSave();
+      setTimeout(() => onClose(), 5000);
     }
-  };
-
-  const handleLoader = () => {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64"></div>
-      </div>
-    );
-  };
-
-  const handleLoaded = () => {
-    return (
-      <div className="flex items-center justify-center">
-        <h1 className="text-white text-3xl">Loaded</h1>
-      </div>
-    );
   };
 
   const handleSave = () => {
     onSave({ name, type, description, features: featuresSelected.join(', '), targets });
-    onClose();
   };
 
   const handleStackSelection = (type: string, value: string) => {
-    if (type === 'frontend') {
-      setFrontend(value);
-    } else if (type === 'backend') {
-      setBackend(value);
-    } else if (type === 'database') {
-      setDatabase(value);
-    }
+    if (type === 'frontend') setFrontend(value);
+    else if (type === 'backend') setBackend(value);
+    else if (type === 'database') setDatabase(value);
   };
 
   const handleFeatureSelection = (feature: string) => {
@@ -118,7 +111,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full p-2 bg-bgSecondary text-white rounded border-none border-gray-600 focus:outline-none"
+                  className="w-full p-2 bg-bgSecondary text-white rounded border-none border-gray-600 focus:outline-none resize-none"
                   rows={3}
                 ></textarea>
               </div>
@@ -127,7 +120,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 <textarea
                   value={features}
                   onChange={(e) => setFeatures(e.target.value)}
-                  className="w-full p-2 bg-bgSecondary text-white rounded border-none border-gray-600 focus:outline-none"
+                  className="w-full p-2 bg-bgSecondary text-white rounded border-none border-gray-600 focus:outline-none resize-none"
                   rows={3}
                 ></textarea>
               </div>
@@ -140,8 +133,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 ></input>
               </div>
             </div>
-
-            {/* Button */}
             <div className="mt-6 text-center">
               <button
                 onClick={handleSendToBack}
@@ -156,7 +147,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
         {step === 2 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your stack</h2>
-            {/* Modale Step 2 - Stack */}
             <div className='flex flex-col gap-4'>
               <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
@@ -197,8 +187,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                   </div>
                 ))}
               </div>
-
-              {/* Buttons */}
               <div className="mt-6 text-center">
                 <button
                   onClick={handlePrevious}
@@ -214,14 +202,12 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
                 </button>
               </div>
             </div>
-
           </>
         )}
 
         {step === 3 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your features</h2>
-            {/* Modale Step 3 - Features */}
             <div className='flex flex-col gap-4 h-80 p-4 rounded-lg overflow-y-auto'>
               {['Features 1', 'Features 2', 'Features 3', 'Features 4', 'Features 5', 'Features 6', 'Features 7', 'Features 8', 'Features 9', 'Features 10', 'Features 11', 'Features 12', 'Features 13', 'Features 14', 'Features 15', 'Features 16', 'Features 17', 'Features 18', 'Features 19', 'FeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeatures'].map((feature) => (
                 <div
@@ -249,6 +235,24 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               </button>
             </div>
           </>
+        )}
+
+        {step === 4 && (
+          <div className="flex flex-col items-center justify-center p-10">
+            <div className="loader mt-20"></div>
+            <div>
+              <h2 className="text-white text-3xl mt-20 mb-20 font-thin text-center">Waiting for AI response...</h2>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
+          <div className="flex flex-col items-center justify-center p-10">
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-secondary mt-10">
+              <div className="text-white text-6xl">&#x2714;</div>
+            </div>
+            <h2 className="text-white text-3xl mt-10 mb-20 font-thin text-center">AI response received</h2>
+          </div>
         )}
       </div>
     </div>
