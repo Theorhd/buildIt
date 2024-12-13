@@ -1,0 +1,6 @@
+.logo{
+    height: 80px;
+}
+.main-div {
+    height: calc(100vh - 80px);
+}
