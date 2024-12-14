@@ -58,13 +58,13 @@ export default function List() {
 
   return (
     <div className="relative h-full flex mt-2">
-      <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
+      <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 mb-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
         {lists.map((list) => (
           <li
             key={list.id}
             className="list h-full block px-2 shrink-0 self-start drop-shadow-lg whitespace-nowrap"
           >
-            <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full">
+            <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full scroll-m-2">
               <button
                 onClick={() => deleteList(list.id)}
                 className="absolute top-4 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"

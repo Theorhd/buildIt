@@ -24,7 +24,7 @@ export default function Layout() {
       <div
         className={`${
           isNavbarOpen ? "w-10/12" : "w-full"
-        } bg-bgSecondary transition-all duration-300 ease-in-out overflow-x-auto`}
+        } bg-bgSecondary transition-all duration-300 ease-in-out`}
         id="content"
       >
         <Outlet />

@@ -1,21 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { NavLink, Outlet, useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { NavLink, Outlet, useParams } from "react-router-dom";
 
 export default function Project() {
 
     const { project_tagname } = useParams();
-
-    const { t } = useTranslation();
-
-    const project = {
-        name: "BuildIT",
-        tagname: project_tagname,
-        description: "A short description about the project",
-        createdBy: "Microsoft",
-        creationDate: "28/11/2024",
-    }
 
     const { t } = useTranslation();
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../../public/buildit-logo.png';
-import './Register.css';
+import '../../styles/Register.css';
 
 const Register: React.FC = () => {
 	return (

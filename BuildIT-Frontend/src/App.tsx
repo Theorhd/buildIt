@@ -9,8 +9,8 @@ import Statistics from "./pages/project/Statistics";
 import Team from "./pages/project/Team";
 import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
-import Register from "./pages/register/Register";
-import Login from "./pages/login/Login";
+import Register from "./pages/Auth/Register";
+import Login from "./pages/Auth/Login";
 
 function App() {
   return (
