@@ -11,7 +11,7 @@ export default function Home() {
       {/* Logo et titre */}
       <div className="logo flex items-center mb-14">
         <img src={logo} alt="BuildIT logo" className="h-20" />
-        <h1 className="text-6xl text-primary ml-2 font-bold">
+        <h1 className="text-6xl text-primary ml-2 font-bold font-montserrat">
           BUILD<span className="text-secondary">IT</span>
         </h1>
       </div>

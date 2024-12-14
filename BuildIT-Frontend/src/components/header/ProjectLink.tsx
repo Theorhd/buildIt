@@ -32,7 +32,7 @@ export default function ProjectLink({project}: { project: Project }) {
             
                 <NavLink
                     to={`/${project.tagname}`}
-                    className={({ isActive }) => (isActive ? "text-secondary hover:text-secondary" : "text-primary hover:text-primary")}
+                    className={({ isActive }) => (isActive ? "text-secondary hover:text-secondary font-semibold" : "text-primary hover:text-primary font-semibold")}
                 >
                     {project.project_name}
                 </NavLink>

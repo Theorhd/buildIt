@@ -3,19 +3,33 @@
   --secondary-color: #34d399;
   --bg-primary: #1e1e1e;
   --bg-secondary: #313131;
-  font-family: "Roboto", sans-serif;
+  --font-title: "Montserrat", sans-serif;
+  --font-corps: "Roboto", sans-serif;
 }
 
 body {
   background-color: var(--bg-secondary);
   color: var(--primary-color);
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-corps);
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   scrollbar-color: rgb(113 113 122 / 0.5) transparent;
   scrollbar-width: thin;
+}
+/* Pour Chrome, Edge et Safari */
+body::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgba(113, 113, 122, 0.5); /* Couleur du "pouce" de la scrollbar */
+  border-radius: 4px; /* Arrondir les bords */
+}
+
+body::-webkit-scrollbar-track {
+  background: transparent; /* Couleur de l'arrière-plan de la scrollbar */
 }
 ul {
   list-style-type: none;
@@ -27,7 +41,7 @@ ul {
   color: var(--primary-color);
   background-color: var(--secondary-color);
   text-transform: uppercase;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-title);
   border-radius: 6px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

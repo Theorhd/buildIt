@@ -18,14 +18,14 @@ export default function Project() {
     return (
         <>
             {project && (
-                <div className="h-full">
+                <div className="h-full p-16">
                     <div className="mb-6">
-                        <h1 className="text-6xl font-bold">{project.name}<span className="text-sm text-secondary font-medium">@{project.tagname}</span></h1>
+                        <h1 className="text-6xl font-bold font-montserrat">{project.name}<span className="text-sm text-secondary font-medium">@{project.tagname}</span></h1>
                         <p className="font-semibold">{project.description}</p>
-                        <p className="text-sm">Created by <span className="text-secondary cursor-pointer">{project.createdBy}</span> on {project.creationDate}</p>
+                        <p className="text-sm">Created by <span className="text-secondary font-semibold cursor-pointer">{project.createdBy}</span> on {project.creationDate}</p>
                     </div>
-                    <div className="">
-                        <div className="flex gap-4 text-xs ms-4">
+                    <div className="mb-4">
+                        <div className="flex gap-4 text-xs font-semibold ms-4">
                             <NavLink end to={`/${project.tagname}`}
                             className={({ isActive }) => (isActive ? "border-b-2 border-primary text-primary hover:text-primary" : "text-primary hover:text-primary")}>
                                 {t('About').toUpperCase()}
@@ -47,7 +47,7 @@ export default function Project() {
                                 {t('Team').toUpperCase()}
                             </NavLink>
                         </div>
-                        <div className="w-full border-b border-bgPrimary mb-4 mx-auto"></div>
+                        <div className="w-full border-b border-bgPrimary mx-auto"></div>
                     </div>
                     <div className="h-5/6 overflow-y-auto">
                         <Outlet />

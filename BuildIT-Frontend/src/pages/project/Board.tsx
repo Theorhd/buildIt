@@ -6,7 +6,7 @@ export default function Board() {
   // const { board_name } = useParams();
 
   return (
-    <div>
+    <div className="pt-16 h-full">
       <List />
     </div>
   );

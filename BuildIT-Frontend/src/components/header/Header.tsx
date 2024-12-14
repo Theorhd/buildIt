@@ -21,7 +21,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
         <div className="flex items-center justify-between p-4">
           <Link to="/" className="flex items-center">
             <img src={logo} className="w-8" alt="BuildIT logo" />
-            <h1 className="text-2xl text-primary ml-2 font-bold">BUILD<span className="text-secondary">IT</span></h1>
+            <h1 className="text-2xl text-primary ml-2 font-bold font-montserrat">BUILD<span className="text-secondary">IT</span></h1>
           </Link>
           <ChevronLeftIcon onClick={()=>{toggleNavbar()}} className="w-4 h-4 cursor-pointer" />
         </div>
@@ -30,7 +30,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
         <div className={`transition-opacity duration-300 ${isNavbarOpen ? "opacity-100" : "opacity-0"}`}>
           <div className="w-40 border-b border-bgSecondary mb-2 mx-auto"></div>
       
-          <div className="flex justify-between items-center px-4 py-2">
+          <div className="flex justify-between items-center px-4 py-2 font-semibold">
             <span>{t('Your projects')}</span>
             <PlusIcon className="w-4 h-4 cursor-pointer" title="Create new project" onClick={ () => setIsModalOpen(true) }/>
           </div>

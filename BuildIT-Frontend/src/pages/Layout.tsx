@@ -24,22 +24,24 @@ export default function Layout() {
       <div
         className={`${
           isNavbarOpen ? "w-10/12" : "w-full"
-        } p-16 transition-all duration-300 ease-in-out overflow-x-auto`}
+        } bg-bgSecondary transition-all duration-300 ease-in-out overflow-x-auto`}
         id="content"
       >
         <Outlet />
       </div>
       <div
-        className={`w-full absolute transition-all duration-300 ease-in-out select-none`}
+        className={`w-full absolute transition-all duration-300 ease-in-out select-none ${
+          isNavbarOpen ? "invisible" : "visible"
+        }`}
       >
         <div
-          className={`w-2/12 flex items-center justify-between p-4 transition-opacity duration-300 ease-in-out ${
+          className={`w-2/12 flex items-center gap-4 p-4 transition-opacity duration-300 ease-in-out ${
             isNavbarOpen ? "opacity-0" : "opacity-100"
           }`}
         >
           <Link to="/" className="flex items-center">
             <img src={logo} className="w-8" alt="BuildIT logo" />
-            <h1 className="text-2xl text-primary ml-2 font-bold">
+            <h1 className="text-2xl text-primary ml-2 font-bold font-montserrat">
               BUILD<span className="text-secondary">IT</span>
             </h1>
           </Link>
