@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -14,7 +17,7 @@
 }
 
 nav {
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   height: 100vh;
 }
 .nav-link {
