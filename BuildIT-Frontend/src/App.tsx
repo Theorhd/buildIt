@@ -11,6 +11,7 @@ import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
+import Settings from "./pages/project/Settings";
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
             <Route path="features" element={<Features />} />
             <Route path="statistics" element={<Statistics />} />
             <Route path="diagrams" element={<Diagrams />} />
-            <Route path="team" element={<Team />} />            
+            <Route path="team" element={<Team />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
 
           <Route path="/:project_tagname/:board_name" element={<Board />} />
