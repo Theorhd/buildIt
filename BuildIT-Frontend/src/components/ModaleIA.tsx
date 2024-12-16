@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/ModaleIA.css';
+import axios from 'axios';
+import { stringify } from 'querystring';
 
 { 
   /*
@@ -27,32 +29,112 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [backend, setBackend] = useState('');
   const [database, setDatabase] = useState('');
   const [featuresSelected, setFeaturesSelected] = useState<string[]>([]);
+  const [threadId, setThreadId] = useState<string>('');
+  const [runId, setRunId] = useState<string>('');
+  const [aiResponse, setAiResponse] = useState<string>('');
+  const [frontendStacks, setFrontendStacks] = useState<string[]>([]);
+  const [backendStacks, setBackendStacks] = useState<string[]>([]);
+  const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
   const openLoader = () => setStep(4);
   const openLoaded = () => setStep(5);
 
-  const handleSendToBack = () => {
+
+  const handleSendToBack = async () => {
     const showLoaderAndLoaded = (nextStep: number) => {
-      openLoader();
+      setLoading(true);
       setTimeout(() => {
-        openLoaded();
-        setTimeout(() => setStep(nextStep), 1000);
+        setLoading(false);
+        setStep(nextStep);
       }, 1000);
     };
 
-    if (step === 1) {
-      console.log({ step, name, type, description, features, targets });
-      showLoaderAndLoaded(2);
-    } else if (step === 2) {
-      console.log({ step, frontend, backend, database });
-      showLoaderAndLoaded(3);
-    } else if (step === 3) {
-      console.log({ step, featuresSelected });
-      showLoaderAndLoaded(5);
-      handleSave();
-      setTimeout(() => onClose(), 2000);
+    try {
+      setLoading(true);
+      if (step === 1) {
+        /* Creation du Thread */
+        const createThread = await axios.post('http://127.0.0.1:8000/api/create-thread', {});
+        const threadId = createThread.data.thread_id;
+        setThreadId(threadId); 
+        console.log('Thread ID:', threadId);
+        /* Mis a jour du Thread */
+        const response_part1 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+          thread_id: threadId,
+          content: { name, type, description, features, targets },
+        });
+        const runId = response_part1.data.run_id;
+        setRunId(runId);
+        console.log('Run ID:', runId);
+        /* Récupère la réponse de l'IA */
+        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
+
+        const recommendationJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        recommendationJSON.recommendations.frontend.push('Other');
+        recommendationJSON.recommendations.backend.push('Other');
+        recommendationJSON.recommendations.database.push('Other');
+        setFrontendStacks(recommendationJSON.recommendations.frontend); /* Stocke les stacks frontend */
+        console.log(frontendStacks);
+        setBackendStacks(recommendationJSON.recommendations.backend); /* Stocke les stacks backend */
+        console.log(backendStacks);
+        setDatabaseStacks(recommendationJSON.recommendations.database); /* Stocke les stacks database */
+        console.log(databaseStacks);
+
+        showLoaderAndLoaded(2);
+
+      } else if (step === 2) {
+        setLoading(true); /* Affiche le loader */
+        console.log('Frontend:', frontend); /* Affiche le frontend */
+        console.log('Backend:', backend); /* Affiche le backend */
+        console.log('Database:', database); /* Affiche le database */
+        /* Mis a jour du Thread */
+        const response_part2 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+          thread_id: threadId,
+          content: { "Frontend": frontend, "Backend": backend, "Database": database },
+        });
+        const runId = response_part2.data.run_id; /* Récupère le run ID */
+        setRunId(runId);
+        console.log('Run ID:', runId);
+        /* Récupérer la réponse de l'IA */
+        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
+
+        showLoaderAndLoaded(3);
+
+      } else if (step === 3) {
+        const response = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+          thread_id: threadId,
+          content: { featuresSelected },
+        });
+        const runId = response.data.run_id;
+        localStorage.setItem('runId', runId);
+        showLoaderAndLoaded(5);
+        handleSave();
+        setTimeout(() => onClose(), 2000);
+      }
+
+      if (threadId) {
+        const aiResponse = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+          thread_id: localStorage.getItem('threadId'),
+          run_id: localStorage.getItem('runId'),
+        });
+        setAiResponse(aiResponse.data.assistant_reply);
+      } else {
+        console.error('Thread ID is null');
+      }
+    } catch (error) {
+      console.error('Error communicating with backend:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,7 +164,16 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           &#x2715;
         </button>
 
-        {step === 1 && (
+        {loading && (
+          <div className="flex flex-col items-center justify-center p-10">
+            <div className="loader mt-20"></div>
+            <div>
+              <h2 className="text-white text-3xl mt-20 mb-20 font-thin text-center">Waiting for AI response...</h2>
+            </div>
+          </div>
+        )}
+
+        {!loading && step === 1 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Create a new project</h2>
             <div className="space-y-4">
@@ -144,13 +235,13 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 2 && (
+        {!loading && step === 2 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your stack</h2>
             <div className='flex flex-col gap-4'>
               <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
-                {['React', 'Vue', 'Angular', 'Other'].map((stack) => (
+                {frontendStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
@@ -163,7 +254,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
-                {['NodeJS', 'Python', 'Java', 'Other'].map((stack) => (
+                {backendStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
@@ -176,7 +267,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
-                {['MongoDB', 'PostgreSQL', 'MySQL', 'Other'].map((stack) => (
+                {databaseStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
@@ -205,7 +296,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 3 && (
+        {!loading && step === 3 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your features</h2>
             <div className='flex flex-col gap-4 h-80 p-4 rounded-lg overflow-y-auto'>
@@ -237,16 +328,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 4 && (
-          <div className="flex flex-col items-center justify-center p-10">
-            <div className="loader mt-20"></div>
-            <div>
-              <h2 className="text-white text-3xl mt-20 mb-20 font-thin text-center">Waiting for AI response...</h2>
-            </div>
-          </div>
-        )}
-
-        {step === 5 && (
+        {!loading && step === 5 && (
           <div className="flex flex-col items-center justify-center p-10">
             <div className="flex items-center justify-center w-20 h-20 rounded-full bg-secondary mt-10">
               <div className="text-white text-6xl">&#x2714;</div>
