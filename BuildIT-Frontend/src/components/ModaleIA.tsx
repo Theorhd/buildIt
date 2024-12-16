@@ -131,7 +131,11 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
         console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
         setFinalMessage(get_response.data.assistant_reply); /* Stocke la réponse de l'IA */
 
-
+        const deleteThread = await axios.post('http://127.0.0.1:8000/api/delete-thread', {
+          thread_id: threadId,
+        });
+        console.log('Thread deleted:', deleteThread.data.deleted);
+        setThreadId('');
         showLoaderAndLoaded(5);
         setTimeout(() => onClose(), 2000);
       }
