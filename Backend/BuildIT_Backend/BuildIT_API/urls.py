@@ -1,6 +1,6 @@
 from django.urls import path
 from BuildIT_API.views.users_views import  UserLoginView, ProtectedView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
-from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse
+from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 
 userpatterns = [
     path('register/', UserCreateView.as_view(), name='register'),               # Créer un utilisateur
@@ -12,6 +12,7 @@ userpatterns = [
     path('create-thread', CreateThread.as_view(), name='create-thread'),        # Créer un thread
     path('update-run-thread', UpdateRunThread.as_view(), name='update-run-thread'), # Mettre à jour un thread
     path('get-assistant-response', GetAssistantResponse.as_view(), name='get-assistant-response'), # Récupérer la réponse de l'assistant
+    path('delete-thread', DeleteThread.as_view(), name='delete-thread'),        # Supprimer un thread
 ]
 
 urlpatterns = [

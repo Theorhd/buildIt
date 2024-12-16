@@ -58,3 +58,10 @@ class GetAssistantResponse(APIView):
         
         return Response({"assistant_reply": assistant_reply}, status=status.HTTP_200_OK)
 
+class DeleteThread(APIView):
+    def post(self, request):
+        thread_id = request.data.get("thread_id")
+        if not thread_id:
+            return Response({"error": "thread_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        client.beta.threads.delete(thread_id=thread_id)
+        return Response({"message": "Thread deleted successfully"}, status=status.HTTP_200_OK)
