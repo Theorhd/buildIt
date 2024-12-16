@@ -4,7 +4,7 @@ from rest_framework import status
 from openai import OpenAI
 import time
 
-API_KEY="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"
+API_KEY=""
 client = OpenAI(api_key=API_KEY)
 
 class CreateThread(APIView):
