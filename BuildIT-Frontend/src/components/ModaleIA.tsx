@@ -38,11 +38,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [finalMessage, setFinalMessage] = useState('');
 
-  const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
-  const openLoader = () => setStep(4);
-  const openLoaded = () => setStep(5);
-
 
   const handleSendToBack = async () => {
     const showLoaderAndLoaded = (nextStep: number) => {
@@ -145,10 +141,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSave = () => {
-    onSave({ name, type, description, features: featuresSelected.join(', '), targets });
   };
 
   const handleStackSelection = (type: string, value: string) => {
