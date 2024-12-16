@@ -17,6 +17,8 @@ interface ModaleIAProps {
   onClose: () => void;
 }
 
+const BackendUrl = 'http://127.0.0.1:8000/'
+
 const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
@@ -53,12 +55,12 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
       setLoading(true);
       if (step === 1) {
         /* Creation du Thread */
-        const createThread = await axios.post('http://127.0.0.1:8000/api/create-thread', {});
+        const createThread = await axios.post(BackendUrl+'api/create-thread', {});
         const threadId = createThread.data.thread_id;
         setThreadId(threadId); 
         console.log('Thread ID:', threadId);
         /* Mis a jour du Thread */
-        const response_part1 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+        const response_part1 = await axios.post(BackendUrl+'api/update-run-thread', {
           thread_id: threadId,
           content: { name, type, description, features, targets },
         });
@@ -66,7 +68,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         setRunId(runId);
         console.log('Run ID:', runId);
         /* Récupère la réponse de l'IA */
-        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+        const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
           thread_id: threadId,
           run_id: runId,
         });
@@ -91,7 +93,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         console.log('Backend:', backend); /* Affiche le backend */
         console.log('Database:', database); /* Affiche le database */
         /* Mis a jour du Thread */
-        const response_part2 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+        const response_part2 = await axios.post(BackendUrl+'api/update-run-thread', {
           thread_id: threadId,
           content: { "Frontend": frontend, "Backend": backend, "Database": database },
         });
@@ -99,7 +101,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         setRunId(runId);
         console.log('Run ID:', runId);
         /* Récupérer la réponse de l'IA */
-        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+        const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
           thread_id: threadId,
           run_id: runId,
         });
@@ -112,7 +114,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         showLoaderAndLoaded(3);
 
       } else if (step === 3) {
-        const response_part3 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+        const response_part3 = await axios.post(BackendUrl+'api/update-run-thread', {
           thread_id: threadId,
           content: { featuresSelected },
         });
@@ -120,14 +122,14 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         setRunId(runId);
         console.log('Run ID:', runId);
 
-        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+        const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
           thread_id: threadId,
           run_id: runId,
         });
         console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
         setFinalMessage(get_response.data.assistant_reply); /* Stocke la réponse de l'IA */
 
-        const deleteThread = await axios.post('http://127.0.0.1:8000/api/delete-thread', {
+        const deleteThread = await axios.post(BackendUrl+'api/delete-thread', {
           thread_id: threadId,
         });
         console.log('Thread deleted:', deleteThread.data.deleted);
