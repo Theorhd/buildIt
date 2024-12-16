@@ -1,0 +1,49 @@
+.logo{
+    height: 80px;
+}
+.main-div {
+    height: calc(100vh - 80px);
+}
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+h2{
+    font-size: 2rem;
+    font-weight: 500;
+}
+h3{
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+h4{
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+h5{
+    font-size: 1rem;
+    font-weight: 500;
+}
+h6{
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+p{
+    font-size: 1rem;
+    font-weight: 400;
+}
+label{
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+}
+button{
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 43px;
+}
