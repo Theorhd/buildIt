@@ -17,7 +17,7 @@ interface ModaleIAProps {
   onClose: () => void;
 }
 
-const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
+const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
