@@ -1,0 +1,20 @@
+.list {
+
+}
+.list-title {
+  color: var(--secondary-color);
+}
+.list-add-task {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+.list-input {
+  background-color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  padding: 5px;
+}
+:focus {
+  outline: none;
+}
