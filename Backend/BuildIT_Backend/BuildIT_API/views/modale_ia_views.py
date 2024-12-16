@@ -3,8 +3,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from openai import OpenAI
 import time
+import os
 
-API_KEY=""
+PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, os.pardir))
+ENV_FOLDER = os.path.join(PATH, ".env")
+API_KEY = None
+if os.path.exists(ENV_FOLDER):
+    with open(ENV_FOLDER, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if "OPENAI_API_KEY_BUILDIT" in line:
+                API_KEY = line.split("=")[1].strip()
+if not API_KEY:
+    raise ValueError("OPENAI_API_KEY_BUILDIT not found in .env file")
+
+
 client = OpenAI(api_key=API_KEY)
 
 class CreateThread(APIView):
