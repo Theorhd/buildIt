@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/ModaleIA.css';
 import axios from 'axios';
-import { stringify } from 'querystring';
 
 { 
   /*
@@ -35,7 +34,9 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [frontendStacks, setFrontendStacks] = useState<string[]>([]);
   const [backendStacks, setBackendStacks] = useState<string[]>([]);
   const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
+  const [featuresRecommendations, setFeaturesRecommendations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [finalMessage, setFinalMessage] = useState('');
 
   const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
@@ -108,29 +109,33 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
         });
         console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
 
+        const featuresRecommendationsJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        const featuresRecommendationsArray: string[] = Object.values(featuresRecommendationsJSON.features_recommendations) as string[];
+        setFeaturesRecommendations(featuresRecommendationsArray); /* Stocke les features recommandées */
+
         showLoaderAndLoaded(3);
 
       } else if (step === 3) {
-        const response = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
+        const response_part3 = await axios.post('http://127.0.0.1:8000/api/update-run-thread', {
           thread_id: threadId,
           content: { featuresSelected },
         });
-        const runId = response.data.run_id;
-        localStorage.setItem('runId', runId);
+        const runId = response_part3.data.run_id;
+        setRunId(runId);
+        console.log('Run ID:', runId);
+
+        const get_response = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
+        setFinalMessage(get_response.data.assistant_reply); /* Stocke la réponse de l'IA */
+
+
         showLoaderAndLoaded(5);
-        handleSave();
         setTimeout(() => onClose(), 2000);
       }
 
-      if (threadId) {
-        const aiResponse = await axios.post('http://127.0.0.1:8000/api/get-assistant-response', {
-          thread_id: localStorage.getItem('threadId'),
-          run_id: localStorage.getItem('runId'),
-        });
-        setAiResponse(aiResponse.data.assistant_reply);
-      } else {
-        console.error('Thread ID is null');
-      }
     } catch (error) {
       console.error('Error communicating with backend:', error);
     } finally {
@@ -300,7 +305,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your features</h2>
             <div className='flex flex-col gap-4 h-80 p-4 rounded-lg overflow-y-auto'>
-              {['Features 1', 'Features 2', 'Features 3', 'Features 4', 'Features 5', 'Features 6', 'Features 7', 'Features 8', 'Features 9', 'Features 10', 'Features 11', 'Features 12', 'Features 13', 'Features 14', 'Features 15', 'Features 16', 'Features 17', 'Features 18', 'Features 19', 'FeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeatures'].map((feature) => (
+              {featuresRecommendations.map((feature) => (
                 <div
                   key={feature}
                   className={`features-card bg-bgSecondary p-4 rounded-lg shadow-lg text-wrap break-words hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${featuresSelected.includes(feature) ? 'bg-secondary scale-105' : ''}`}
