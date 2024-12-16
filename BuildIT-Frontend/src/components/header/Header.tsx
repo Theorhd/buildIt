@@ -40,9 +40,11 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
       </div>
       <div className="p-4">
         <div className="w-40 border-b border-bgSecondary mb-5 mx-auto"></div>
-        <div className="w-12 h-12 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm">
-          MB
-        </div>
+        <Link to="/account/maelbell">
+          <div className="w-12 h-12 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm">
+            MB
+          </div>
+        </Link>
       </div>
       {isModalOpen && (
         <ModaleIA 
