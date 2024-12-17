@@ -28,8 +28,16 @@ const Login = () => {
             }
 
             const data = await response.json();
-            localStorage.setItem('access_token', data.access_token);
-            // Redirect or update UI as needed
+            /* Mise a jour des tokens dans le local storage */
+            localStorage.setItem('access', data.access);
+            localStorage.setItem('refresh', data.refresh);
+            /* Redirection page principale */
+            if (localStorage.getItem('access') !== undefined) {
+                console.log("Login success");
+                window.location.href = '/';
+            } else {
+                console.error("Access token is undefined or not save in local storage");
+            }
         } catch (error) {
             setError('Login failed. Please check your credentials and try again.');
         }
