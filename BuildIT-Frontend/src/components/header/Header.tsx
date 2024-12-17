@@ -14,6 +14,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
 
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const accountLink = `/account/${localStorage.getItem('mail')}:${localStorage.getItem('pseudo')}`;
 
   return (
     <header className='h-full bg-bgPrimary flex flex-col justify-between select-none'>
@@ -40,11 +41,16 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
       </div>
       <div className="p-4">
         <div className="w-40 border-b border-bgSecondary mb-5 mx-auto"></div>
-        <Link to="/account/maelbell">
-          <div className="w-12 h-12 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm">
-            MB
+        <div className="flex items-center">
+          <Link to={accountLink}>
+            <div className="w-12 h-12 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm">
+              {localStorage.getItem('pseudo')?.charAt(0).toUpperCase()} {/* Afficher la première lettre du Pseudo de l'user */}
+            </div>
+          </Link>
+          <div className="ml-4">
+            <h4 className="text-center text-sm font-bold">{localStorage.getItem('pseudo')}</h4> {/* Afficher le Pseudo de l'user */}
           </div>
-        </Link>
+        </div>
       </div>
       {isModalOpen && (
         <ModaleIA 

@@ -31,6 +31,9 @@ const Login = () => {
             /* Mise a jour des tokens dans le local storage */
             localStorage.setItem('access', data.access);
             localStorage.setItem('refresh', data.refresh);
+            localStorage.setItem('pseudo', data.pseudo);
+            localStorage.setItem('mail', data.mail);
+
             /* Redirection page principale */
             if (localStorage.getItem('access') !== undefined) {
                 console.log("Login success");

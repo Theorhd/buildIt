@@ -38,6 +38,8 @@ class UserLoginView(APIView):
         # Vérifier si l'utilisateur existe
         try:
             user = Users.objects.get(mail=mail)
+            pseudo = user.pseudo
+            mail = user.mail
         except Users.DoesNotExist:
             return Response({"detail": "Invalid tagname"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -51,7 +53,9 @@ class UserLoginView(APIView):
         # Rend une réponse JSON avec le token
         return Response({
             "refresh": str(refresh),
-            "access": str(refresh.access_token)
+            "access": str(refresh.access_token),
+            "pseudo": str(pseudo),
+            "mail": str(mail)
         }, status=status.HTTP_200_OK)
 
 class UserCreateView(generics.CreateAPIView):
