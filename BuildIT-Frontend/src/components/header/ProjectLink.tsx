@@ -39,11 +39,11 @@ export default function ProjectLink({project}: { project: Project }) {
                 </NavLink>
             </div>
             <div className="flex items-center gap-1">
-                <Tooltip as="div" text="Invite user" position="top">
+                <Tooltip text="Invite user" position="top">
                     <UserPlusIcon className="w-4 h-4 cursor-pointer"/>
                 </Tooltip>
                 
-                <Tooltip as="div" text="New board" position="top">
+                <Tooltip text="New board" position="top">
                     <PlusIcon className="w-4 h-4 cursor-pointer"/>
                 </Tooltip>
                 

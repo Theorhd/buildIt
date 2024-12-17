@@ -33,7 +33,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
       
           <div className="flex justify-between items-center px-4 py-2">
             <span className="font-semibold">{t('Your projects')}</span>
-            <Tooltip as="div" text="New project" position="top">
+            <Tooltip text="New project" position="top">
               <PlusIcon className="w-4 h-4 cursor-pointer" onClick={ () => setIsModalOpen(true) }/>
             </Tooltip>
           </div>
