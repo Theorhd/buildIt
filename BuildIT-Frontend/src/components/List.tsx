@@ -25,7 +25,7 @@ export default function List() {
             : list
         )
       );
-      setTaskValues({ ...taskValues, [listId]: "" }); // Réinitialiser l'input spécifique à cette liste
+      setTaskValues({ ...taskValues, [listId]: "" });
     }
   };
 
@@ -67,12 +67,12 @@ export default function List() {
             <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full scroll-m-2">
               <button
                 onClick={() => deleteList(list.id)}
-                className="absolute top-4 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
+                className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
               >
                 &#x2715;
               </button>
 
-              <div id="list-title" className="flex pb-4">
+              <div id="list-title" className="flex items-center pb-4">
                 <input
                   className="text-secondary font-montserrat list-input"
                   placeholder="List title"
@@ -97,7 +97,7 @@ export default function List() {
                   >
                     <button
                       onClick={() => deleteTask(list.id, taskIndex)}
-                      className="absolute top-2 right-2 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
+                      className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
                     >
                       &#x2715;
                     </button>
@@ -144,8 +144,8 @@ export default function List() {
             onClick={addNewList}
             className="list w-64 h-24 drop-shadow-lg flex items-center justify-center gap-2 whitespace-nowrap bg-bgPrimary rounded-md"
           >
-            <PlusCircleIcon className="size-6 mr-5" />
-            <p className="text-secondary text-sm md:text-md font-medium">
+            <PlusCircleIcon className="size-8 mr-5 text-secondary" />
+            <p className="text-secondary font-bold text-md md:text-l">
               Add New List
             </p>
           </button>
