@@ -40,10 +40,18 @@ const Register: React.FC = () => {
         dataToSend.tagname = `${formData.mail}:${formData.pseudo}`;
         try {
             const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
-            console.log(response.data);
-            setAccessToken(response.data.access);
-            setRefreshToken(response.data.refresh);
-            console.log("Account created successfully");
+
+            setAccessToken(response.data.tokens.access);
+            setRefreshToken(response.data.tokens.refresh);
+            localStorage.setItem('access', response.data.tokens.access);
+            localStorage.setItem('refresh', response.data.tokens.refresh);
+
+            if (localStorage.getItem('access') !== undefined) {
+                console.log("Account created successfully");
+                window.location.href = '/login';
+            } else {
+                console.error("Access token is undefined or not save in local storage");
+            }
         } catch (error) {
             console.error(error);
         }
@@ -62,35 +70,35 @@ const Register: React.FC = () => {
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>First Name</label>
-                            <input type="text" name="firstName" placeholder='First name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstName} onChange={handleChange} required/>
+                            <input type="text" name="firstName" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstName} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Last Name</label>
-                            <input type="text" name="lastName" placeholder='Last name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastName} onChange={handleChange} required/>
+                            <input type="text" name="lastName" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastName} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>Pseudo</label>
-                            <input type="text" name="pseudo" placeholder="Pseudo" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.pseudo} onChange={handleChange} required/>
+                            <input type="text" name="pseudo" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.pseudo} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Phone Number</label>
-                            <input type="text" name="phone" placeholder="Phone number" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.phone} onChange={handleChange} required/>
+                            <input type="text" name="phone" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.phone} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex flex-col mb-2'>
                         <label>Email</label>
-                        <input type="email" name="mail" placeholder="a@a.com" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.mail} onChange={handleChange} required/>
+                        <input type="email" name="mail" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.mail} onChange={handleChange} required/>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>Password</label>
-                            <input type="password" name="password" placeholder="Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.password} onChange={handleChange} required/>
+                            <input type="password" name="password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.password} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Confirm Password</label>
-                            <input type="password" name="confirmPassword" placeholder="Confirm Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.confirmPassword} onChange={handleChange} required/>
+                            <input type="password" name="confirmPassword" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.confirmPassword} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex flex-col mt-5 items-center justify-center'>
