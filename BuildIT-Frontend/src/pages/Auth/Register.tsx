@@ -1,8 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import logo from '../../../public/buildit-logo.png';
 import '../../styles/Register.css';
 
+const BackendUrl = "http://127.0.0.1:8000/"
+
 const Register: React.FC = () => {
+    const [accesToken, setAccessToken] = useState('');
+    const [refreshToken, setRefreshToken] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        pseudo: '',
+        mail: '',
+        tagname: '',
+        phone: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const checkPassword = (password: string, confirmPassword: string) => {
+        return password === confirmPassword;
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!checkPassword(formData.password, formData.confirmPassword)) {
+            alert("Passwords do not match");
+            return;
+        }
+        const { confirmPassword, ...dataToSend } = formData;
+        dataToSend.tagname = `${formData.mail}:${formData.pseudo}`;
+        try {
+            const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
+            console.log(response.data);
+            setAccessToken(response.data.access);
+            setRefreshToken(response.data.refresh);
+            console.log("Account created successfully");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 	return (
         <div>
             <div className="logo flex items-center justify-center bg-bgPrimary p-5">
@@ -12,43 +58,43 @@ const Register: React.FC = () => {
             <div className='main-div flex flex-col items-center justify-center bg-bgPrimary w-screen'> 
 			<h1 className='font-thin mb-10'>Create an account</h1>
 			<div className="registerForm flex flex-col">
-                <form action="" className="flex flex-col">
+                <form onSubmit={handleSubmit} className="flex flex-col">
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>First Name</label>
-                            <input type="text" placeholder='First name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <input type="text" name="firstName" placeholder='First name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstName} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Last Name</label>
-                            <input type="text" placeholder='Last name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <input type="text" name="lastName" placeholder='Last name' className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastName} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
-                            <label>Username</label>
-                            <input type="text" placeholder="Username" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <label>Pseudo</label>
+                            <input type="text" name="pseudo" placeholder="Pseudo" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.pseudo} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Phone Number</label>
-                            <input type="text" placeholder="Phone number" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <input type="text" name="phone" placeholder="Phone number" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.phone} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex flex-col mb-2'>
                         <label>Email</label>
-                        <input type="email" placeholder="a@a.com" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                        <input type="email" name="mail" placeholder="a@a.com" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.mail} onChange={handleChange} required/>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>Password</label>
-                            <input type="password" placeholder="Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <input type="password" name="password" placeholder="Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.password} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Confirm Password</label>
-                            <input type="password" placeholder="Confirm Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' required/>
+                            <input type="password" name="confirmPassword" placeholder="Confirm Password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.confirmPassword} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex flex-col mt-5 items-center justify-center'>
-                        <button className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
+                        <button type="submit" className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
                 </form>
                 <p className='mt-5 flex items-center justify-center'>Already have an account ? <a href='/login' className='text-secondary ml-2'>Login</a></p>
