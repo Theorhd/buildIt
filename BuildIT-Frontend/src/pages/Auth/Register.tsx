@@ -6,8 +6,6 @@ import '../../styles/Register.css';
 const BackendUrl = "http://127.0.0.1:8000/"
 
 const Register: React.FC = () => {
-    const [accesToken, setAccessToken] = useState('');
-    const [refreshToken, setRefreshToken] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -17,7 +15,7 @@ const Register: React.FC = () => {
         phone: '',
         password: '',
         confirmPassword: ''
-    });
+     });
 
     const checkPassword = (password: string, confirmPassword: string) => {
         return password === confirmPassword;
@@ -41,8 +39,6 @@ const Register: React.FC = () => {
         try {
             const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
 
-            setAccessToken(response.data.tokens.access);
-            setRefreshToken(response.data.tokens.refresh);
             localStorage.setItem('access', response.data.tokens.access);
             localStorage.setItem('refresh', response.data.tokens.refresh);
 

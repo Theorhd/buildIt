@@ -32,12 +32,12 @@ class UserLoginView(APIView):
     def post(self, request):
 
         # Récupération du tagname et du mot de passe depuis le corps de la requête
-        tagname = request.data.get("tagname")
+        mail = request.data.get("mail")
         password = request.data.get("password")
 
         # Vérifier si l'utilisateur existe
         try:
-            user = Users.objects.get(tagname=tagname)
+            user = Users.objects.get(mail=mail)
         except Users.DoesNotExist:
             return Response({"detail": "Invalid tagname"}, status=status.HTTP_401_UNAUTHORIZED)
 
