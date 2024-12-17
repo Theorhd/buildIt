@@ -1,6 +1,7 @@
 import { ChevronDownIcon, UserPlusIcon, PlusIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import Tooltip from "../ToolTip";
 
 interface Board {
     board_name: string;
@@ -38,8 +39,14 @@ export default function ProjectLink({project}: { project: Project }) {
                 </NavLink>
             </div>
             <div className="flex items-center gap-1">
-                <UserPlusIcon className="w-4 h-4 cursor-pointer" title="Add an user" />
-                <PlusIcon className="w-4 h-4 cursor-pointer" title="Create new board"/>
+                <Tooltip as="div" text="Invite user" position="top">
+                    <UserPlusIcon className="w-4 h-4 cursor-pointer"/>
+                </Tooltip>
+                
+                <Tooltip as="div" text="New board" position="top">
+                    <PlusIcon className="w-4 h-4 cursor-pointer"/>
+                </Tooltip>
+                
             </div>
         </div>
         {isProjectLinkOpen && project.boards &&

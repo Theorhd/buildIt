@@ -9,6 +9,7 @@ import {
   PlusIcon
 } from '@heroicons/react/24/outline'
 import Navbar from "./Navbar";
+import Tooltip from "../ToolTip";
 
 export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boolean, toggleNavbar: () => void }) {
 
@@ -30,9 +31,11 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
         <div className={`transition-opacity duration-300 ${isNavbarOpen ? "opacity-100" : "opacity-0"}`}>
           <div className="w-40 border-b border-bgSecondary mb-2 mx-auto"></div>
       
-          <div className="flex justify-between items-center px-4 py-2 font-semibold">
-            <span>{t('Your projects')}</span>
-            <PlusIcon className="w-4 h-4 cursor-pointer" title="Create new project" onClick={ () => setIsModalOpen(true) }/>
+          <div className="flex justify-between items-center px-4 py-2">
+            <span className="font-semibold">{t('Your projects')}</span>
+            <Tooltip as="div" text="New project" position="top">
+              <PlusIcon className="w-4 h-4 cursor-pointer" onClick={ () => setIsModalOpen(true) }/>
+            </Tooltip>
           </div>
           
           <Navbar />

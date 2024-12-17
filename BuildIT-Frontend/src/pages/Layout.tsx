@@ -16,7 +16,7 @@ export default function Layout() {
       <div
         className={`${
           isNavbarOpen ? "w-2/12" : "w-0"
-        } overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out`}
+        } whitespace-nowrap transition-all duration-300 ease-in-out`}
         id="header"
       >
         <Header isNavbarOpen={isNavbarOpen} toggleNavbar={toggleNavbar} />
