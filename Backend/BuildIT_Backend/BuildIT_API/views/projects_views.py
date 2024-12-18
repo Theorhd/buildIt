@@ -29,12 +29,10 @@ class CreateProjectView(generics.CreateAPIView):
         user = Users.objects.get(id=user_id_from_token)
 
         # Création du projet
-        project_name = data.get('project-name')
-        project_description = data.get('project-description')
         project = Projects.objects.create(
-            name=project_name,
-            description=project_description,
-            created_by=user  # L'utilisateur actuel
+            name=data.get('project-name'),
+            description=data.get('project-description'),
+            created_by=user
         )
 
         # Gestion des boards
@@ -45,13 +43,13 @@ class CreateProjectView(generics.CreateAPIView):
             # Gestion des skills (création ou récupération)
             skills = board_data.get('skills', [])
             for skill_name in skills:
-                skill, created = Skills.objects.get_or_create(name=skill_name)
-                BoardSkills.objects.create(board=board, skill=skill)  # Création dans la table intermédiaire
+                skill, already_exist = Skills.objects.get_or_create(name=skill_name)
+                BoardSkills.objects.create(board=board, skill=skill)
 
             # Gestion des listes dans chaque board
             for list_data in board_data.get('lists', []):
                 list_name = list_data.get('name')
-                list_instance = Lists.objects.create(name=list_name, board=board)
+                list = Lists.objects.create(name=list_name, board=board)
 
                 # Gestion des items dans chaque liste
                 for item_data in list_data.get('items', []):
@@ -63,7 +61,7 @@ class CreateProjectView(generics.CreateAPIView):
                         name=item_name,
                         description=item_description,
                         created_by=user,  # L'utilisateur actuel
-                        list=list_instance  # Association avec la liste
+                        list=list  # Association avec la liste
                     )
 
         # Sérialisation et réponse
