@@ -1,6 +1,6 @@
 from django.urls import path
 from BuildIT_API.views.users_views import  UserLoginView, ProtectedView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
-from BuildIT_API.views.projects_views import CreateProjectView
+from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
 
 userpatterns = [
     path('user/create/', UserCreateView.as_view(), name='register'),                # Créer un utilisateur
@@ -11,7 +11,10 @@ userpatterns = [
 ]
 
 projectpatterns = [
-    path('project/create/', CreateProjectView.as_view(), name='project-create'),    # Créer un projet
+    path('project/create/', ProjectCreateView.as_view(), name='project-create'),    # Créer un projet
+    path('project/get/<int:pk>/', ProjectRetriveView.as_view(), name='project-detail'), # Rechercher un projet par son id
+    path('project/update/', ProjectUpdateView.as_view(), name='project-update'),     # Modifier un projet
+    path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name='project-delete'), # Supprimer un projet par son id
 ]
 
 urlpatterns = [

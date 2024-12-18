@@ -6,7 +6,7 @@ from .ChatRooms import ChatRooms
 class Boards(models.Model):
     name = models.CharField(max_length=255)
     placement = models.IntegerField(default=0)
-    project = models.ForeignKey(Projects, related_name='boards', on_delete=models.CASCADE)
+    project = models.ForeignKey(Projects, related_name='boards', on_delete=models.CASCADE, null=False, blank=False)
     chatroom = models.OneToOneField(ChatRooms, null=True, blank=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):

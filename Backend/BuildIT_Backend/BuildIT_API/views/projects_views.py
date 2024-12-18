@@ -13,7 +13,14 @@ from BuildIT_API.serializers.ProjectSerializer import ProjectSerializer
 from BuildIT_API.permissions import IsAuthenticatedWithToken
 
 
-class CreateProjectView(generics.CreateAPIView):
+
+class ProjectCreateView(generics.CreateAPIView):
+    """
+    Création d'un projet
+    
+    Méthode POST
+    Permission: Doit avoir un token JWT valide
+    """
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticatedWithToken]
 
@@ -60,10 +67,106 @@ class CreateProjectView(generics.CreateAPIView):
                     Items.objects.create(
                         name=item_name,
                         description=item_description,
-                        created_by=user,  # L'utilisateur actuel
-                        list=list  # Association avec la liste
+                        created_by=user,
+                        list=list
                     )
 
         # Sérialisation et réponse
         serializer = self.get_serializer(project)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class ProjectRetriveView(generics.RetrieveAPIView):
+    """
+    Recherche d'un projet par son ID
+    
+    Méthode GET
+    Permission: Doit avoir un token JWT valide
+    """
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def get(self, request, *args, **kwargs):
+        
+        # Récupération de l'ID projet depuis l'URL
+        project_id_url = kwargs.get("pk")
+
+        # Vérification de la validité du token
+        auth = JWTAuthentication()
+        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
+
+        # Recuperation de l'id de l'utilisateur depuis le token
+        user_id_from_token = validated_token.get("user_id")
+
+        # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
+        try:
+            project = Projects.objects.get(id=project_id_url, created_by_id=user_id_from_token)
+            serializer = self.get_serializer(project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ProjectUpdateView(generics.UpdateAPIView):
+    """
+    Modification d'un projet
+    
+    Méthode PUT
+    Permission: Doit avoir un token JWT valide
+    """
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def put(self, request, *args, **kwargs):
+
+        # Vérification de la validité du token
+        auth = JWTAuthentication()
+        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
+
+        # Recuperation de l'id de l'utilisateur depuis le token
+        user_id_from_token = validated_token.get("user_id")
+
+        # Récupération de l'ID projet depuis le corps de la requête
+        project_id_from_body = request.data.get("id")    
+
+        # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
+        # Mise à jour du projet
+        try:
+            project = Projects.objects.get(id=project_id_from_body, created_by_id=user_id_from_token)
+            serializer = self.get_serializer(project, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ProjectDeleteView(generics.DestroyAPIView):
+    """
+    Suppression d'un projet
+    
+    Méthode DELETE
+    Permission: Doit avoir un token JWT valide
+    """
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def delete(self, request, *args, **kwargs):
+        # Récupération de l'ID projet depuis l'URL
+        project_id_url = kwargs.get("pk")
+
+        # Vérification de la validité du token
+        auth = JWTAuthentication()
+        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
+
+        # Recuperation de l'id de l'utilisateur depuis le token
+        user_id_from_token = validated_token.get("user_id")
+
+        # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
+        # Suppression du projet
+        try:
+            project = Projects.objects.get(id=project_id_url, created_by_id=user_id_from_token)
+            project.delete()
+            return Response({"message": "Project deleted successfully."}, status=status.HTTP_200_OK)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)

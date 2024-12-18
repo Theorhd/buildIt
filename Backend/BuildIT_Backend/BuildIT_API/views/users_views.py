@@ -71,7 +71,7 @@ class UserCreateView(generics.CreateAPIView):
             }
         }, status=status.HTTP_201_CREATED)
 
-class UserRetrieveView(generics.RetrieveAPIView):
+class UserRetrieveView(generics.RetrieveAPIView): #TODO ajouter les permissions
     """
     Recherche d'un utilisateur par son ID
 
