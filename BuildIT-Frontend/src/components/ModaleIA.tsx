@@ -31,8 +31,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [database, setDatabase] = useState('');
   const [featuresSelected, setFeaturesSelected] = useState<string[]>([]);
   const [threadId, setThreadId] = useState<string>('');
-  const [runId, setRunId] = useState<string>('');
-  const [aiResponse, setAiResponse] = useState<string>('');
   const [frontendStacks, setFrontendStacks] = useState<string[]>([]);
   const [backendStacks, setBackendStacks] = useState<string[]>([]);
   const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
@@ -65,7 +63,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
           content: { "Nom du projet": name, "Type de projet": type, "Description détaillé": description, "Fonctionnalités clés": features, "Public cible": targets },
         });
         const runId = response_part1.data.run_id;
-        setRunId(runId);
         console.log('Run ID:', runId);
         /* Récupère la réponse de l'IA */
         const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
@@ -98,7 +95,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
           content: { "Frontend": frontend, "Backend": backend, "Database": database },
         });
         const runId = response_part2.data.run_id; /* Récupère le run ID */
-        setRunId(runId);
         console.log('Run ID:', runId);
         /* Récupérer la réponse de l'IA */
         const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
@@ -119,15 +115,14 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
           content: { featuresSelected },
         });
         const runId = response_part3.data.run_id;
-        setRunId(runId);
         console.log('Run ID:', runId);
 
         const get_response = await axios.post(BackendUrl+'api/get-assistant-response', {
           thread_id: threadId,
           run_id: runId,
         });
-        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
         setFinalMessage(get_response.data.assistant_reply); /* Stocke la réponse de l'IA */
+        console.log(finalMessage); /* Affiche la réponse de l'IA */
 
         const deleteThread = await axios.post(BackendUrl+'api/delete-thread', {
           thread_id: threadId,
