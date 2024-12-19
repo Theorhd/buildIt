@@ -9,8 +9,10 @@ import Statistics from "./pages/project/Statistics";
 import Team from "./pages/project/Team";
 import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
-import Register from "./pages/Auth/Register";
-import Login from "./pages/Auth/Login";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
+import Settings from "./pages/project/Settings";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -24,15 +26,19 @@ function App() {
             <Route path="features" element={<Features />} />
             <Route path="statistics" element={<Statistics />} />
             <Route path="diagrams" element={<Diagrams />} />
-            <Route path="team" element={<Team />} />            
+            <Route path="team" element={<Team />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
 
           <Route path="/:project_tagname/:board_name" element={<Board />} />
+          <Route path="/account/:tagname" element={<Account />} />
           
           <Route path="*" element={<NotFound />} />
         </Route>
+
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
+
       </Routes>
     </BrowserRouter>
   );

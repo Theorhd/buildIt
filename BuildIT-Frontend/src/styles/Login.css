@@ -1,11 +1,24 @@
+:root {
+    --primary-color: #f4f4f4;
+    --secondary-color: #34d399;
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #313131;
+    --font-title: "Montserrat", sans-serif;
+    --font-corps: "Roboto", sans-serif;
+}
+  
+h1, h2, h3, h4, h5, h6{
+    font-family: var(--font-title);
+}
+p, button, a, label, input, select, option, textarea{
+    font-family: var(--font-corps);
+}
+
 .logo{
     height: 80px;
 }
 .main-div {
     height: calc(100vh - 80px);
-}
-body{
-    font-family: 'Roboto', sans-serif;
 }
 
 h1{
@@ -37,12 +50,10 @@ p{
     font-weight: 400;
 }
 label{
-    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 400;
 }
 button{
-    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 500;
     height: 43px;

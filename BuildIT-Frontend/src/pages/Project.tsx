@@ -46,6 +46,10 @@ export default function Project() {
                             className={({ isActive }) => (isActive ? "border-b-2 border-primary text-primary hover:text-primary" : "text-primary hover:text-primary")}>
                                 {t('Team').toUpperCase()}
                             </NavLink>
+                            <NavLink to={`/${project.tagname}/settings`}
+                            className={({ isActive }) => (isActive ? "border-b-2 border-primary text-primary hover:text-primary" : "text-primary hover:text-primary")}>
+                                {t('Settings').toUpperCase()}
+                            </NavLink>
                         </div>
                         <div className="w-full border-b border-bgPrimary mx-auto"></div>
                     </div>
