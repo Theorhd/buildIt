@@ -36,7 +36,6 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
   const [featuresRecommendations, setFeaturesRecommendations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [finalMessage, setFinalMessage] = useState('');
 
   const handlePrevious = () => setStep(step - 1);
 
@@ -133,13 +132,17 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         });
         console.log(processFinalMessage)
 
-        const deleteThread = await axios.post(BackendUrl+'api/assistant/delete-thread', {
-          thread_id: threadId,
-        });
-        console.log('Thread deleted:', deleteThread.data.deleted);
-        setThreadId('');
-        showLoaderAndLoaded(5);
-        setTimeout(() => onClose(), 2000);
+        if (processFinalMessage.status === 201) {
+          const deleteThread = await axios.post(BackendUrl+'api/assistant/delete-thread', {
+            thread_id: threadId,
+          });
+          console.log('Thread deleted:', deleteThread.data.deleted);
+          setThreadId('');
+          showLoaderAndLoaded(5);
+          setTimeout(() => onClose(), 2000);
+        } else {
+          console.error('Error creating project:', processFinalMessage);
+        }
       }
 
     } catch (error) {
