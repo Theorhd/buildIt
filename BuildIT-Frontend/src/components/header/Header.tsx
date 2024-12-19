@@ -14,7 +14,7 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
 
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const accountLink = `/account/${localStorage.getItem('mail')}:${localStorage.getItem('pseudo')}`;
+  const accountLink = `/account/`;
 
   return (
     <header className='h-full bg-bgPrimary flex flex-col justify-between select-none'>

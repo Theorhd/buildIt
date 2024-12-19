@@ -62,7 +62,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         /* Mis a jour du Thread */
         const response_part1 = await axios.post(BackendUrl+'api/update-run-thread', {
           thread_id: threadId,
-          content: { name, type, description, features, targets },
+          content: { "Nom du projet": name, "Type de projet": type, "Description détaillé": description, "Fonctionnalités clés": features, "Public cible": targets },
         });
         const runId = response_part1.data.run_id;
         setRunId(runId);
@@ -109,7 +109,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
 
         const featuresRecommendationsJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
         const featuresRecommendationsArray: string[] = Object.values(featuresRecommendationsJSON.features_recommendations) as string[];
-        setFeaturesRecommendations(featuresRecommendationsArray); /* Stocke les features recommandées */
+        const featuresRecommendationsWithId = featuresRecommendationsArray.map((recommendation, index) => `${index + 1}. ${recommendation}`);
+        setFeaturesRecommendations(featuresRecommendationsWithId); /* Stocke les features recommandées */
 
         showLoaderAndLoaded(3);
 

@@ -37,15 +37,14 @@ const Register: React.FC = () => {
             return;
         }
         const { confirmPassword, ...dataToSend } = formData;
-        dataToSend.tagname = `${formData.mail}:${formData.pseudo}`;
         try {
             const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
             console.log(response.data);
 
-            setAccessToken(response.data.access);
-            setRefreshToken(response.data.refresh);
-            localStorage.setItem('access', response.data.access);
-            localStorage.setItem('refresh', response.data.refresh);
+            setAccessToken(response.data.tokens.access);
+            setRefreshToken(response.data.tokens.refresh);
+            localStorage.setItem('access', response.data.tokens.access);
+            localStorage.setItem('refresh', response.data.tokens.refresh);
             console.log("Account created successfully");
             window.location.href = '/login';
         } catch (error) {
@@ -86,6 +85,10 @@ const Register: React.FC = () => {
                     <div className='flex flex-col mb-2'>
                         <label>Email</label>
                         <input type="email" name="mail" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.mail} onChange={handleChange} required/>
+                    </div>
+                    <div className='flex flex-col mb-2'>
+                        <label>Tagname</label>
+                        <input type="text" name="tagname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.tagname} onChange={handleChange} required/>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
