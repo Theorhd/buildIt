@@ -6,6 +6,8 @@ import '../../styles/Register.css';
 const BackendUrl = "http://127.0.0.1:8000/"
 
 const Register: React.FC = () => {
+    const [accesToken, setAccessToken] = useState('');
+    const [refreshToken, setRefreshToken] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -15,7 +17,7 @@ const Register: React.FC = () => {
         phone: '',
         password: '',
         confirmPassword: ''
-     });
+    });
 
     const checkPassword = (password: string, confirmPassword: string) => {
         return password === confirmPassword;
@@ -38,16 +40,14 @@ const Register: React.FC = () => {
         dataToSend.tagname = `${formData.mail}:${formData.pseudo}`;
         try {
             const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
+            console.log(response.data);
 
-            localStorage.setItem('access', response.data.tokens.access);
-            localStorage.setItem('refresh', response.data.tokens.refresh);
-
-            if (localStorage.getItem('access') !== undefined) {
-                console.log("Account created successfully");
-                window.location.href = '/login';
-            } else {
-                console.error("Access token is undefined or not save in local storage");
-            }
+            setAccessToken(response.data.access);
+            setRefreshToken(response.data.refresh);
+            localStorage.setItem('access', response.data.access);
+            localStorage.setItem('refresh', response.data.refresh);
+            console.log("Account created successfully");
+            window.location.href = '/login';
         } catch (error) {
             console.error(error);
         }
