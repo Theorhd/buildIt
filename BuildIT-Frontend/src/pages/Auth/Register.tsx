@@ -7,8 +7,8 @@ const BackendUrl = "http://127.0.0.1:8000/"
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         pseudo: '',
         mail: '',
         tagname: '',
@@ -61,11 +61,11 @@ const Register: React.FC = () => {
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>First Name</label>
-                            <input type="text" name="firstName" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstName} onChange={handleChange} required/>
+                            <input type="text" name="firstname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstname} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Last Name</label>
-                            <input type="text" name="lastName" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastName} onChange={handleChange} required/>
+                            <input type="text" name="lastname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastname} onChange={handleChange} required/>
                         </div>
                     </div>
                     <div className='flex mb-2'>
