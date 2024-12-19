@@ -6,8 +6,6 @@ import '../../styles/Register.css';
 const BackendUrl = "http://127.0.0.1:8000/"
 
 const Register: React.FC = () => {
-    const [accesToken, setAccessToken] = useState('');
-    const [refreshToken, setRefreshToken] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -41,8 +39,6 @@ const Register: React.FC = () => {
             const response = await axios.post(`${BackendUrl}api/register/`, dataToSend);
             console.log(response.data);
 
-            setAccessToken(response.data.tokens.access);
-            setRefreshToken(response.data.tokens.refresh);
             localStorage.setItem('access', response.data.tokens.access);
             localStorage.setItem('refresh', response.data.tokens.refresh);
             console.log("Account created successfully");
