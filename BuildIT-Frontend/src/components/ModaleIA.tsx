@@ -109,8 +109,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
 
         const featuresRecommendationsJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
         const featuresRecommendationsArray: string[] = Object.values(featuresRecommendationsJSON.features_recommendations) as string[];
-        const featuresRecommendationsWithId = featuresRecommendationsArray.map((recommendation, index) => `${index + 1}. ${recommendation}`);
-        setFeaturesRecommendations(featuresRecommendationsWithId); /* Stocke les features recommandées */
+        setFeaturesRecommendations(featuresRecommendationsArray); /* Stocke les features recommandées */
 
         showLoaderAndLoaded(3);
 
