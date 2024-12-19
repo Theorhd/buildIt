@@ -106,7 +106,7 @@ class ProjectRetriveView(generics.RetrieveAPIView):
         except Projects.DoesNotExist:
             return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class ProjectUpdateView(generics.UpdateAPIView):
+class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pour prévoir les nested fields ("boards" : [] fait planter le code)
     """
     Modification d'un projet
     
