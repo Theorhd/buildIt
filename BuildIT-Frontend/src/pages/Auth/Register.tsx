@@ -36,7 +36,7 @@ const Register: React.FC = () => {
         }
         const { confirmPassword, ...dataToSend } = formData;
         try {
-            const response = await axios.post(`${BackendUrl}api/user/register/`, dataToSend);
+            const response = await axios.post(`${BackendUrl}api/user/create/`, dataToSend);
             console.log(response.data);
 
             localStorage.setItem('access', response.data.tokens.access);
