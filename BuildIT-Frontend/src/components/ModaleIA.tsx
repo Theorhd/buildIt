@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/ModaleIA.css';
+import axios from 'axios';
 
 { 
   /*
@@ -16,7 +17,9 @@ interface ModaleIAProps {
   onClose: () => void;
 }
 
-const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
+const BackendUrl = 'http://127.0.0.1:8000/'
+
+const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [type, setType] = useState('');
@@ -27,37 +30,115 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
   const [backend, setBackend] = useState('');
   const [database, setDatabase] = useState('');
   const [featuresSelected, setFeaturesSelected] = useState<string[]>([]);
+  const [threadId, setThreadId] = useState<string>('');
+  const [frontendStacks, setFrontendStacks] = useState<string[]>([]);
+  const [backendStacks, setBackendStacks] = useState<string[]>([]);
+  const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
+  const [featuresRecommendations, setFeaturesRecommendations] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [finalMessage, setFinalMessage] = useState('');
 
-  const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
-  const openLoader = () => setStep(4);
-  const openLoaded = () => setStep(5);
 
-  const handleSendToBack = () => {
+  const handleSendToBack = async () => {
     const showLoaderAndLoaded = (nextStep: number) => {
-      openLoader();
+      setLoading(true);
       setTimeout(() => {
-        openLoaded();
-        setTimeout(() => setStep(nextStep), 1000);
+        setLoading(false);
+        setStep(nextStep);
       }, 1000);
     };
 
-    if (step === 1) {
-      console.log({ step, name, type, description, features, targets });
-      showLoaderAndLoaded(2);
-    } else if (step === 2) {
-      console.log({ step, frontend, backend, database });
-      showLoaderAndLoaded(3);
-    } else if (step === 3) {
-      console.log({ step, featuresSelected });
-      showLoaderAndLoaded(5);
-      handleSave();
-      setTimeout(() => onClose(), 2000);
-    }
-  };
+    try {
+      setLoading(true);
+      if (step === 1) {
+        /* Creation du Thread */
+        const createThread = await axios.post(BackendUrl+'api/assistant/create-thread', {});
+        const threadId = createThread.data.thread_id;
+        setThreadId(threadId); 
+        console.log('Thread ID:', threadId);
+        /* Mis a jour du Thread */
+        const response_part1 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
+          thread_id: threadId,
+          content: { "Nom du projet": name, "Type de projet": type, "Description détaillé": description, "Fonctionnalités clés": features, "Public cible": targets },
+        });
+        const runId = response_part1.data.run_id;
+        console.log('Run ID:', runId);
+        /* Récupère la réponse de l'IA */
+        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
 
-  const handleSave = () => {
-    onSave({ name, type, description, features: featuresSelected.join(', '), targets });
+        const recommendationJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        recommendationJSON.recommendations.frontend.push('Other');
+        recommendationJSON.recommendations.backend.push('Other');
+        recommendationJSON.recommendations.database.push('Other');
+        setFrontendStacks(recommendationJSON.recommendations.frontend); /* Stocke les stacks frontend */
+        console.log(frontendStacks);
+        setBackendStacks(recommendationJSON.recommendations.backend); /* Stocke les stacks backend */
+        console.log(backendStacks);
+        setDatabaseStacks(recommendationJSON.recommendations.database); /* Stocke les stacks database */
+        console.log(databaseStacks);
+
+        showLoaderAndLoaded(2);
+
+      } else if (step === 2) {
+        setLoading(true); /* Affiche le loader */
+        console.log('Frontend:', frontend); /* Affiche le frontend */
+        console.log('Backend:', backend); /* Affiche le backend */
+        console.log('Database:', database); /* Affiche le database */
+        /* Mis a jour du Thread */
+        const response_part2 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
+          thread_id: threadId,
+          content: { "Frontend": frontend, "Backend": backend, "Database": database },
+        });
+        const runId = response_part2.data.run_id; /* Récupère le run ID */
+        console.log('Run ID:', runId);
+        /* Récupérer la réponse de l'IA */
+        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
+
+        const featuresRecommendationsJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        const featuresRecommendationsArray: string[] = Object.values(featuresRecommendationsJSON.features_recommendations) as string[];
+        setFeaturesRecommendations(featuresRecommendationsArray); /* Stocke les features recommandées */
+
+        showLoaderAndLoaded(3);
+
+      } else if (step === 3) {
+        const response_part3 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
+          thread_id: threadId,
+          content: { featuresSelected },
+        });
+        const runId = response_part3.data.run_id;
+        console.log('Run ID:', runId);
+
+        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
+          thread_id: threadId,
+          run_id: runId,
+        });
+        const finalResponse = get_response.data.assistant_reply;
+        setFinalMessage(finalResponse); /* Stocke la réponse de l'IA */
+        console.log(finalResponse); /* Affiche la réponse de l'IA */
+
+        const deleteThread = await axios.post(BackendUrl+'api/assistant/delete-thread', {
+          thread_id: threadId,
+        });
+        console.log('Thread deleted:', deleteThread.data.deleted);
+        setThreadId('');
+        showLoaderAndLoaded(5);
+        setTimeout(() => onClose(), 2000);
+      }
+
+    } catch (error) {
+      console.error('Error communicating with backend:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleStackSelection = (type: string, value: string) => {
@@ -82,7 +163,16 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           &#x2715;
         </button>
 
-        {step === 1 && (
+        {loading && (
+          <div className="flex flex-col items-center justify-center p-10">
+            <div className="loader mt-20"></div>
+            <div>
+              <h2 className="text-white text-3xl mt-20 mb-20 font-thin text-center">Waiting for AI response...</h2>
+            </div>
+          </div>
+        )}
+
+        {!loading && step === 1 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Create a new project</h2>
             <div className="space-y-4">
@@ -144,13 +234,13 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 2 && (
+        {!loading && step === 2 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your stack</h2>
             <div className='flex flex-col gap-4'>
               <h3 className='text-primary font-bold text-lg mt-5'>Frontend Stack</h3>
               <div className="frontend-stack-select flex">
-                {['React', 'Vue', 'Angular', 'Other'].map((stack) => (
+                {frontendStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
@@ -163,7 +253,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
-                {['NodeJS', 'Python', 'Java', 'Other'].map((stack) => (
+                {backendStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
@@ -176,7 +266,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
               </div>
               <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
-                {['MongoDB', 'PostgreSQL', 'MySQL', 'Other'].map((stack) => (
+                {databaseStacks.map((stack) => (
                   <div
                     key={stack}
                     className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
@@ -205,11 +295,11 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 3 && (
+        {!loading && step === 3 && (
           <>
             <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Select your features</h2>
             <div className='flex flex-col gap-4 h-80 p-4 rounded-lg overflow-y-auto'>
-              {['Features 1', 'Features 2', 'Features 3', 'Features 4', 'Features 5', 'Features 6', 'Features 7', 'Features 8', 'Features 9', 'Features 10', 'Features 11', 'Features 12', 'Features 13', 'Features 14', 'Features 15', 'Features 16', 'Features 17', 'Features 18', 'Features 19', 'FeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeaturesFeatures'].map((feature) => (
+              {featuresRecommendations.map((feature) => (
                 <div
                   key={feature}
                   className={`features-card bg-bgSecondary p-4 rounded-lg shadow-lg text-wrap break-words hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${featuresSelected.includes(feature) ? 'bg-secondary scale-105' : ''}`}
@@ -237,16 +327,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onSave, onClose }) => {
           </>
         )}
 
-        {step === 4 && (
-          <div className="flex flex-col items-center justify-center p-10">
-            <div className="loader mt-20"></div>
-            <div>
-              <h2 className="text-white text-3xl mt-20 mb-20 font-thin text-center">Waiting for AI response...</h2>
-            </div>
-          </div>
-        )}
-
-        {step === 5 && (
+        {!loading && step === 5 && (
           <div className="flex flex-col items-center justify-center p-10">
             <div className="flex items-center justify-center w-20 h-20 rounded-full bg-secondary mt-10">
               <div className="text-white text-6xl">&#x2714;</div>
