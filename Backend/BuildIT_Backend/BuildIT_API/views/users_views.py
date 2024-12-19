@@ -28,7 +28,7 @@ class UserLoginView(APIView):
             pseudo = user.pseudo
             mail = user.mail
         except Users.DoesNotExist:
-            return Response({"detail": "Invalid tagname"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Invalid email"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Vérifier le mot de passe
         if not check_password(password, user.password):
