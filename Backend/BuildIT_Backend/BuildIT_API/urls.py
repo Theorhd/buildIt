@@ -12,7 +12,7 @@ userpatterns = [
 ]
 
 projectpatterns = [
-    path('project/create/', ProjectCreateView.as_view(), name='project-create'),                    # Créer un projet (accepte board, lists, items)
+    path('project/create', ProjectCreateView.as_view(), name='project-create'),                    # Créer un projet (accepte board, lists, items)
     path('project/get/<int:pk>/', ProjectRetriveView.as_view(), name='project-detail'),             # Rechercher un projet par son id + token de ID créaeur
     path('project/update/', ProjectUpdateView.as_view(), name='project-update'),                    # Modifier un projet + token de ID créateur
     path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name='project-delete'),           # Supprimer un projet par son id + token de ID créatieur
