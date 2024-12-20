@@ -25,10 +25,8 @@ class UserLoginView(APIView):
         # Vérifier si l'utilisateur existe
         try:
             user = Users.objects.get(mail=mail)
-            pseudo = user.pseudo
-            mail = user.mail
         except Users.DoesNotExist:
-            return Response({"detail": "Invalid tagname"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Invalid mail"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Vérifier le mot de passe
         if not check_password(password, user.password):
@@ -39,10 +37,8 @@ class UserLoginView(APIView):
 
         # Rend une réponse JSON avec le token
         return Response({
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-            "pseudo": str(pseudo),
-            "mail": str(mail)
+            "user": user,
+            "token": { "access": str(refresh.access_token), "refresh": str(refresh)},
         }, status=status.HTTP_200_OK)
 
 class UserCreateView(generics.CreateAPIView):
@@ -192,3 +188,17 @@ class ProtectedView(APIView):
     
     def post(self, request):
         return Response({"detail": "You are authenticated!"})
+    
+
+class ValidateTokenView(APIView):
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def get(self, request):
+        try:
+            auth = JWTAuthentication()
+            validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
+            user_id = validated_token.get("user_id")
+            user = Users.objects.get(id=user_id)
+            return Response({"user": user}, status=status.HTTP_200_OK)
+        except Users.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

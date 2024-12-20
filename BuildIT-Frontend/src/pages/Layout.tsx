@@ -1,11 +1,18 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import Header from "../components/header/Header";
 import { useState } from "react";
 import logo from "/buildit-logo.png";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { useSession } from "../contexts/SessionProvider";
 
 export default function Layout() {
+
+  const { session } = useSession();
+
   const [isNavbarOpen, setIsNavbarOpen] = useState<boolean>(true);
+
+  // Si l'utilisateur n'est pas connecté, redirige vers /login
+  if (!session) return <Navigate to="/login" />;
 
   const toggleNavbar = () => {
     setIsNavbarOpen(!isNavbarOpen);

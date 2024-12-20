@@ -2,6 +2,7 @@ from django.urls import path
 from BuildIT_API.views.users_views import  UserLoginView, ProtectedView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
 from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
+from BuildIT_API.views.users_views import ValidateTokenView
 
 userpatterns = [
     path('user/create/', UserCreateView.as_view(), name='register'),                                # Créer un utilisateur
@@ -25,6 +26,10 @@ assistantpatterns = [
     path('assistant/delete-thread', DeleteThread.as_view(), name='delete-thread'),                            # Supprimer un thread
 ]
 
+tokenpatterns = [
+    path('token/validate', ValidateTokenView.as_view(), name='validate-token')
+]
+
 urlpatterns = [
     path('protected/', ProtectedView.as_view(), name='protected-view')                              # Route de test pour vérifier le fonctionnement des tokens
-] + userpatterns + projectpatterns + assistantpatterns
+] + userpatterns + projectpatterns + assistantpatterns + tokenpatterns
