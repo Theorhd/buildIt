@@ -1,27 +1,57 @@
 import { useState } from "react";
 import "../styles/List.css";
 import { PlusCircleIcon, PencilIcon } from "@heroicons/react/24/outline";
+import ListModal from "./ListModal";
+
+export interface Task {
+  id: number;
+  name: string;
+  description: string;
+  tags: Tag[];
+  status: string;
+}
+
+export interface Tag {
+  id: number;
+  title: string;
+  color: string;
+}
 
 interface TaskList {
   id: number;
   title: string;
-  tasks: string[];
+  tasks: Task[];
 }
 
 export default function List() {
   const [lists, setLists] = useState<TaskList[]>([
-    { id: Date.now(), title: "My List", tasks: [] },
+    {
+      id: Date.now(),
+      title: "My List",
+      tasks: [],
+    },
   ]);
   const [taskValues, setTaskValues] = useState<{ [key: number]: string }>({});
-  const [tags, setTags] = useState<string>("React");
+  const [selectedTask, setSelectedTask] = useState<{
+    task: Task;
+    listId: number;
+  } | null>(null);
+  const statusOptions = ["To Do", "In Progress", "Done"];
 
   const addTask = (listId: number, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (taskValues[listId]?.trim() !== "") {
+      const newTask: Task = {
+        id: Date.now(),
+        name: taskValues[listId],
+        description: "",
+        tags: [],
+        status: "To Do",
+      };
       setLists(
         lists.map((list) =>
           list.id === listId
-            ? { ...list, tasks: [...list.tasks, taskValues[listId]] }
+            ? { ...list, tasks: [...list.tasks, newTask] }
             : list
         )
       );
@@ -54,6 +84,38 @@ export default function List() {
     setLists(
       lists.map((list) => (list.id === listId ? { ...list, title: "" } : list))
     );
+  };
+
+  const updateTaskDetails = (
+    listId: number,
+    taskId: number,
+    details: { description: string; tags: Tag[] }
+  ) => {
+    setLists(
+      lists.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              tasks: list.tasks.map((task) =>
+                task.id === taskId ? { ...task, ...details } : task
+              ),
+            }
+          : list
+      )
+    );
+  };
+
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "To Do":
+        return "text-blue-500";
+      case "In Progress":
+        return "text-yellow-500";
+      case "Done":
+        return "text-secondary";
+      case "Blocked":
+        return "text-red-500";
+    }
   };
 
   return (
@@ -94,21 +156,41 @@ export default function List() {
                   <li
                     className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
                     key={taskIndex}
+                    onClick={() =>
+                      setSelectedTask({
+                        listId: list.id,
+                        task: task,
+                      })
+                    }
                   >
+                    <div className="pb-3">
+                      {task.tags.map((tag) => (
+                        <span
+                          key={tag.id}
+                          style={{ backgroundColor: tag.color }}
+                          className="text-xs rounded-md px-2 py-1 mr-2"
+                        >
+                          {tag.title}
+                        </span>
+                      ))}
+                    </div>
                     <button
-                      onClick={() => deleteTask(list.id, taskIndex)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteTask(list.id, taskIndex);
+                      }}
                       className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
                     >
                       &#x2715;
                     </button>
-
-                    <div className="bg-blue-500 py-1 w-max px-2 mb-2 text-xs drop-shadow-lg">
-                      {tags}
-                    </div>
                     <div className="flex flex-col">
-                      <p className="text-center mb-5">{task}</p>
-                      <p className="text-center text-sm text-secondary uppercase">
-                        In progress
+                      <p className="text-center mb-5">{task.name}</p>
+                      <p
+                        className={`text-center text-sm uppercase ${getStatusClass(
+                          task.status
+                        )}`}
+                      >
+                        {task.status}
                       </p>
                     </div>
                   </li>
@@ -122,7 +204,7 @@ export default function List() {
                 <input
                   type="text"
                   placeholder="Add a task"
-                  value={taskValues[list.id] || ""} // Utilisation de la valeur spécifique à cette liste
+                  value={taskValues[list.id] || ""}
                   onChange={(e) =>
                     setTaskValues({ ...taskValues, [list.id]: e.target.value })
                   }
@@ -151,6 +233,19 @@ export default function List() {
           </button>
         </div>
       </ol>
+      {selectedTask && (
+        <ListModal
+          task={selectedTask.task}
+          onClose={() => setSelectedTask(null)}
+          onSave={(details) =>
+            updateTaskDetails(
+              selectedTask!.listId,
+              selectedTask!.task.id,
+              details
+            )
+          }
+        />
+      )}
     </div>
   );
 }

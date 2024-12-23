@@ -24,7 +24,12 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: rgba(113, 113, 122, 0.5); /* Couleur du "pouce" de la scrollbar */
+  background-color: rgba(
+    113,
+    113,
+    122,
+    0.5
+  ); /* Couleur du "pouce" de la scrollbar */
   border-radius: 4px; /* Arrondir les bords */
 }
 
@@ -40,17 +45,16 @@ ul {
 .btn-comp {
   color: var(--primary-color);
   background-color: var(--secondary-color);
-  text-transform: uppercase;
   font-family: var(--font-title);
   border-radius: 6px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   border: none;
-  padding: 5px;
+  padding: 10px 20px;
 
   &:hover {
-    filter: contrast(0.8);
+    opacity: 0.8;
   }
 }
 
@@ -63,8 +67,8 @@ title::after {
   background-color: var(--bg-secondary);
 }
 
-.btn{
-  font-family: 'Roboto', sans-serif;
+.btn {
+  font-family: "Roboto", sans-serif;
   font-size: 1.2rem;
   font-weight: 300;
 }
