@@ -184,10 +184,6 @@ class ProtectedView(APIView):
     permission_classes = [IsAuthenticatedWithToken]  # L'utilisateur doit être connecté avec un token JWT valide
 
     def get(self, request):
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-        user_id = validated_token.get("user_id")
-        print(user_id)
         return Response({"detail": "You are authenticated!"})
     
     def post(self, request):

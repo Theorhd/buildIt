@@ -11,7 +11,7 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${BackendUrl}api/user/login/`, {
+            const response = await fetch(`${BackendUrl}api/user/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
