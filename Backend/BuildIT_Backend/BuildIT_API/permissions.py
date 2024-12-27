@@ -23,111 +23,122 @@ class IsAuthenticatedWithToken(BasePermission):
 
 class IsUserInProjectFromProjectId(BasePermission):
     """
-    Doit être appelé après IsAuthenticatedWithToken car on récupère l'user dans la requête après qu'il y ait été rangé par IsAuthenticatedWithToken
+    Permission pour vérifier si l'utilisateur est membre d'un projet.
+    - Compatible avec les méthodes HTTP : GET, POST
+    - Doit être appelée après IsAuthenticatedWithToken.
 
-    Retourne un status HTTP 404 si le projet n'est pas retrouvable
-    Retourne un status HTTP 400 si l'utilisateur n'est pas membre du projet
+    Retourne un status HTTP 404 si le projet n'est pas retrouvable.
+    Retourne un status HTTP 400 si l'utilisateur n'est pas membre du projet.
     """
 
     def has_permission(self, request, view):
-        # Récupération du project_id depuis les données POST
-        project_id = request.data.get("project_id")
+        # Tentative de récupération du project_id selon la méthode HTTP
 
-        # Vérifier si project_id est fourni
+        # Récupération flexible de project_id
+        project_id = request.data.get("project_id") or view.kwargs.get("pk") # POST ou GET
+
+        # Vérifier si project_id est toujours manquant
         if not project_id:
             raise ProjectNotFoundException  # Aucun project_id fourni
 
         # Vérifier si l'utilisateur fait partie du projet via UserProjects
-        if (not UserProjects.objects.filter(user=request.user, project_id=project_id).exists()):
-            raise UserNotInProjectException 
+        if not UserProjects.objects.filter(user=request.user, project_id=project_id).exists():
+            raise UserNotInProjectException  # L'utilisateur n'est pas membre du projet
 
         return True
 
 class IsUserInProjectFromBoardId(BasePermission):
     """
-    Doit être appelé après IsAuthenticatedWithToken car on récupère l'user dans la requête après qu'il y ait été rangé par IsAuthenticatedWithToken
-    
-    Retourne un status HTTP 404 si le projet n'est pas retrouvé
-    Retourne un status HTTP 400 si l'utilisateur n'est pas membre du projet dans lequel le board appartient
+    Permission pour vérifier si l'utilisateur est membre d'un projet contenant le board spécifié.
+    - Compatible avec les méthodes HTTP : GET, POST
+    - Doit être appelée apres IsAuthenticatedWithToken.
+
+    Vérifie si l'utilisateur appartient au projet contenant le board spécifié.
+    Compatible avec POST (request.data) et GET (kwargs).
     """
 
     def has_permission(self, request, view):
-        # Récupération du board_id depuis les données POST
-        board_id = request.data.get("board_id")
+        # Récupération flexible de board_id
+        board_id = request.data.get("board_id") or view.kwargs.get("pk")  # POST ou GET
 
-        # Vérifier si board_id est fourni
+        # Vérification si board_id est fourni
         if not board_id:
             raise ProjectNotFoundException  # Aucun board_id fourni
 
         try:
-            # Récupérer le board et son projet associé
+            # Récupération du board et de son projet
             board = Boards.objects.get(id=board_id)
             project = board.project
 
-            # Vérifier si l'utilisateur fait partie du projet via UserProjects
-            if (not UserProjects.objects.filter(user=request.user, project=project).exists()):
+            # Vérification si l'utilisateur appartient au projet
+            if not UserProjects.objects.filter(user=request.user, project=project).exists():
                 raise UserNotInProjectException
 
         except Boards.DoesNotExist:
-            # Si le board n'existe pas
-            raise ProjectNotFoundException
-    
+            raise ProjectNotFoundException  # Board introuvable
+
         return True
 
 class IsUserInProjectFromListId(BasePermission):
     """
-    Doit être appelé après IsAuthenticatedWithToken car on récupère l'user dans la requête après qu'il y ait été rangé par IsAuthenticatedWithToken
-    
-    Retourne un status HTTP 404 si le projet n'est pas retrouvé
-    Retourne un status HTTP 400 si l'utilisateur n'est pas membre du projet dans lequel la list appartient
+    Permission pour vérifier si l'utilisateur est membre d'un projet contenant la list spécifique.
+    - Compatible avec les métodes HTTP : GET, POST
+    - Doit être appelée apres IsAuthenticatedWithToken.
+
+    Vérifie si l'utilisateur appartient au projet contenant la liste spécifiée.
+    Compatible avec POST (request.data) et GET (kwargs).
     """
 
     def has_permission(self, request, view):
-        # Récupération du list_id depuis les données POST
-        list_id = request.data.get("list_id")
+        # Récupération flexible de list_id
+        list_id = request.data.get("list_id") or view.kwargs.get("pk")  # POST ou GET
 
-        # Vérifier si list_id est fourni
+        # Vérification si list_id est fourni
         if not list_id:
-            raise ProjectNotFoundException
-        
+            raise ProjectNotFoundException  # Aucun list_id fourni
+
         try:
+            # Récupération de la liste et de son projet
             list = Lists.objects.get(id=list_id)
             project = list.board.project
 
-            # Vérifier si l'utilisateur fait partie du projet via UserProjects
-            if (not UserProjects.objects.filter(user=request.user, project=project).exists()):
+            # Vérification si l'utilisateur appartient au projet
+            if not UserProjects.objects.filter(user=request.user, project=project).exists():
                 raise UserNotInProjectException
 
         except Lists.DoesNotExist:
-            raise ProjectNotFoundException
+            raise ProjectNotFoundException  # Liste introuvable
 
         return True
 
 class IsUserInProjectFromItemId(BasePermission):
     """
-    Doit être appelé après IsAuthenticatedWithToken car on récupère l'user dans la requête après qu'il y ait été rangé par IsAuthenticatedWithToken
-    
-    Retourne un status HTTP 404 si le projet n'est pas retrouvé
-    Retourne un status HTTP 400 si l'utilisateur n'est pas membre du projet dans lequel l'item appartient
+    Permission pour vérifier si l'utilisateur est membre d'un projet contenant l'item spécifique.
+    - Compatible avec les métodes HTTP : GET, POST
+    - Doit être appelée apres IsAuthenticatedWithToken.
+
+    Vérifie si l'utilisateur appartient au projet contenant l'item spécifié.
+    Compatible avec POST (request.data) et GET (kwargs).
     """
 
     def has_permission(self, request, view):
-        # Récupération du item_id depuis les données POST
-        item_id = request.data.get("item_id")
+        # Récupération flexible de item_id
+        item_id = request.data.get("item_id") or view.kwargs.get("pk")  # POST ou GET
 
-        # Vérifier si item_id est fourni
+        # Vérification si item_id est fourni
         if not item_id:
-            raise ProjectNotFoundException
-        
+            raise ProjectNotFoundException  # Aucun item_id fourni
+
         try:
+            # Récupération de l'item et de son projet
             item = Items.objects.get(id=item_id)
             project = item.list.board.project
 
-            # Vérifier si l'utilisateur fait partie du projet via UserProjects
-            if (not UserProjects.objects.filter(user=request.user, project=project).exists()):
+            # Vérification si l'utilisateur appartient au projet
+            if not UserProjects.objects.filter(user=request.user, project=project).exists():
                 raise UserNotInProjectException
 
-        except Lists.DoesNotExist:
-            raise ProjectNotFoundException
+        except Items.DoesNotExist:  # Correction : Items et non Lists
+            raise ProjectNotFoundException  # Item introuvable
 
         return True

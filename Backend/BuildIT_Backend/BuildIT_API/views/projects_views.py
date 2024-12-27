@@ -11,7 +11,7 @@ from BuildIT_API.models.BoardSkills import BoardSkills
 from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Users import Users
 from BuildIT_API.serializers.ProjectSerializer import ProjectSerializer
-from BuildIT_API.permissions import IsAuthenticatedWithToken
+from BuildIT_API.permissions import IsAuthenticatedWithToken, IsUserInProjectFromProjectId
 
 
 
@@ -89,27 +89,22 @@ class ProjectRetriveView(generics.RetrieveAPIView):
     Recherche d'un projet par son ID
     
     Méthode GET
-    Permission: Doit avoir un token JWT valide
+    Permission:
+    - Doit avoir un token JWT valide
+    - Doit faire partie du projet
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedWithToken]
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromProjectId]
 
     def get(self, request, *args, **kwargs):
         
         # Récupération de l'ID projet depuis l'URL
         project_id_url = kwargs.get("pk")
 
-        # Vérification de la validité du token
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-
-        # Recuperation de l'id de l'utilisateur depuis le token
-        user_id_from_token = validated_token.get("user_id")
-
-        # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
+        # Recherche du projet dans la base de données selon l'ID projet
         try:
-            project = Projects.objects.get(id=project_id_url, created_by_id=user_id_from_token)
+            project = Projects.objects.get(id=project_id_url)
             serializer = self.get_serializer(project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Projects.DoesNotExist:
@@ -120,28 +115,23 @@ class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pou
     Modification d'un projet
     
     Méthode PUT
-    Permission: Doit avoir un token JWT valide
+    Permission:
+    - Doit avoir un token JWT valide
+    - Doit faire partie du projet
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedWithToken]
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromProjectId]
 
     def put(self, request, *args, **kwargs):
 
-        # Vérification de la validité du token
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-
-        # Recuperation de l'id de l'utilisateur depuis le token
-        user_id_from_token = validated_token.get("user_id")
-
         # Récupération de l'ID projet depuis le corps de la requête
-        project_id_from_body = request.data.get("id")    
+        project_id_from_body = request.data.get("project_id")    
 
-        # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
+        # Recherche du projet dans la base de données selon l'ID projet
         # Mise à jour du projet
         try:
-            project = Projects.objects.get(id=project_id_from_body, created_by_id=user_id_from_token)
+            project = Projects.objects.get(id=project_id_from_body)
             serializer = self.get_serializer(project, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -154,7 +144,9 @@ class ProjectDeleteView(generics.DestroyAPIView):
     Suppression d'un projet
     
     Méthode DELETE
-    Permission: Doit avoir un token JWT valide
+    Permission:
+    - Doit avoir un token JWT valide
+    - Doit être le créateur du projet
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
