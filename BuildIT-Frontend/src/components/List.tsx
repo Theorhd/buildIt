@@ -1,31 +1,61 @@
 import { useState } from "react";
 import "../styles/List.css";
 import { PlusCircleIcon, PencilIcon } from "@heroicons/react/24/outline";
+import ListModal from "./ListModal";
+
+export interface Task {
+  id: number;
+  name: string;
+  description: string;
+  tags: Tag[];
+  status: string;
+}
+
+export interface Tag {
+  id: number;
+  title: string;
+  color: string;
+}
 
 interface TaskList {
   id: number;
   title: string;
-  tasks: string[];
+  tasks: Task[];
 }
 
 export default function List() {
   const [lists, setLists] = useState<TaskList[]>([
-    { id: Date.now(), title: "My List", tasks: [] },
+    {
+      id: Date.now(),
+      title: "My List",
+      tasks: [],
+    },
   ]);
   const [taskValues, setTaskValues] = useState<{ [key: number]: string }>({});
-  const [tags, setTags] = useState<string>("React");
+  const [selectedTask, setSelectedTask] = useState<{
+    task: Task;
+    listId: number;
+  } | null>(null);
+  const statusOptions = ["To Do", "In Progress", "Done"];
 
   const addTask = (listId: number, e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (taskValues[listId]?.trim() !== "") {
+      const newTask: Task = {
+        id: Date.now(),
+        name: taskValues[listId],
+        description: "",
+        tags: [],
+        status: "To Do",
+      };
       setLists(
         lists.map((list) =>
           list.id === listId
-            ? { ...list, tasks: [...list.tasks, taskValues[listId]] }
+            ? { ...list, tasks: [...list.tasks, newTask] }
             : list
         )
       );
-      setTaskValues({ ...taskValues, [listId]: "" }); // Réinitialiser l'input spécifique à cette liste
+      setTaskValues({ ...taskValues, [listId]: "" });
     }
   };
 
@@ -56,6 +86,38 @@ export default function List() {
     );
   };
 
+  const updateTaskDetails = (
+    listId: number,
+    taskId: number,
+    details: { description: string; tags: Tag[] }
+  ) => {
+    setLists(
+      lists.map((list) =>
+        list.id === listId
+          ? {
+              ...list,
+              tasks: list.tasks.map((task) =>
+                task.id === taskId ? { ...task, ...details } : task
+              ),
+            }
+          : list
+      )
+    );
+  };
+
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "To Do":
+        return "text-blue-500";
+      case "In Progress":
+        return "text-yellow-500";
+      case "Done":
+        return "text-secondary";
+      case "Blocked":
+        return "text-red-500";
+    }
+  };
+
   return (
     <div className="relative h-full flex mt-2">
       <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 mb-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
@@ -67,12 +129,12 @@ export default function List() {
             <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full scroll-m-2">
               <button
                 onClick={() => deleteList(list.id)}
-                className="absolute top-4 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
+                className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
               >
                 &#x2715;
               </button>
 
-              <div id="list-title" className="flex pb-4">
+              <div id="list-title" className="flex items-center pb-4">
                 <input
                   className="text-secondary font-montserrat list-input"
                   placeholder="List title"
@@ -94,21 +156,41 @@ export default function List() {
                   <li
                     className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
                     key={taskIndex}
+                    onClick={() =>
+                      setSelectedTask({
+                        listId: list.id,
+                        task: task,
+                      })
+                    }
                   >
+                    <div className="pb-3">
+                      {task.tags.map((tag) => (
+                        <span
+                          key={tag.id}
+                          style={{ backgroundColor: tag.color }}
+                          className="text-xs rounded-md px-2 py-1 mr-2"
+                        >
+                          {tag.title}
+                        </span>
+                      ))}
+                    </div>
                     <button
-                      onClick={() => deleteTask(list.id, taskIndex)}
-                      className="absolute top-2 right-2 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteTask(list.id, taskIndex);
+                      }}
+                      className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
                     >
                       &#x2715;
                     </button>
-
-                    <div className="bg-blue-500 py-1 w-max px-2 mb-2 text-xs drop-shadow-lg">
-                      {tags}
-                    </div>
                     <div className="flex flex-col">
-                      <p className="text-center mb-5">{task}</p>
-                      <p className="text-center text-sm text-secondary uppercase">
-                        In progress
+                      <p className="text-center mb-5">{task.name}</p>
+                      <p
+                        className={`text-center text-sm uppercase ${getStatusClass(
+                          task.status
+                        )}`}
+                      >
+                        {task.status}
                       </p>
                     </div>
                   </li>
@@ -122,7 +204,7 @@ export default function List() {
                 <input
                   type="text"
                   placeholder="Add a task"
-                  value={taskValues[list.id] || ""} // Utilisation de la valeur spécifique à cette liste
+                  value={taskValues[list.id] || ""}
                   onChange={(e) =>
                     setTaskValues({ ...taskValues, [list.id]: e.target.value })
                   }
@@ -144,13 +226,26 @@ export default function List() {
             onClick={addNewList}
             className="list w-64 h-24 drop-shadow-lg flex items-center justify-center gap-2 whitespace-nowrap bg-bgPrimary rounded-md"
           >
-            <PlusCircleIcon className="size-6 mr-5" />
-            <p className="text-secondary text-sm md:text-md font-medium">
+            <PlusCircleIcon className="size-8 mr-5 text-secondary" />
+            <p className="text-secondary font-bold text-md md:text-l">
               Add New List
             </p>
           </button>
         </div>
       </ol>
+      {selectedTask && (
+        <ListModal
+          task={selectedTask.task}
+          onClose={() => setSelectedTask(null)}
+          onSave={(details) =>
+            updateTaskDetails(
+              selectedTask!.listId,
+              selectedTask!.task.id,
+              details
+            )
+          }
+        />
+      )}
     </div>
   );
 }
