@@ -3,6 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from BuildIT_API.views.users_views import  UserLoginView, ProtectedView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
 from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
+from BuildIT_API.views.list_views import ListCreateView
 
 userpatterns = [
     path('user/create', UserCreateView.as_view(), name='register'),                                # Créer un utilisateur
@@ -23,6 +24,10 @@ projectpatterns = [
     path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),           # Supprimer un projet par son id + token de ID créatieur
 ]
 
+listpatterns = [
+    path('list/create', ListCreateView.as_view(), name='list-create'),
+]
+
 assistantpatterns = [
     path('assistant/create-thread', CreateThread.as_view(), name='create-thread'),                            # Créer un thread
     path('assistant/update-run-thread', UpdateRunThread.as_view(), name='update-run-thread'),                 # Mettre à jour un thread
@@ -32,4 +37,4 @@ assistantpatterns = [
 
 urlpatterns = [
     path('protected', ProtectedView.as_view(), name='protected-view')                              # Route de test pour vérifier le fonctionnement des tokens #TODO supprimer en prod
-] + userpatterns + tokenpatterns + projectpatterns + assistantpatterns
+] + userpatterns + tokenpatterns + projectpatterns + listpatterns + assistantpatterns

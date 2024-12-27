@@ -8,6 +8,7 @@ from BuildIT_API.models.Lists import Lists
 from BuildIT_API.models.Items import Items
 from BuildIT_API.models.Skills import Skills
 from BuildIT_API.models.BoardSkills import BoardSkills
+from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Users import Users
 from BuildIT_API.serializers.ProjectSerializer import ProjectSerializer
 from BuildIT_API.permissions import IsAuthenticatedWithToken
@@ -40,6 +41,14 @@ class ProjectCreateView(generics.CreateAPIView):
             name=data.get('project-name'),
             description=data.get('project-description'),
             created_by=user
+        )
+
+        # Création de l'association entre l'utilisateur et le projet
+        UserProjects.objects.create(
+            user=user,
+            project=project,
+            user_role='owner',  # Définit comme propriétaire
+            project_placement='main'  # Placement par défaut
         )
 
         # Gestion des boards
@@ -106,7 +115,7 @@ class ProjectRetriveView(generics.RetrieveAPIView):
         except Projects.DoesNotExist:
             return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pour prévoir les nested fields ("boards" : [] fait planter le code)
+class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pour prévoir les nested fields ("boards" : [...] fait planter le code)
     """
     Modification d'un projet
     
