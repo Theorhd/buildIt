@@ -6,7 +6,6 @@ from BuildIT_API.serializers.BoardSerializer import BoardSerializer
 from BuildIT_API.permissions import IsAuthenticatedWithToken, IsUserInProjectFromBoardId, IsUserInProjectFromProjectId
 from BuildIT_API.models.Projects import Projects
 
-
 class BoardCreateView(generics.CreateAPIView):
     """
     Crée un nouveau board dans un projet donné.
@@ -34,7 +33,7 @@ class BoardCreateView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # Sauvegarde avec le projet transmis manuellement
+        # Sauvegarde avec le projet transmis
         serializer.save(project=project)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
