@@ -28,7 +28,7 @@ class UserLoginView(APIView):
             pseudo = user.pseudo
             mail = user.mail
         except Users.DoesNotExist:
-            return Response({"detail": "Invalid email"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"detail": "Invalid mail"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # Vérifier le mot de passe
         if not check_password(password, user.password):
@@ -180,11 +180,3 @@ class UserDeleteView(generics.DestroyAPIView):
         except Users.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticatedWithToken]  # L'utilisateur doit être connecté avec un token JWT valide
-
-    def get(self, request):
-        return Response({"detail": "You are authenticated!"})
-    
-    def post(self, request):
-        return Response({"detail": "You are authenticated!"})

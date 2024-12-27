@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from BuildIT_API.views.users_views import  UserLoginView, ProtectedView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
+from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
 from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
+from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 from BuildIT_API.views.list_views import ListCreateView
 
@@ -24,6 +25,13 @@ projectpatterns = [
     path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),           # Supprimer un projet par son id + token de ID créatieur
 ]
 
+boardpatterns = [
+    path('board/create', BoardCreateView.as_view(), name='board-create'),
+    path('board/get/<int:pk>', BoardRetrieveView.as_view(), name='board-detail'),
+    path('board/update', BoardUpdateView.as_view(), name='board-update'),
+    path('board/delete/<int:pk>', BoardDeleteView.as_view(), name='board-delete'),
+]
+
 listpatterns = [
     path('list/create', ListCreateView.as_view(), name='list-create'),
 ]
@@ -35,6 +43,4 @@ assistantpatterns = [
     path('assistant/delete-thread', DeleteThread.as_view(), name='delete-thread'),                            # Supprimer un thread
 ]
 
-urlpatterns = [
-    path('protected', ProtectedView.as_view(), name='protected-view')                              # Route de test pour vérifier le fonctionnement des tokens #TODO supprimer en prod
-] + userpatterns + tokenpatterns + projectpatterns + listpatterns + assistantpatterns
+urlpatterns =  userpatterns + tokenpatterns + projectpatterns + boardpatterns + listpatterns + assistantpatterns

@@ -9,7 +9,7 @@ class InvalidTokenException(APIException):
 
 # Exception personnalisée pour un utilisateur qui n’est pas membre du projet
 class UserNotInProjectException(APIException):
-    status_code = status.HTTP_400_BAD_REQUEST
+    status_code = status.HTTP_403_FORBIDDEN
     default_detail = 'L’utilisateur n’est pas membre du projet.'
     default_code = 'user_not_in_project'
 
