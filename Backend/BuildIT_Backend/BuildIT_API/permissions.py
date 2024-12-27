@@ -16,3 +16,10 @@ class IsAuthenticatedWithToken(BasePermission):
             return True  
         except Exception:
             raise InvalidTokenException
+
+
+class IsUserInProjectFromBoardId(BasePermission):
+    def has_permission(self, request, view):
+        board_id = request.data.get('board_id')
+        user = request.user
+        return user in board_id.project.users.all()
