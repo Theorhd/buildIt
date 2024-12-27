@@ -5,6 +5,9 @@ from openai import OpenAI
 import time
 import os
 
+#ASSISTANT_ID="asst_z7Ae71fbnBfLWGp6ChWz98NG" # Assistant ID for BuildIT v3
+ASSISTANT_ID="asst_RpHjOisE2GGzQJ2MK4LGnlT0" # Assistant ID for BuildIT v4
+
 PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, os.pardir))
 ENV_FOLDER = os.path.join(PATH, ".env")
 API_KEY = None
@@ -37,7 +40,7 @@ class UpdateRunThread(APIView):
         )
         run = client.beta.threads.runs.create(
             thread_id=my_thread_id,
-            assistant_id="asst_z7Ae71fbnBfLWGp6ChWz98NG"
+            assistant_id=ASSISTANT_ID
         )
         return Response({"run_id": run.id, "thread_id": my_thread_id}, status=status.HTTP_200_OK)
 

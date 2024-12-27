@@ -1,5 +1,17 @@
-body{
-  font-family: 'Roboto', sans-serif;
+:root {
+  --primary-color: #f4f4f4;
+  --secondary-color: #34d399;
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #313131;
+  --font-title: "Montserrat", sans-serif;
+  --font-corps: "Roboto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family: var(--font-title);
+}
+p, button, a, label, input, select, option, textarea{
+  font-family: var(--font-corps);
 }
 
 .loader {

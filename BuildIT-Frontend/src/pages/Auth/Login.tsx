@@ -1,15 +1,48 @@
 import React, { useState } from 'react';
 import logo from '../../../public/buildit-logo.png';
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const BackendUrl = "http://127.0.0.1:8000/"
 
-    const handleSubmit = (e) => {
+const Login = () => {
+    const [mail, setMail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Logique de soumission du formulaire
-        console.log('Email:', email);
-        console.log('Password:', password);
+        try {
+            const response = await fetch(`${BackendUrl}api/user/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    "mail":mail, 
+                    "password":password 
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data = await response.json();
+            /* Mise a jour des tokens dans le local storage */
+            localStorage.setItem('access', data.access);
+            localStorage.setItem('refresh', data.refresh);
+            localStorage.setItem('pseudo', data.pseudo);
+            localStorage.setItem('mail', data.mail);
+
+            /* Redirection page principale */
+            if (localStorage.getItem('access') !== undefined) {
+                console.log("Login success");
+                window.location.href = '/';
+            } else {
+                console.error("Access token is undefined or not save in local storage");
+            }
+        } catch (error) {
+            setError('Login failed. Please check your credentials and try again.');
+        }
     };
 
     return (
@@ -19,19 +52,17 @@ const Login = () => {
                 <h2 className='font-bold text-2xl ml-2 text-center'>BUILD<span className='text-secondary'>IT</span></h2>
             </div>
             <div className='main-div flex flex-col items-center justify-center bg-bgPrimary w-screen'> 
-			<h1 className='font-thin mb-10'>Login</h1>
+            <h1 className='font-thin mb-10'>Login</h1>
             <div className='flex flex-col items-center justify-center'>
-
                 <form onSubmit={handleSubmit}>
                     <div className='flex flex-col justify-center w-full'>
                         <label>Email:</label>
                         <input 
                             type="email" 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)} 
+                            value={mail} 
+                            onChange={(e) => setMail(e.target.value)} 
                             required 
                             className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary'
-                            placeholder='a@a.com'
                         />
                     </div>
                     <div className='flex flex-col justify-center mt-5 w-full'>
@@ -42,9 +73,14 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)} 
                             required 
                             className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary'
-                            placeholder='********'
                         />
                     </div>
+                    {error && 
+                    <div className='flex justify-center text-center mt-5 mb-5'>
+                        <p className=' text-red-500 text-sm w-52'>{error}</p>
+                    </div>
+                    }
+                    
                     <div className='flex justify-center mt-5'>
                         <button type="submit" className='w-1/2 border-none rounded-full bg-secondary hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all'>Submit</button>
                     </div>
