@@ -1,4 +1,13 @@
 import ProjectLink from "./ProjectLink";
+import {getProjectsFromToken, refresh} from "../../utils/api_router";
+
+
+try {
+  const lprojects = await getProjectsFromToken();
+  console.log(lprojects);
+} catch (error) {
+  console.error(error);
+}
 
 const projects = [
     {

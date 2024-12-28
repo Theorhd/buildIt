@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
-from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
+from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 from BuildIT_API.views.list_views import ListCreateView, ListRetrieveView, ListUpdateView, ListDeleteView
@@ -21,7 +21,8 @@ tokenpatterns = [
 
 projectpatterns = [
     path('project/create', ProjectCreateView.as_view(), name='project-create'),             # Créer un projet (accepte board, lists, items)
-    path('project/get/<int:pk>', ProjectRetriveView.as_view(), name='project-detail'),      # Rechercher un projet par son id + token de ID créaeur
+    path('project/get_single/<int:project_id>', ProjectRetriveView.as_view(), name='project-detail'),      # Rechercher un projet par son id + token de ID créaeur
+    path('project/get_from_token', ProjectFromUserView.as_view(), name='project-detail'),      # Rechercher tous les projets d'un utilisateur
     path('project/update', ProjectUpdateView.as_view(), name='project-update'),             # Modifier un projet + token de ID créateur
     path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),    # Supprimer un projet par son id + token de ID créatieur
 ]

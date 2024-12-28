@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../../../public/buildit-logo.png';
-
-const BackendUrl = "http://127.0.0.1:8000/"
+import {login} from '../../utils/api_router';
 
 const Login = () => {
     const [mail, setMail] = useState('');
@@ -11,22 +10,8 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${BackendUrl}api/user/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    "mail":mail, 
-                    "password":password 
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Login failed');
-            }
-
-            const data = await response.json();
+            // Appel de la route API login
+            const data = await login(mail, password);
             /* Mise a jour des tokens dans le local storage */
             localStorage.setItem('access', data.access);
             localStorage.setItem('refresh', data.refresh);

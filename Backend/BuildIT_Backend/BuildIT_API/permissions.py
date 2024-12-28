@@ -34,7 +34,7 @@ class IsUserInProjectFromProjectId(BasePermission):
     def has_permission(self, request, view):
 
         # Récupération du project_id POST ou GET
-        project_id = request.data.get("project_id") or view.kwargs.get("pk") # 
+        project_id = request.data.get("project_id") or view.kwargs.get("project_id") # 
 
         # Si le projet n'est pas fourni erreur 404 'project_not_found'
         if not project_id:
