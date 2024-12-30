@@ -83,6 +83,20 @@ export async function login(mail: string, password: string) {
     }
 };
 
+// Register
+export async function register(data: any) {
+    try {
+      const response = await api.post("/user/create", data);
+      
+      localStorage.setItem('access', response.data.tokens.access);
+      localStorage.setItem('refresh', response.data.tokens.refresh);
+      console.log("Account created successfully");
+      window.location.href = '/login';
+    } catch (error) {
+      handleError(error);
+    }
+};
+
 // Récupérer les projets de l'utilisateur connecté
 export async function getProjectsFromToken() {
     try {

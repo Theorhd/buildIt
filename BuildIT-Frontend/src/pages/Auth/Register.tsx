@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import logo from '../../../public/buildit-logo.png';
 import '../../styles/Register.css';
-
-const BackendUrl = "http://127.0.0.1:8000/"
+import { register } from '../../utils/api_router';
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -35,17 +33,7 @@ const Register: React.FC = () => {
             return;
         }
         const { confirmPassword, ...dataToSend } = formData;
-        try {
-            const response = await axios.post(`${BackendUrl}api/user/create/`, dataToSend);
-            console.log(response.data);
-
-            localStorage.setItem('access', response.data.tokens.access);
-            localStorage.setItem('refresh', response.data.tokens.refresh);
-            console.log("Account created successfully");
-            window.location.href = '/login';
-        } catch (error) {
-            console.error(error);
-        }
+        register(dataToSend);
     };
 
 	return (
