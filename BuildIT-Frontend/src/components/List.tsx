@@ -23,7 +23,7 @@ interface TaskList {
   tasks: Task[];
 }
 
-export default function List() {
+export default function List({ board }: { board: TaskList[] }) {
   const [lists, setLists] = useState<TaskList[]>([
     {
       id: Date.now(),
