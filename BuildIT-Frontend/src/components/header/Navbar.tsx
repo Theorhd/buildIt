@@ -1,7 +1,8 @@
 import ProjectLink from "./ProjectLink";
 import {getProjectsFromToken} from "../../utils/api_router";
+import { ProjectInterface } from "../../utils/interfaces";
 
-const projects = await getProjectsFromToken();
+const projects: ProjectInterface[] = await getProjectsFromToken();
 console.log(projects);
 
 export default function Navbar() {

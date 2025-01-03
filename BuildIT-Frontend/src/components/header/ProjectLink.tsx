@@ -2,18 +2,10 @@ import { ChevronDownIcon, UserPlusIcon, PlusIcon, ChevronRightIcon } from "@hero
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Tooltip from "../ToolTip";
+import { ProjectInterface } from "../../utils/interfaces";
 
-interface Board {
-    board_name: string;
-}
 
-interface Project {
-    project_name: string;
-    tagname: string;
-    boards: Array<Board>;
-}
-
-export default function ProjectLink({project}: { project: Project }) {
+export default function ProjectLink({project}: { project: ProjectInterface }) {
 
     const [isProjectLinkOpen, setIsProjectLinkOpen] = useState<boolean>(true);
 

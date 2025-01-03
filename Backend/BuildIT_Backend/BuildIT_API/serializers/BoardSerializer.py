@@ -24,3 +24,9 @@ class BoardSerializer(serializers.ModelSerializer):
             'project': {'read_only': True},   # Lecture seule car passé via la vue
             'chatroom': {'read_only': True},
         }
+
+    # Tri des boards par placement
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['lists'] = sorted(representation['lists'], key=lambda x: x['placement'])
+        return representation

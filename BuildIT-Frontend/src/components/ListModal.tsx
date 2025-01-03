@@ -1,23 +1,19 @@
 import { useState } from "react";
 import { PlusCircleIcon, PaintBrushIcon } from "@heroicons/react/24/outline";
-import { Task, Tag } from "./List";
+import { ItemInterface , TagInterface } from "../utils/interfaces";
 
 interface ListModalProps {
-  task: Task;
+  item: ItemInterface;
   onClose: () => void;
-  onSave: (details: {
-    description: string;
-    tags: Tag[];
-    status: string;
-  }) => void;
+  onSave: (details: ItemInterface) => void;
 }
 
-export default function ListModal({ task, onClose, onSave }: ListModalProps) {
-  const [tags, setTags] = useState<Tag[]>(task.tags || []);
+export default function ListModal({ item, onClose, onSave }: ListModalProps) {
+  const [tags, setTags] = useState<TagInterface[]>(item.tags || []);
   const [description, setDescription] = useState<string>(
-    task.description || ""
+    item.description || ""
   );
-  const [status, setStatus] = useState<string>(task.status || "In Progress");
+  const [status, setStatus] = useState<string>(item.status || "In Progress");
   const [newTagTitle, setNewTagTitle] = useState<string>("");
   const [newTagColor, setNewTagColor] = useState<string>("#34d399");
   const [showTagInput, setShowTagInput] = useState<boolean>(false);
@@ -26,7 +22,7 @@ export default function ListModal({ task, onClose, onSave }: ListModalProps) {
     if (newTagTitle.trim() !== "") {
       setTags([
         ...tags,
-        { id: Date.now(), title: newTagTitle, color: newTagColor },
+        { id: Date.now(), tag_name: newTagTitle, color: newTagColor },
       ]);
       setNewTagTitle("");
       setNewTagColor("#34d399");
@@ -47,7 +43,7 @@ export default function ListModal({ task, onClose, onSave }: ListModalProps) {
         >
           &#x2715;
         </button>
-        <h2 className="font-bold mb-4">{task.name}</h2>
+        <h2 className="font-bold mb-4">{item.item_name}</h2>
         <hr />
         <div className="flex my-5 gap-5 items-center">
           <div className="flex gap-5 items-center">
@@ -114,7 +110,7 @@ export default function ListModal({ task, onClose, onSave }: ListModalProps) {
                 className="text-sm rounded-md px-2 py-1"
                 style={{ backgroundColor: tag.color }}
               >
-                {tag.title}
+                {tag.tag_name}
               </span>
               <button
                 onClick={() => deleteTag(tag.id)}
