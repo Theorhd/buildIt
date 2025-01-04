@@ -9,7 +9,7 @@ export interface ItemInterface {
     id?: number;
     item_name: string; // max length = 31
     description?: string;
-    priority?: number; // 
+    priority?: number;
     status: string;
     risk?: string;
     effort?: string;
@@ -55,8 +55,9 @@ export interface ProjectInterface {
 export interface UserInterface {
     id?: number;
     tagname: string; // max length = 22
-    firstname: string; // max length = 50
-    lastname: string; // max length = 50
-    email: string;
+    firstname?: string; // max length = 50
+    lastname?: string; // max length = 50
+    mail: string;
+    phone?: string; // max length = 20
     password?: string; // Write only
 }
