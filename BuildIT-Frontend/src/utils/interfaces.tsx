@@ -2,6 +2,7 @@ export interface TagInterface {
     id?: number;
     tag_name: string; // max length = 22
     color: string; // max length = 7 - Code hexa - exemple: #000000
+    project_id?: number;
 }
 
 export interface ItemInterface {
