@@ -5,7 +5,7 @@ from .Lists import Lists
 
 class Items(models.Model):
     # Champs texte
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=31)
     description = models.TextField(null=True, blank=True)
 
     # Champs avec des valeurs spécifiques et valeur par défaut

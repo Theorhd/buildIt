@@ -3,7 +3,7 @@ from django.db import models # type: ignore
 from .Boards import Boards
 
 class Lists(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=22)
     placement = models.IntegerField(default=0)
     board = models.ForeignKey(Boards, related_name='lists', on_delete=models.CASCADE)
 

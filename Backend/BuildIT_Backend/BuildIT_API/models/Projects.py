@@ -5,7 +5,7 @@ import string
 
 class Projects(models.Model):
     tagname = models.CharField(max_length=80, unique=True, null=False, blank=False)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=22)
     description = models.TextField()
     created_by = models.ForeignKey(Users, on_delete=models.CASCADE)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -15,7 +15,7 @@ class Projects(models.Model):
         if not self.tagname:
             self.tagname = self.name  # Utilise le nom comme base pour le tagname
 
-        # Génère 8 caractères UTF-8 aléatoires
+        # Génère 4 caractères UTF-8 aléatoires
         random_suffix = ''.join(random.choices(
             string.ascii_letters + string.digits + string.punctuation, k=4))
 

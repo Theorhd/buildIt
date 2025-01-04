@@ -5,6 +5,10 @@ from BuildIT_API.models.Lists import Lists
 from BuildIT_API.serializers.TagSerializer import TagSerializer
 
 class ItemSerializer(serializers.ModelSerializer):
+    
+    # Champ personnalisé
+    item_name = serializers.CharField(source='name')
+
     # Champs existants
     description = serializers.CharField(required=False, allow_blank=True)
     priority = serializers.IntegerField(required=False)
@@ -17,9 +21,6 @@ class ItemSerializer(serializers.ModelSerializer):
     # Gestion de la liste
     list_id = serializers.IntegerField(write_only=True)  # Pour l'entrée
     list = serializers.PrimaryKeyRelatedField(read_only=True)  # Pour la sortie
-
-    # Champ personnalisé
-    item_name = serializers.CharField(source='name')
 
     # Status (remplace la valeur brute par le label lisible pour l'affichage)
     status = serializers.SerializerMethodField()
