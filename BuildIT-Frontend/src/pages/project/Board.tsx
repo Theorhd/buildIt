@@ -3,7 +3,7 @@ import List from "../../components/List";
 import "../../App.css";
 
 export default function Board() {
-  const location = useLocation();     // Récupérer les données passées en state
+  const location = useLocation(); // Récupérer les données passées en state
 
   // Vérifier si les données sont bien passées
   const board = location.state?.board;
@@ -17,7 +17,7 @@ export default function Board() {
 
   return (
     <div className="pt-16 h-full">
-      <List board={board}/>
+      <List board={board} />
     </div>
   );
 }
