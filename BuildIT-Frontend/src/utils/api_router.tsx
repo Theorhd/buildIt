@@ -106,3 +106,48 @@ export async function getProjectsFromToken() {
       handleError(error);
     }
 };
+
+// Crée un Thread
+export async function createThread() {
+    try {
+      const response = await api.post("/assistant/create-thread");
+      return response.data.thread_id;
+    } catch (error) {
+      handleError(error);
+    }
+}
+
+// Met à jour le Thread et récupère le message de l'IA
+export async function updateThread(threadID: any, content: any) {
+    try {
+      const response = await api.post("/assistant/update-run-thread", {
+        thread_id: threadID,
+        content: content,
+      });
+      const get_response = await api.post("/assistant/get-assistant-response", {
+        thread_id: threadID,
+        run_id: response.data.run_id,
+      });
+      return get_response.data.assistant_reply;
+    } catch (error) {
+      handleError(error);
+    }
+}
+
+// Process du message final de l'IA pour crée projets [*ModaleIA.tsx / Ligne 101-127*]
+export async function processMessage(finalResponse: any, threadID: any) {
+  try {
+    const response = await api.post("/project/create", finalResponse);
+    if (response.status === 201) {
+      const deleteThread = await api.post("/assistant/delete-thread", {
+        thread_id: threadID,
+      });
+      console.log(deleteThread.data);
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    handleError(error);
+  }
+}
