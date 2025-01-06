@@ -43,7 +43,7 @@ function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("refresh");
   localStorage.removeItem("access");
-  window.location.href = '/login';
+//   window.location.href = '/login';
 }
 
 // Gestion des erreurs
@@ -61,7 +61,7 @@ const handleError = async (error: any) => {
                 // Récupération des nouveaux tokens et réessai de la requête originale
                 const newAccessToken = localStorage.getItem('access');
                 error.config.headers['Authorization'] = `Token ${newAccessToken}`;
-                return api.request(error.config); // Réessaie la requête initiale
+                window.location.reload();
             } catch (refreshError) {
                 console.error("Token refresh failed:", refreshError);
                 logout(); // Déconnecte l'utilisateur si le refresh échoue
@@ -85,7 +85,7 @@ const handleError = async (error: any) => {
 
 // Fonctions pour les appels API
 
-export async function login({ mail, password }: { mail: string, password: string }) {
+export async function login(mail: string, password: string) {
     /*
     Authentifier un utilisateur
 
@@ -98,7 +98,7 @@ export async function login({ mail, password }: { mail: string, password: string
       localStorage.setItem("user", response.data.user);
       localStorage.setItem("refresh", response.data.refresh);
       localStorage.setItem("access", response.data.access);
-        return response.data;
+      window.location.href = '/';
     } catch (error) {
         handleError(error);
     }

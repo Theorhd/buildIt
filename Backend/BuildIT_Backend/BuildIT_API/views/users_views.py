@@ -16,6 +16,8 @@ class UserLoginView(APIView):
     """
     Connexion d'un utilisateur
     """
+    serializer_class = UserSerializer
+
     def post(self, request):
 
         # Récupération du tagname et du mot de passe depuis le corps de la requête
@@ -35,9 +37,12 @@ class UserLoginView(APIView):
         # Générer un token JWT
         refresh = RefreshToken.for_user(user)
 
+        # Génère l'objet User en json pour la réponse
+        user_data = UserSerializer(user).data
+
         # Rend une réponse JSON avec le token
         return Response({
-            "user": user,
+            "user": user_data,
             "refresh": str(refresh),
             "access": str(refresh.access_token)
         }, status=status.HTTP_200_OK)
