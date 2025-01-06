@@ -5,8 +5,28 @@ from BuildIT_API.models.Boards import Boards
 from BuildIT_API.serializers.ListSerializer import ListSerializer
 
 class BoardSerializer(serializers.ModelSerializer):
-    lists = ListSerializer(many=True)
+    lists = ListSerializer(many=True, required=False)
+
+    board_name = serializers.CharField(source='name')
 
     class Meta:
         model = Boards
-        fields = ['id', 'name', 'placement', 'project', 'chatroom', "lists"]
+        fields = [
+            'id',
+            'board_name',
+            'placement',
+            'project',
+            'lists',
+            'chatroom',
+        ]
+        extra_kwargs = {
+            'placement': {'read_only': True},  # Lecture seule car calculé automatiquement
+            'project': {'read_only': True},   # Lecture seule car passé via la vue
+            'chatroom': {'read_only': True},
+        }
+
+    # Tri des boards par placement
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['lists'] = sorted(representation['lists'], key=lambda x: x['placement'])
+        return representation

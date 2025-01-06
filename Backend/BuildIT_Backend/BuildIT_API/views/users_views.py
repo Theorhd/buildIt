@@ -38,7 +38,8 @@ class UserLoginView(APIView):
         # Rend une réponse JSON avec le token
         return Response({
             "user": user,
-            "token": { "access": str(refresh.access_token), "refresh": str(refresh)},
+            "refresh": str(refresh),
+            "access": str(refresh.access_token)
         }, status=status.HTTP_200_OK)
 
 class UserCreateView(generics.CreateAPIView):
@@ -176,29 +177,3 @@ class UserDeleteView(generics.DestroyAPIView):
         except Users.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticatedWithToken]  # L'utilisateur doit être connecté avec un token JWT valide
-
-    def get(self, request):
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-        user_id = validated_token.get("user_id")
-        print(user_id)
-        return Response({"detail": "You are authenticated!"})
-    
-    def post(self, request):
-        return Response({"detail": "You are authenticated!"})
-    
-
-class ValidateTokenView(APIView):
-    permission_classes = [IsAuthenticatedWithToken]
-
-    def get(self, request):
-        try:
-            auth = JWTAuthentication()
-            validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-            user_id = validated_token.get("user_id")
-            user = Users.objects.get(id=user_id)
-            return Response({"user": user}, status=status.HTTP_200_OK)
-        except Users.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

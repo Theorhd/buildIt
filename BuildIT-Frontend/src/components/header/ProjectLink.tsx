@@ -2,18 +2,10 @@ import { ChevronDownIcon, UserPlusIcon, PlusIcon, ChevronRightIcon } from "@hero
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Tooltip from "../ToolTip";
+import { ProjectInterface } from "../../utils/interfaces";
 
-interface Board {
-    board_name: string;
-}
 
-interface Project {
-    project_name: string;
-    tagname: string;
-    boards: Array<Board>;
-}
-
-export default function ProjectLink({project}: { project: Project }) {
+export default function ProjectLink({project}: { project: ProjectInterface }) {
 
     const [isProjectLinkOpen, setIsProjectLinkOpen] = useState<boolean>(true);
 
@@ -55,6 +47,7 @@ export default function ProjectLink({project}: { project: Project }) {
             <div key={board.board_name} className="ps-6 py-0.5">
                 <NavLink
                 to={`/${project.tagname}/${board.board_name}`}
+                state={{ board: board }} // Passer l'objet board en state
                 className={({ isActive }) => (isActive ? "font-normal text-secondary hover:text-secondary" : "font-normal text-primary hover:text-primary")}
                 >
                     {board.board_name}

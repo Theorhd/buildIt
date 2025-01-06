@@ -1,31 +1,9 @@
 import ProjectLink from "./ProjectLink";
+import {getProjectsFromToken} from "../../utils/api_router";
+import { ProjectInterface } from "../../utils/interfaces";
 
-const projects = [
-    {
-      project_name: "Projet 1",
-      tagname: "project1",
-      boards: [
-        {
-          board_name: "Board 1",
-        },
-        {
-          board_name: "Board 2",
-        },
-      ],
-    },
-    {
-      project_name: "Projet 2",
-      tagname: "project2",
-      boards: [
-        {
-          board_name: "Board 1",
-        },
-        {
-          board_name: "Board 2",
-        },
-      ],
-    },
-];
+const projects: ProjectInterface[] = await getProjectsFromToken();
+console.log(projects);
 
 export default function Navbar() {
   return (
