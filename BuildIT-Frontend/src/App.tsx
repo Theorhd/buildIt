@@ -18,6 +18,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Route privée */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
 
@@ -36,6 +38,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
+        {/* Route publique */}
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
 

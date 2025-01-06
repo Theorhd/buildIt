@@ -7,6 +7,8 @@ from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Boards import Boards
 from BuildIT_API.models.Lists import Lists
 from BuildIT_API.models.Items import Items
+from BuildIT_API.models.Tags import Tags
+from BuildIT_API.models.ItemTags import ItemTags
 
 class IsAuthenticatedWithToken(BasePermission):
     """
@@ -34,7 +36,7 @@ class IsUserInProjectFromProjectId(BasePermission):
     def has_permission(self, request, view):
 
         # Récupération du project_id POST ou GET
-        project_id = request.data.get("project_id") or view.kwargs.get("pk") # 
+        project_id = request.data.get("project_id") or view.kwargs.get("project_id") # 
 
         # Si le projet n'est pas fourni erreur 404 'project_not_found'
         if not project_id:
@@ -139,5 +141,38 @@ class IsUserInProjectFromItemId(BasePermission):
 
         except Items.DoesNotExist:  # Correction : Items et non Lists
             raise ProjectNotFoundException  # Item introuvable
+
+        return True
+
+class IsUserInProjectFromTagId(BasePermission):
+    """
+    Permission pour vérifier si l'utilisateur est membre d'un projet contenant le tag spécifique.
+    - Compatible avec les métodes HTTP : GET, POST
+    - Doit être appelée apres IsAuthenticatedWithToken.
+
+    Retourne un status HTTP 404 si le tag n'est pas retrouvable.
+    Retourne un status HTTP 403 si l'utilisateur n'est pas membre du projet.
+    """
+
+    def has_permission(self, request, view):
+        # Récupération flexible de tag_id
+        tag_id = request.data.get("tag_id") or view.kwargs.get("pk")  # POST ou GET
+
+        # Vérification si tag_id est fourni
+        if not tag_id:
+            raise ProjectNotFoundException  # Aucun tag_id fourni
+
+        try:
+            # Récupération du tag et de son projet
+            item_tag = ItemTags.objects.get(tag_id=tag_id)
+            item = item_tag.item
+            project = item.list.board.project
+
+            # Vérification si l'utilisateur appartient au projet
+            if not UserProjects.objects.filter(user=request.user, project=project).exists():
+                raise UserNotInProjectException
+
+        except Tags.DoesNotExist:
+            raise ProjectNotFoundException  # Tag introuvable
 
         return True

@@ -5,6 +5,7 @@ import logo from "/buildit-logo.png";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export default function Layout() {
+
   const [isNavbarOpen, setIsNavbarOpen] = useState<boolean>(true);
 
   const toggleNavbar = () => {
@@ -12,6 +13,7 @@ export default function Layout() {
   };
 
   return (
+
     <div className="w-screen h-screen flex text-primary overflow-hidden relative">
       <div
         className={`${

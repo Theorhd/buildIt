@@ -25,8 +25,6 @@ class UserLoginView(APIView):
         # Vérifier si l'utilisateur existe
         try:
             user = Users.objects.get(mail=mail)
-            pseudo = user.pseudo
-            mail = user.mail
         except Users.DoesNotExist:
             return Response({"detail": "Invalid mail"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -39,10 +37,9 @@ class UserLoginView(APIView):
 
         # Rend une réponse JSON avec le token
         return Response({
+            "user": user,
             "refresh": str(refresh),
-            "access": str(refresh.access_token),
-            "pseudo": str(pseudo),
-            "mail": str(mail)
+            "access": str(refresh.access_token)
         }, status=status.HTTP_200_OK)
 
 class UserCreateView(generics.CreateAPIView):
@@ -61,19 +58,10 @@ class UserCreateView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         # Création de l'utilisateur
-        user = serializer.save()
-
-        # Génération des tokens JWT
-        refresh = RefreshToken.for_user(user)
+        serializer.save()
 
         # Réponse JSON avec les détails de l'utilisateur et les tokens
-        return Response({
-            "user": serializer.data,
-            "tokens": {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            }
-        }, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 class UserRetrieveView(generics.RetrieveAPIView): #TODO ajouter les permissions
     """

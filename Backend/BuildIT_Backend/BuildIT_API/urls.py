@@ -1,11 +1,12 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
-from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView
+from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 from BuildIT_API.views.list_views import ListCreateView, ListRetrieveView, ListUpdateView, ListDeleteView
 from BuildIT_API.views.item_views import ItemCreateView, ItemRetrieveView, ItemUpdateView, ItemDeleteView
+from BuildIT_API.views.tag_views import TagCreateView, TagRetrieveView, TagUpdateView, TagDeleteView
 
 userpatterns = [
     path('user/create', UserCreateView.as_view(), name='register'),                 # Créer un utilisateur
@@ -21,7 +22,8 @@ tokenpatterns = [
 
 projectpatterns = [
     path('project/create', ProjectCreateView.as_view(), name='project-create'),             # Créer un projet (accepte board, lists, items)
-    path('project/get/<int:pk>', ProjectRetriveView.as_view(), name='project-detail'),      # Rechercher un projet par son id + token de ID créaeur
+    path('project/get_single/<int:project_id>', ProjectRetriveView.as_view(), name='project-detail'),      # Rechercher un projet par son id + token de ID créaeur
+    path('project/get_from_token', ProjectFromUserView.as_view(), name='project-detail'),      # Rechercher tous les projets d'un utilisateur
     path('project/update', ProjectUpdateView.as_view(), name='project-update'),             # Modifier un projet + token de ID créateur
     path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),    # Supprimer un projet par son id + token de ID créatieur
 ]
@@ -47,6 +49,13 @@ itempatterns = [
     path('item/delete/<int:pk>', ItemDeleteView.as_view(), name='item-delete'),     # Supprimer un item
 ]
 
+tagpatterns = [
+    path('tag/create', TagCreateView.as_view(), name='tag-create'),              # Créer un tag
+    path('tag/get/<int:pk>', TagRetrieveView.as_view(), name='tag-detail'),      # Rechercher un tag par son id
+    path('tag/update', TagUpdateView.as_view(), name='tag-update'),              # Modifier un tag
+    path('tag/delete/<int:pk>', TagDeleteView.as_view(), name='tag-delete'),     # Supprimer un tag
+]
+
 assistantpatterns = [
     path('assistant/create-thread', CreateThread.as_view(), name='create-thread'),                            # Créer un thread
     path('assistant/update-run-thread', UpdateRunThread.as_view(), name='update-run-thread'),                 # Mettre à jour un thread
@@ -54,4 +63,4 @@ assistantpatterns = [
     path('assistant/delete-thread', DeleteThread.as_view(), name='delete-thread'),                            # Supprimer un thread
 ]
 
-urlpatterns = userpatterns + tokenpatterns + projectpatterns + boardpatterns + listpatterns + assistantpatterns + itempatterns
+urlpatterns = userpatterns + tokenpatterns + projectpatterns + boardpatterns + listpatterns + assistantpatterns + itempatterns + tagpatterns

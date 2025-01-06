@@ -1,7 +1,7 @@
 .list-title {
   color: var(--secondary-color);
 }
-.list-add-task {
+.list-add-item {
   display: flex;
   justify-content: center;
   gap: 5px;
