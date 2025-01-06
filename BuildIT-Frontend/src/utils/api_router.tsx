@@ -35,6 +35,15 @@ export async function refresh() {
     localStorage.setItem('refresh', response.data.refresh);
 };
 
+// Logout
+
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("access");
+  window.location.href = '/login';
+}
+
 // Gestion des erreurs
 const handleError = async (error: any) => {
     // Si l'erreur est une réponse de l'API
@@ -53,7 +62,7 @@ const handleError = async (error: any) => {
                 return api.request(error.config); // Réessaie la requête initiale
             } catch (refreshError) {
                 console.error("Token refresh failed:", refreshError);
-                // window.location.href = '/login'; // Redirige vers la page de connexion 
+                logout(); // Déconnecte l'utilisateur si le refresh échoue
             }
         }
     } 
@@ -71,13 +80,16 @@ const handleError = async (error: any) => {
     throw error; // Propage l'erreur après traitement
 };
 
+
 // Fonctions pour les appels API
 
 // Login
 export async function login(mail: string, password: string) {
     try {
       const response = await api.post("/user/login",{ mail: mail, password: password });
-      return response.data;
+      localStorage.setItem("user", response.data.user);
+      localStorage.setItem("refresh", response.data.refresh);
+      localStorage.setItem("access", response.data.access);
     } catch (error) {
       handleError(error);
     }
@@ -86,10 +98,7 @@ export async function login(mail: string, password: string) {
 // Register
 export async function register(data: any) {
     try {
-      const response = await api.post("/user/create", data);
-      
-      localStorage.setItem('access', response.data.tokens.access);
-      localStorage.setItem('refresh', response.data.tokens.refresh);
+      await api.post("/user/create", data);
       console.log("Account created successfully");
       window.location.href = '/login';
     } catch (error) {

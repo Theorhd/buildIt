@@ -58,19 +58,10 @@ class UserCreateView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         # Création de l'utilisateur
-        user = serializer.save()
-
-        # Génération des tokens JWT
-        refresh = RefreshToken.for_user(user)
+        serializer.save()
 
         # Réponse JSON avec les détails de l'utilisateur et les tokens
-        return Response({
-            "user": serializer.data,
-            "tokens": {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            }
-        }, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 class UserRetrieveView(generics.RetrieveAPIView): #TODO ajouter les permissions
     """

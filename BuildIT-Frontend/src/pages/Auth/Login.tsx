@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import logo from '../../../public/buildit-logo.png';
-import { useSession } from '../../contexts/SessionProvider';
+import { login } from '../../utils/api_router';
 
 const Login = () => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login } = useSession();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
