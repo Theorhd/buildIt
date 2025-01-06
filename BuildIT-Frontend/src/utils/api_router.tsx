@@ -85,7 +85,7 @@ const handleError = async (error: any) => {
 
 // Fonctions pour les appels API
 
-export async function login(data: UserInterface) {
+export async function login({ mail, password }: { mail: string, password: string }) {
     /*
     Authentifier un utilisateur
 
@@ -98,7 +98,6 @@ export async function login(data: UserInterface) {
       localStorage.setItem("user", response.data.user);
       localStorage.setItem("refresh", response.data.refresh);
       localStorage.setItem("access", response.data.access);
-        const response = await api.post("/user/login", data);
         return response.data;
     } catch (error) {
         handleError(error);
