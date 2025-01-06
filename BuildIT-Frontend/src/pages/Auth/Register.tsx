@@ -49,38 +49,38 @@ const Register: React.FC = () => {
                     <div className='flex mt-2 mb-2'>
                         <div className='flex flex-col w-1/2'>
                             <label>First Name</label>
-                            <input type="text" name="firstname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstname} onChange={handleChange} required/>
+                            <input type="text" name="firstname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.firstname} onChange={handleChange}/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Last Name</label>
-                            <input type="text" name="lastname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastname} onChange={handleChange} required/>
+                            <input type="text" name="lastname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.lastname} onChange={handleChange}/>
                         </div>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
-                            <label>Pseudo</label>
+                            <label>Pseudo <span title='Required' className='text-red-500 cursor-pointer'>*</span></label>
                             <input type="text" name="pseudo" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.pseudo} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
                             <label>Phone Number</label>
-                            <input type="text" name="phone" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.phone} onChange={handleChange} required/>
+                            <input type="text" name="phone" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.phone} onChange={handleChange}/>
                         </div>
                     </div>
                     <div className='flex flex-col mb-2'>
-                        <label>Email</label>
+                        <label>Email <span title='Required' className='text-red-500 cursor-pointer'>*</span></label>
                         <input type="email" name="mail" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.mail} onChange={handleChange} required/>
                     </div>
                     <div className='flex flex-col mb-2'>
-                        <label>Tagname</label>
+                        <label>Tagname <span title='Required' className='text-red-500 cursor-pointer'>*</span></label>
                         <input type="text" name="tagname" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.tagname} onChange={handleChange} required/>
                     </div>
                     <div className='flex mb-2'>
                         <div className='flex flex-col w-1/2'>
-                            <label>Password</label>
+                            <label>Password <span title='Required' className='text-red-500 cursor-pointer'>*</span></label>
                             <input type="password" name="password" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.password} onChange={handleChange} required/>
                         </div>
                         <div className='flex flex-col w-1/2 ml-5'>
-                            <label>Confirm Password</label>
+                            <label>Confirm Password <span title='Required' className='text-red-500 cursor-pointer'>*</span></label>
                             <input type="password" name="confirmPassword" className='w-full h-10 p-2 text-white border-none focus:outline-none rounded cursor-auto bg-bgSecondary' value={formData.confirmPassword} onChange={handleChange} required/>
                         </div>
                     </div>

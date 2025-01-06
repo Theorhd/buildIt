@@ -37,6 +37,15 @@ export async function refresh() {
     localStorage.setItem('refresh', response.data.refresh);
 };
 
+// Logout
+
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("access");
+  window.location.href = '/login';
+}
+
 // Gestion des erreurs
 const handleError = async (error: any) => {
     // Si l'erreur est une réponse de l'API
@@ -55,7 +64,7 @@ const handleError = async (error: any) => {
                 return api.request(error.config); // Réessaie la requête initiale
             } catch (refreshError) {
                 console.error("Token refresh failed:", refreshError);
-                // window.location.href = '/login'; // Redirige vers la page de connexion 
+                logout(); // Déconnecte l'utilisateur si le refresh échoue
             }
         }
     } 
@@ -73,6 +82,7 @@ const handleError = async (error: any) => {
     throw error; // Propage l'erreur après traitement
 };
 
+
 // Fonctions pour les appels API
 
 export async function login(data: UserInterface) {
@@ -84,6 +94,10 @@ export async function login(data: UserInterface) {
     - password
     */
     try {
+      const response = await api.post("/user/login",{ mail: mail, password: password });
+      localStorage.setItem("user", response.data.user);
+      localStorage.setItem("refresh", response.data.refresh);
+      localStorage.setItem("access", response.data.access);
         const response = await api.post("/user/login", data);
         return response.data;
     } catch (error) {
@@ -102,6 +116,9 @@ export async function register(data: UserInterface) {
     - tagname
     */
     try {
+      await api.post("/user/create", data);
+      console.log("Account created successfully");
+      window.location.href = '/login';
         const response = await api.post("/user/create", data);
       
         localStorage.setItem('access', response.data.tokens.access);
@@ -125,6 +142,50 @@ export async function getProjectsFromToken() {
     }
 };
 
+// Crée un Thread
+export async function createThread() {
+    try {
+      const response = await api.post("/assistant/create-thread");
+      return response.data.thread_id;
+    } catch (error) {
+      handleError(error);
+    }
+}
+
+// Met à jour le Thread et récupère le message de l'IA
+export async function updateThread(threadID: any, content: any) {
+    try {
+      const response = await api.post("/assistant/update-run-thread", {
+        thread_id: threadID,
+        content: content,
+      });
+      const get_response = await api.post("/assistant/get-assistant-response", {
+        thread_id: threadID,
+        run_id: response.data.run_id,
+      });
+      return get_response.data.assistant_reply;
+    } catch (error) {
+      handleError(error);
+    }
+}
+
+// Process du message final de l'IA pour crée projets [*ModaleIA.tsx / Ligne 101-127*]
+export async function processMessage(finalResponse: any, threadID: any) {
+  try {
+    const response = await api.post("/project/create", finalResponse);
+    if (response.status === 201) {
+      const deleteThread = await api.post("/assistant/delete-thread", {
+        thread_id: threadID,
+      });
+      console.log(deleteThread.data);
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    handleError(error);
+  }
+}
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
