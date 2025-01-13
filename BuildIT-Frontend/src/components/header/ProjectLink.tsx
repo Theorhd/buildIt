@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import Tooltip from "../ToolTip";
 import { ProjectInterface } from "../../utils/interfaces";
 import ModaleInvite from "../ModaleInvite";
+import { addUserToProject } from "../../utils/api_router";
 
 
 export default function ProjectLink({project}: { project: ProjectInterface }) {
@@ -66,7 +67,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
         ))}
         {inviteModaleOpen && (
             <ModaleInvite
-                onInvite={(tagname, projectId) => console.log(tagname, projectId)}
+                onInvite={(tagname, projectId) => addUserToProject(projectId, tagname)}
                 onClose={() => setInviteModale(false)}
                 projectId={projectId}
             />
