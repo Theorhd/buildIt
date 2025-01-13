@@ -36,13 +36,13 @@ class IsUserInProjectFromProjectId(BasePermission):
     def has_permission(self, request, view):
 
         # Récupération du project_id POST ou GET
-        project_id = request.data.get("project_id") or view.kwargs.get("project_id") # 
+        project_id = request.data.get("project_id") or view.kwargs.get("project_id")
 
         # Si le projet n'est pas fourni erreur 404 'project_not_found'
         if not project_id:
             raise ProjectNotFoundException
 
-        # Si l'utilisateur n'est pas membre du projet erreur 400 'user_not_in_project'
+        # Si l'utilisateur n'est pas membre du projet erreur 403 'user_not_in_project'
         if not UserProjects.objects.filter(user=request.user, project_id=project_id).exists():
             raise UserNotInProjectException
 
