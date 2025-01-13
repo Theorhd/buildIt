@@ -185,6 +185,24 @@ export async function processMessage(finalResponse: any, threadID: any) {
     handleError(error);
   }
 }
+
+export async function addUserToProject(projectID: number, userTagName: string) {
+    /*
+    Ajoute un utilisateur à un projet
+    
+    Required fields:
+    - project_id
+    - user tagname
+    */
+    try {
+        const response = await api.post("/project/add_user", { project_id: projectID, user_tagname: userTagName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+
+}
+
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
