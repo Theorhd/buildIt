@@ -15,6 +15,7 @@ export default function Navbar() {
       try {
         const fetchedProjects = await getProjectsFromToken();
         setProjects(fetchedProjects);
+        console.log(fetchedProjects);
       } catch (err) {
         setError("Failed to load projects : " + err);
       } finally {
@@ -35,7 +36,7 @@ export default function Navbar() {
 
   return (
     <nav>
-        {projects && projects.length > 0 && projects.map((project) => (
+        {projects.active_projects && projects.active_projects.length > 0 && projects.active_projects.map((project) => (
           <ProjectLink project={project} key={project.tagname}/>
         ))}
     </nav>
