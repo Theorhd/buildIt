@@ -43,7 +43,7 @@ function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("refresh");
   localStorage.removeItem("access");
-//   window.location.href = '/login';
+  window.location.href = '/login';
 }
 
 // Gestion des erreurs
