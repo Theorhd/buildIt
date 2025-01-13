@@ -38,7 +38,7 @@ function App() {
           </Route>
 
           <Route path="/:project_tagname/:board_name" element={<Board />} />
-          <Route path="/account/:tagname" element={<Account />} />
+          <Route path="/account/" element={<Account />} />
           
           <Route path="*" element={<NotFound />} />
         </Route>
