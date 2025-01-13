@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 interface ModaleInviteProps {
-  onInvite: (tagname: string, projectTagname: string) => void;
+  onInvite: (tagname: string, projectId: string) => void;
   onClose: () => void;
-  projectTagname: string;
+  projectId: string;
 }
 
-const ModaleInvite: React.FC<ModaleInviteProps> = ({ onInvite, onClose, projectTagname }) => {
+const ModaleInvite: React.FC<ModaleInviteProps> = ({ onInvite, onClose, projectId }) => {
   const [tagname, setTagname] = useState('');
 
   const handleInvite = () => {
@@ -14,7 +14,7 @@ const ModaleInvite: React.FC<ModaleInviteProps> = ({ onInvite, onClose, projectT
       alert('Please enter a tagname');
       return;
     }
-    onInvite(tagname, projectTagname);
+    onInvite(tagname, projectId);
     onClose();
   };
 

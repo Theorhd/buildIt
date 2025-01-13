@@ -15,7 +15,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
     };
 
     const [inviteModaleOpen, setInviteModale] = useState(false);
-    const [projectTagname, setProjectTagname] = useState<string>('');
+    const [projectId, setProjectId] = useState<string>('');
 
   return (
     <div key={project.tagname} className="flex flex-col px-4 py-1">
@@ -40,7 +40,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
                         className="w-4 h-4 cursor-pointer" 
                         onClick={() => {
                             setInviteModale(true);
-                            setProjectTagname(project.tagname);
+                            setProjectId(project.id);
                         }}
                     />
                 </Tooltip>
@@ -66,9 +66,9 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
         ))}
         {inviteModaleOpen && (
             <ModaleInvite
-                onInvite={(tagname, projectTagname) => console.log(tagname, projectTagname)}
+                onInvite={(tagname, projectId) => console.log(tagname, projectId)}
                 onClose={() => setInviteModale(false)}
-                projectTagname={projectTagname}
+                projectId={projectId}
             />
         )}
     </div>
