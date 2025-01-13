@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PlusCircleIcon, PaintBrushIcon } from "@heroicons/react/24/outline";
-import { ItemInterface , TagInterface } from "../utils/interfaces";
+import { ItemInterface, TagInterface } from "../utils/interfaces";
 
 interface ListModalProps {
   item: ItemInterface;
@@ -63,7 +63,7 @@ export default function ListModal({ item, onClose, onSave }: ListModalProps) {
             <h2 className="text-xl font-bold">Tags:</h2>
             <button
               onClick={() => setShowTagInput(true)}
-              className="rounded-md bg-bgSecondary hover:bg-secondary  px-4 text-xs flex items-center"
+              className="rounded-md bg-bgSecondary hover:bg-secondary px-4 text-xs flex items-center"
             >
               <PlusCircleIcon className="size-6 mr-1" />
               Add Tag
@@ -113,7 +113,7 @@ export default function ListModal({ item, onClose, onSave }: ListModalProps) {
                 {tag.tag_name}
               </span>
               <button
-                onClick={() => deleteTag(tag.id)}
+                onClick={() => deleteTag(tag.id as number)}
                 className="absolute w-full h-full rounded-md z-20 text-gray-400 transition-all hover:text-white focus:outline-none border-none opacity-0 group-hover:opacity-100"
                 style={{ backgroundColor: tag.color }}
               >
@@ -134,7 +134,12 @@ export default function ListModal({ item, onClose, onSave }: ListModalProps) {
         <div className="flex justify-between mt-4">
           <button
             onClick={() => {
-              onSave({ description, tags, status }); // Inclut le statut dans les détails sauvegardés
+              onSave({
+                ...item,
+                description,
+                tags,
+                status,
+              });
               onClose();
             }}
             className="btn-comp text-xs transition-all"
@@ -146,12 +151,12 @@ export default function ListModal({ item, onClose, onSave }: ListModalProps) {
             onClick={() => {
               setDescription("");
               setTags([]);
-              setStatus("In Progress"); // Réinitialiser le statut
+              setStatus("In Progress");
               onClose();
             }}
             className="rounded-md text-xs"
           >
-            Annuler
+            Cancel
           </button>
         </div>
       </div>

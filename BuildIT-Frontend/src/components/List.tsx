@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { ListInterface, ItemInterface, TagInterface } from "../utils/interfaces";
-import "../styles/List.css"; // Ajout explicite du CSS manquant
+import { ListInterface, ItemInterface } from "../utils/interfaces";
+import "../styles/List.css";
 
 export default function List({
   list,
@@ -12,23 +12,26 @@ export default function List({
   list: ListInterface;
   deleteList: (listId: number) => void;
   updateList: (list: ListInterface) => void;
-  setSelectedItem: ({ item, list }: { item: ItemInterface; list: ListInterface }) => void;
+  setSelectedItem: (args: { item: ItemInterface; list: ListInterface }) => void;
 }) {
   const [itemValues, setItemValues] = useState<{ [key: number]: string }>({});
-
-  const statusOptions = ["To Do", "In Progress", "Done"];
 
   // Ajouter un item
   const addItem = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (itemValues[list.id]?.trim() !== "") {
+    if (!list.id) {
+      console.error("list.id is undefined");
+      return;
+    }
+    const value = itemValues[list.id]?.trim();
+    if (value && value !== "") {
       const newItem: ItemInterface = {
         id: Date.now(),
-        item_name: itemValues[list.id],
+        item_name: value,
         description: "",
         status: "To Do",
         placement: list.items.length,
-        created_by: 1, // Exemple, à remplacer avec un vrai ID utilisateur
+        created_by: 1, // Exemple d'utilisateur par défaut
         creation_date: new Date().toISOString(),
         list: list.id,
       };
@@ -52,7 +55,6 @@ export default function List({
     updateList({ ...list, list_name: "" });
   };
 
-
   // Retourner la classe CSS pour le statut
   const getStatusClass = (status: string) => {
     switch (status) {
@@ -64,6 +66,8 @@ export default function List({
         return "text-secondary";
       case "Blocked":
         return "text-red-500";
+      default:
+        return "";
     }
   };
 
@@ -71,7 +75,7 @@ export default function List({
     <li className="list h-full block px-2 shrink-0 self-start drop-shadow-lg whitespace-nowrap">
       <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full scroll-m-2">
         <button
-          onClick={() => deleteList(list.id)}
+          onClick={() => list.id && deleteList(list.id)}
           className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
         >
           &#x2715;
@@ -82,10 +86,8 @@ export default function List({
             className="text-secondary font-montserrat list-input"
             placeholder="List name"
             value={list.list_name}
-            onClick={clearTitle}
-            onChange={(e) =>
-              updateList({ ...list, list_name: e.target.value })
-            }
+            onFocus={clearTitle}
+            onChange={(e) => updateList({ ...list, list_name: e.target.value })}
           />
           <PencilIcon className="size-4 absolute right-12" />
         </div>
@@ -97,11 +99,22 @@ export default function List({
               key={itemIndex}
               onClick={() =>
                 setSelectedItem({
-                  list: list,
-                  item: item,
+                  list,
+                  item,
                 })
               }
             >
+              <div className="pb-3">
+                {item.tags?.map((tag) => (
+                  <span
+                    key={tag.id}
+                    style={{ backgroundColor: tag.color }}
+                    className="text-xs rounded-md px-2 py-1 mr-2"
+                  >
+                    {tag.tag_name}
+                  </span>
+                ))}
+              </div>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -129,13 +142,17 @@ export default function List({
           <input
             type="text"
             placeholder="Add an item"
-            value={itemValues[list.id] || ""}
+            value={list.id ? itemValues[list.id] || "" : ""}
             onChange={(e) =>
+              list.id &&
               setItemValues({ ...itemValues, [list.id]: e.target.value })
             }
             className="list-input w-full text-primary"
           />
-          <button type="submit" className="drop-shadow-lg pl-6 btn-comp text-xs">
+          <button
+            type="submit"
+            className="drop-shadow-lg pl-6 btn-comp text-xs"
+          >
             Add Item
           </button>
         </form>
