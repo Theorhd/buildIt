@@ -1,115 +1,600 @@
 {
     "Skills": [
-        { "name": "mern stack", "categorie": "application", "description": "Stack basée sur MongoDB, Express.js, React et Node.js pour des applications web full-stack." },
-        { "name": "mean stack", "categorie": "application", "description": "Stack utilisant MongoDB, Express.js, Angular et Node.js pour des applications web complètes." },
-        { "name": "lamp stack", "categorie": "application", "description": "Ensemble de technologies open source : Linux, Apache, MySQL et PHP pour le développement web." },
-        { "name": "jam stack", "categorie": "application", "description": "Architecture utilisant JavaScript, APIs et Markup pour des sites web modernes et rapides." },
-        { "name": "django + react", "categorie": "application", "description": "Combinaison de Django pour le backend et React.js pour le frontend des applications web." },
-        { "name": "spring boot + angular", "categorie": "application", "description": "Stack utilisant Spring Boot pour le backend et Angular pour le frontend." },
-        { "name": "flutter + firebase", "categorie": "mobile", "description": "Framework mobile Flutter avec Firebase pour un backend sans serveur." },
+        { "name": "mern stack", "category": "application", "description": "Stack basée sur MongoDB, Express.js, React et Node.js pour des applications web full-stack." },
+        { "name": "mean stack", "category": "application", "description": "Stack utilisant MongoDB, Express.js, Angular et Node.js pour des applications web complètes." },
+        { "name": "lamp stack", "category": "application", "description": "Ensemble de technologies open source : Linux, Apache, MySQL et PHP pour le développement web." },
+        { "name": "jam stack", "category": "application", "description": "Architecture utilisant JavaScript, APIs et Markup pour des sites web modernes et rapides." },
+        { "name": "django + react", "category": "application", "description": "Combinaison de Django pour le backend et React.js pour le frontend des applications web." },
+        { "name": "spring boot + angular", "category": "application", "description": "Stack utilisant Spring Boot pour le backend et Angular pour le frontend." },
+        { "name": "flutter + firebase", "category": "mobile", "description": "Framework mobile Flutter avec Firebase pour un backend sans serveur." },
 
-        { "name": "react.js", "categorie": "frontend", "description": "Bibliothèque JavaScript pour construire des interfaces utilisateur interactives." },
-        { "name": "angular", "categorie": "frontend", "description": "Framework TypeScript développé par Google pour construire des applications dynamiques." },
-        { "name": "vue.js", "categorie": "frontend", "description": "Framework JavaScript progressif pour construire des interfaces utilisateur." },
-        { "name": "svelte", "categorie": "frontend", "description": "Framework JavaScript compilant les composants en code optimisé pour le DOM." },
-        { "name": "next.js", "categorie": "frontend", "description": "Framework React pour le rendu côté serveur (SSR) et la génération statique." },
-        { "name": "nuxt.js", "categorie": "frontend", "description": "Framework Vue.js pour le rendu côté serveur et la génération statique de sites web." },
+        { "name": "react.js", "category": "frontend", "description": "Bibliothèque JavaScript pour construire des interfaces utilisateur interactives." },
+        { "name": "angular", "category": "frontend", "description": "Framework TypeScript développé par Google pour construire des applications dynamiques." },
+        { "name": "vue.js", "category": "frontend", "description": "Framework JavaScript progressif pour construire des interfaces utilisateur." },
+        { "name": "svelte", "category": "frontend", "description": "Framework JavaScript compilant les composants en code optimisé pour le DOM." },
+        { "name": "next.js", "category": "frontend", "description": "Framework React pour le rendu côté serveur (SSR) et la génération statique." },
+        { "name": "nuxt.js", "category": "frontend", "description": "Framework Vue.js pour le rendu côté serveur et la génération statique de sites web." },
       
-        { "name": "html5", "categorie": "frontend", "description": "Langage de base pour structurer et présenter du contenu sur le web." },
-        { "name": "css3", "categorie": "frontend", "description": "Langage de style pour la mise en page et l'esthétique des pages web." },
-        { "name": "javascript (es6+)", "categorie": "frontend", "description": "Langage de programmation pour le développement frontend dynamique et interactif." },
-        { "name": "sass/scss", "categorie": "frontend", "description": "Préprocesseur CSS ajoutant des fonctionnalités comme les variables et les mixins." },
-        { "name": "less", "categorie": "frontend", "description": "Préprocesseur CSS qui étend les capacités du CSS avec des variables et des fonctions." },
-        { "name": "typescript", "categorie": "frontend", "description": "Sur-ensemble de JavaScript ajoutant un typage statique pour une meilleure maintenance." },
+        { "name": "html5", "category": "frontend", "description": "Langage de base pour structurer et présenter du contenu sur le web." },
+        { "name": "css3", "category": "frontend", "description": "Langage de style pour la mise en page et l'esthétique des pages web." },
+        { "name": "javascript (es6+)", "category": "frontend", "description": "Langage de programmation pour le développement frontend dynamique et interactif." },
+        { "name": "sass/scss", "category": "frontend", "description": "Préprocesseur CSS ajoutant des fonctionnalités comme les variables et les mixins." },
+        { "name": "less", "category": "frontend", "description": "Préprocesseur CSS qui étend les capacités du CSS avec des variables et des fonctions." },
+        { "name": "typescript", "category": "frontend", "description": "Sur-ensemble de JavaScript ajoutant un typage statique pour une meilleure maintenance." },
       
-        { "name": "tailwind css", "categorie": "frontend", "description": "Framework CSS utilitaire pour construire rapidement des interfaces utilisateur." },
-        { "name": "bootstrap", "categorie": "frontend", "description": "Framework CSS populaire pour des designs responsive et consistants." },
-        { "name": "material-ui", "categorie": "frontend", "description": "Bibliothèque React implémentant les principes Material Design de Google." },
-        { "name": "chakra ui", "categorie": "frontend", "description": "Bibliothèque React pour construire des interfaces utilisateur accessibles et modernes." },
-        { "name": "ant design", "categorie": "frontend", "description": "Framework React pour des interfaces utilisateur orientées entreprise." },
+        { "name": "tailwind css", "category": "frontend", "description": "Framework CSS utilitaire pour construire rapidement des interfaces utilisateur." },
+        { "name": "bootstrap", "category": "frontend", "description": "Framework CSS populaire pour des designs responsive et consistants." },
+        { "name": "material-ui", "category": "frontend", "description": "Bibliothèque React implémentant les principes Material Design de Google." },
+        { "name": "chakra ui", "category": "frontend", "description": "Bibliothèque React pour construire des interfaces utilisateur accessibles et modernes." },
+        { "name": "ant design", "category": "frontend", "description": "Framework React pour des interfaces utilisateur orientées entreprise." },
       
-        { "name": "node.js", "categorie": "backend", "description": "Environnement JavaScript côté serveur pour des applications rapides et scalables." },
-        { "name": "python", "categorie": "backend", "description": "Langage de programmation polyvalent souvent utilisé pour les backends web." },
-        { "name": "java (spring boot)", "categorie": "backend", "description": "Langage et framework pour créer des backends robustes et sécurisés." },
-        { "name": "ruby (ruby on rails)", "categorie": "backend", "description": "Langage et framework pour le développement rapide d'applications web." },
-        { "name": "php (laravel)", "categorie": "backend", "description": "Langage utilisé avec Laravel pour développer des backends efficaces." },
-        { "name": "c# (asp.net core)", "categorie": "backend", "description": "Langage pour développer des API et backends sécurisés avec ASP.NET Core." },
-        { "name": "go (gin)", "categorie": "backend", "description": "Langage Go avec le framework Gin pour des backends rapides et performants." },
-        { "name": "kotlin", "categorie": "backend", "description": "Langage moderne pour le développement backend et d'applications Android." },
+        { "name": "node.js", "category": "backend", "description": "Environnement JavaScript côté serveur pour des applications rapides et scalables." },
+        { "name": "java (spring boot)", "category": "backend", "description": "Langage et framework pour créer des backends robustes et sécurisés." },
+        { "name": "ruby (ruby on rails)", "category": "backend", "description": "Langage et framework pour le développement rapide d'applications web." },
+        { "name": "php (laravel)", "category": "backend", "description": "Langage utilisé avec Laravel pour développer des backends efficaces." },
+        { "name": "c# (asp.net core)", "category": "backend", "description": "Langage pour développer des API et backends sécurisés avec ASP.NET Core." },
+        { "name": "go (gin)", "category": "backend", "description": "Langage Go avec le framework Gin pour des backends rapides et performants." },
+        { "name": "kotlin", "category": "backend", "description": "Langage moderne pour le développement backend et d'applications Android." },
       
-        { "name": "mysql", "categorie": "database", "description": "Système de gestion de bases de données relationnelles open source." },
-        { "name": "postgresql", "categorie": "database", "description": "Base de données relationnelle puissante et riche en fonctionnalités." },
-        { "name": "mongodb", "categorie": "database", "description": "Base de données NoSQL orientée documents pour stocker des données flexibles." },
-        { "name": "couchdb", "categorie": "database", "description": "Base de données NoSQL conçue pour une gestion simplifiée des documents JSON." },
-        { "name": "firebase firestore", "categorie": "database", "description": "Base de données NoSQL temps réel proposée par Google." },
-        { "name": "redis", "categorie": "database", "description": "Base de données en mémoire utilisée pour la mise en cache et les sessions." },
-        { "name": "neo4j", "categorie": "database", "description": "Base de données orientée graphes pour des relations complexes entre entités." },
+        { "name": "mysql", "category": "database", "description": "Système de gestion de bases de données relationnelles open source." },
+        { "name": "postgresql", "category": "database", "description": "Base de données relationnelle puissante et riche en fonctionnalités." },
+        { "name": "mongodb", "category": "database", "description": "Base de données NoSQL orientée documents pour stocker des données flexibles." },
+        { "name": "couchdb", "category": "database", "description": "Base de données NoSQL conçue pour une gestion simplifiée des documents JSON." },
+        { "name": "firebase firestore", "category": "database", "description": "Base de données NoSQL temps réel proposée par Google." },
+        { "name": "redis", "category": "database", "description": "Base de données en mémoire utilisée pour la mise en cache et les sessions." },
+        { "name": "neo4j", "category": "database", "description": "Base de données orientée graphes pour des relations complexes entre entités." },
       
-        { "name": "bubble", "categorie": "nocode", "description": "Plateforme no-code pour créer des applications web sans programmation." },
-        { "name": "webflow", "categorie": "nocode", "description": "Outil de conception web sans code pour créer des sites interactifs." },
-        { "name": "zapier", "categorie": "nocode", "description": "Plateforme d'automatisation connectant différentes applications sans code." },
+        { "name": "bubble", "category": "nocode", "description": "Plateforme no-code pour créer des applications web sans programmation." },
+        { "name": "webflow", "category": "nocode", "description": "Outil de conception web sans code pour créer des sites interactifs." },
+        { "name": "zapier", "category": "nocode", "description": "Plateforme d'automatisation connectant différentes applications sans code." },
       
-        { "name": "python", "categorie": "code_language", "description": "Langage de programmation simple et polyvalent adapté à de nombreux domaines." },
-        { "name": "java", "categorie": "code_language", "description": "Langage de programmation orienté objet utilisé pour des applications complexes." },
-        { "name": "c++", "categorie": "code_language", "description": "Langage compilé performant pour des applications système et embarquées." },
-        { "name": "ruby", "categorie": "code_language", "description": "Langage simple et expressif pour le développement web et d'outils." },
-        { "name": "php", "categorie": "code_language", "description": "Langage pour le développement web côté serveur, simple et efficace." },
-        { "name": "javascript", "categorie": "code_language", "description": "Langage essentiel pour les applications web côté client et serveur." },
-        { "name": "figma", "categorie": "design", "description": "Outil de conception d'interfaces collaboratif basé sur le cloud." },
-        { "name": "adobe xd", "categorie": "design", "description": "Outil de design UX/UI pour prototyper et concevoir des interfaces utilisateur." },
-        { "name": "sketch", "categorie": "design", "description": "Logiciel de conception d'interface pour Mac, idéal pour les prototypes." },
-        { "name": "canva", "categorie": "design", "description": "Outil de conception graphique simplifié pour créer des visuels professionnels." },
-        { "name": "invision", "categorie": "design", "description": "Outil de prototypage pour la conception d'interfaces interactives." },
-        { "name": "zeplin", "categorie": "design", "description": "Plateforme de collaboration entre designers et développeurs pour les assets." },
-        { "name": "photoshop", "categorie": "design", "description": "Logiciel professionnel pour la création et la retouche d'images." },
-        { "name": "illustrator", "categorie": "design", "description": "Logiciel de création de graphiques vectoriels et de design." },
-        { "name": "affinity designer", "categorie": "design", "description": "Outil de conception graphique vectorielle pour professionnels et amateurs." },
-        { "name": "gimp", "categorie": "design", "description": "Logiciel libre pour l'édition et la retouche d'images." },
-        { "name": "coreldraw", "categorie": "design", "description": "Suite de conception graphique pour des visuels professionnels et artistiques." },
-        { "name": "balsamiq", "categorie": "design", "description": "Outil pour créer des wireframes simples et rapides." },
-        { "name": "axure rp", "categorie": "design", "description": "Plateforme avancée pour le prototypage et les wireframes interactifs." },
-        { "name": "proto.io", "categorie": "design", "description": "Outil pour concevoir des prototypes interactifs sans code." },
-        { "name": "uxpin", "categorie": "design", "description": "Plateforme UX collaborative pour le prototypage et la documentation de design." },
-        { "name": "marvel app", "categorie": "design", "description": "Outil de prototypage et collaboration pour designers et équipes produit." },
-        { "name": "framer", "categorie": "design", "description": "Outil de design et prototypage avancé avec animation intégrée." },
+        { "name": "python", "category": "code_language", "description": "Langage de programmation simple et polyvalent adapté à de nombreux domaines." },
+        { "name": "java", "category": "code_language", "description": "Langage de programmation orienté objet utilisé pour des applications complexes." },
+        { "name": "c++", "category": "code_language", "description": "Langage compilé performant pour des applications système et embarquées." },
+        { "name": "ruby", "category": "code_language", "description": "Langage simple et expressif pour le développement web et d'outils." },
+        { "name": "php", "category": "code_language", "description": "Langage pour le développement web côté serveur, simple et efficace." },
+        { "name": "javascript", "category": "code_language", "description": "Langage essentiel pour les applications web côté client et serveur." },
+        { "name": "figma", "category": "design", "description": "Outil de conception d'interfaces collaboratif basé sur le cloud." },
+        { "name": "adobe xd", "category": "design", "description": "Outil de design UX/UI pour prototyper et concevoir des interfaces utilisateur." },
+        { "name": "sketch", "category": "design", "description": "Logiciel de conception d'interface pour Mac, idéal pour les prototypes." },
+        { "name": "canva", "category": "design", "description": "Outil de conception graphique simplifié pour créer des visuels professionnels." },
+        { "name": "invision", "category": "design", "description": "Outil de prototypage pour la conception d'interfaces interactives." },
+        { "name": "zeplin", "category": "design", "description": "Plateforme de collaboration entre designers et développeurs pour les assets." },
+        { "name": "photoshop", "category": "design", "description": "Logiciel professionnel pour la création et la retouche d'images." },
+        { "name": "illustrator", "category": "design", "description": "Logiciel de création de graphiques vectoriels et de design." },
+        { "name": "affinity designer", "category": "design", "description": "Outil de conception graphique vectorielle pour professionnels et amateurs." },
+        { "name": "gimp", "category": "design", "description": "Logiciel libre pour l'édition et la retouche d'images." },
+        { "name": "coreldraw", "category": "design", "description": "Suite de conception graphique pour des visuels professionnels et artistiques." },
+        { "name": "balsamiq", "category": "design", "description": "Outil pour créer des wireframes simples et rapides." },
+        { "name": "axure rp", "category": "design", "description": "Plateforme avancée pour le prototypage et les wireframes interactifs." },
+        { "name": "proto.io", "category": "design", "description": "Outil pour concevoir des prototypes interactifs sans code." },
+        { "name": "uxpin", "category": "design", "description": "Plateforme UX collaborative pour le prototypage et la documentation de design." },
+        { "name": "marvel app", "category": "design", "description": "Outil de prototypage et collaboration pour designers et équipes produit." },
+        { "name": "framer", "category": "design", "description": "Outil de design et prototypage avancé avec animation intégrée." },
 
-        { "name": "jira", "categorie": "elaboration_cdc", "description": "Outil de gestion de projet agile pour le suivi des tâches et des sprints." },
-        { "name": "trello", "categorie": "elaboration_cdc", "description": "Outil de gestion de tâches visuel basé sur un système de tableaux et cartes." },
-        { "name": "asana", "categorie": "elaboration_cdc", "description": "Plateforme de gestion de projets pour coordonner les tâches et équipes." },
-        { "name": "monday.com", "categorie": "elaboration_cdc", "description": "Outil de planification et collaboration pour les équipes." },
-        { "name": "notion", "categorie": "elaboration_cdc", "description": "Plateforme pour documenter, organiser et planifier des projets." },
-        { "name": "slack", "categorie": "elaboration_cdc", "description": "Outil de communication d'équipe avec intégrations multiples." },
-        { "name": "microsoft teams", "categorie": "elaboration_cdc", "description": "Plateforme de communication et collaboration pour les équipes." },
-        { "name": "confluence", "categorie": "elaboration_cdc", "description": "Outil pour centraliser la documentation des projets et partager les connaissances." },
-        { "name": "clickup", "categorie": "elaboration_cdc", "description": "Plateforme de gestion de projet unifiée pour suivre les tâches et les progrès." },
-        { "name": "basecamp", "categorie": "elaboration_cdc", "description": "Outil de collaboration pour coordonner les projets et la communication." },
-        { "name": "miro", "categorie": "elaboration_cdc", "description": "Tableau blanc en ligne collaboratif pour brainstormings et planifications." },
-        { "name": "lucidchart", "categorie": "elaboration_cdc", "description": "Outil pour créer des diagrammes, workflows et visualisations." },
-        { "name": "draw.io", "categorie": "elaboration_cdc", "description": "Outil gratuit pour concevoir des diagrammes et des organigrammes." },
-        { "name": "airtable", "categorie": "elaboration_cdc", "description": "Base de données visuelle pour organiser et suivre des projets." },
-        { "name": "todoist", "categorie": "elaboration_cdc", "description": "Gestionnaire de tâches simple pour organiser les tâches personnelles et professionnelles." },
-        { "name": "workflowy", "categorie": "elaboration_cdc", "description": "Outil minimaliste pour organiser et hiérarchiser des idées." },
-        { "name": "loom", "categorie": "elaboration_cdc", "description": "Outil de communication vidéo pour expliquer ou documenter des processus." },
-        { "name": "clickmeeting", "categorie": "elaboration_cdc", "description": "Plateforme de webinaires pour organiser des réunions et des présentations." },
-        { "name": "zoho projects", "categorie": "elaboration_cdc", "description": "Outil de gestion de projet avec planification et collaboration." },
-        { "name": "ganttproject", "categorie": "elaboration_cdc", "description": "Application pour créer des diagrammes de Gantt et gérer les tâches." },
+        { "name": "jira", "category": "elaboration_cdc", "description": "Outil de gestion de projet agile pour le suivi des tâches et des sprints." },
+        { "name": "trello", "category": "elaboration_cdc", "description": "Outil de gestion de tâches visuel basé sur un système de tableaux et cartes." },
+        { "name": "asana", "category": "elaboration_cdc", "description": "Plateforme de gestion de projets pour coordonner les tâches et équipes." },
+        { "name": "monday.com", "category": "elaboration_cdc", "description": "Outil de planification et collaboration pour les équipes." },
+        { "name": "notion", "category": "elaboration_cdc", "description": "Plateforme pour documenter, organiser et planifier des projets." },
+        { "name": "slack", "category": "elaboration_cdc", "description": "Outil de communication d'équipe avec intégrations multiples." },
+        { "name": "microsoft teams", "category": "elaboration_cdc", "description": "Plateforme de communication et collaboration pour les équipes." },
+        { "name": "confluence", "category": "elaboration_cdc", "description": "Outil pour centraliser la documentation des projets et partager les connaissances." },
+        { "name": "clickup", "category": "elaboration_cdc", "description": "Plateforme de gestion de projet unifiée pour suivre les tâches et les progrès." },
+        { "name": "basecamp", "category": "elaboration_cdc", "description": "Outil de collaboration pour coordonner les projets et la communication." },
+        { "name": "miro", "category": "elaboration_cdc", "description": "Tableau blanc en ligne collaboratif pour brainstormings et planifications." },
+        { "name": "lucidchart", "category": "elaboration_cdc", "description": "Outil pour créer des diagrammes, workflows et visualisations." },
+        { "name": "draw.io", "category": "elaboration_cdc", "description": "Outil gratuit pour concevoir des diagrammes et des organigrammes." },
+        { "name": "airtable", "category": "elaboration_cdc", "description": "Base de données visuelle pour organiser et suivre des projets." },
+        { "name": "todoist", "category": "elaboration_cdc", "description": "Gestionnaire de tâches simple pour organiser les tâches personnelles et professionnelles." },
+        { "name": "workflowy", "category": "elaboration_cdc", "description": "Outil minimaliste pour organiser et hiérarchiser des idées." },
+        { "name": "loom", "category": "elaboration_cdc", "description": "Outil de communication vidéo pour expliquer ou documenter des processus." },
+        { "name": "clickmeeting", "category": "elaboration_cdc", "description": "Plateforme de webinaires pour organiser des réunions et des présentations." },
+        { "name": "zoho projects", "category": "elaboration_cdc", "description": "Outil de gestion de projet avec planification et collaboration." },
+        { "name": "ganttproject", "category": "elaboration_cdc", "description": "Application pour créer des diagrammes de Gantt et gérer les tâches." },
         
-        { "name": "fastapi", "categorie": "backend", "description": "Framework Python rapide pour construire des APIs web modernes et performantes." },
-        { "name": "express.js", "categorie": "backend", "description": "Framework minimaliste pour Node.js, idéal pour des applications backend rapides." },
-        { "name": "hapi.js", "categorie": "backend", "description": "Framework Node.js riche en fonctionnalités pour construire des APIs et des applications robustes." },
-        { "name": "flask", "categorie": "backend", "description": "Framework Python léger pour créer des applications web simples et évolutives." },
-        { "name": "nest.js", "categorie": "backend", "description": "Framework Node.js basé sur TypeScript, inspiré par Angular pour une structure modulaire." },
-        { "name": "adonis.js", "categorie": "backend", "description": "Framework backend Node.js offrant une structure MVC complète." },
-        { "name": "sequelize", "categorie": "database", "description": "ORM Node.js pour interagir avec des bases de données relationnelles comme MySQL ou PostgreSQL." },
-        { "name": "typeorm", "categorie": "database", "description": "ORM TypeScript/JavaScript pour des bases de données SQL." },
-        { "name": "elasticsearch", "categorie": "database", "description": "Moteur de recherche et d'analyse distribué pour des requêtes rapides et puissantes." },
-        { "name": "hadoop", "categorie": "database", "description": "Framework open source pour le stockage et le traitement distribué de grandes données." },
-        { "name": "pandas", "categorie": "code_language", "description": "Bibliothèque Python pour la manipulation et l'analyse de données." },
-        { "name": "scikit-learn", "categorie": "code_language", "description": "Bibliothèque Python pour le machine learning et l'exploration de données." },
-        { "name": "rust", "categorie": "code_language", "description": "Langage de programmation système axé sur la sécurité et la performance." },
-        { "name": "elixir", "categorie": "code_language", "description": "Langage fonctionnel pour des systèmes distribués, basé sur la machine virtuelle Erlang." },
-        { "name": "graphql", "categorie": "backend", "description": "Langage de requête pour les APIs, offrant flexibilité et performance dans les données retournées." }
-      ]
-      
-      
+        { "name": "fastapi", "category": "backend", "description": "Framework Python rapide pour construire des APIs web modernes et performantes." },
+        { "name": "express.js", "category": "backend", "description": "Framework minimaliste pour Node.js, idéal pour des applications backend rapides." },
+        { "name": "hapi.js", "category": "backend", "description": "Framework Node.js riche en fonctionnalités pour construire des APIs et des applications robustes." },
+        { "name": "flask", "category": "backend", "description": "Framework Python léger pour créer des applications web simples et évolutives." },
+        { "name": "nest.js", "category": "backend", "description": "Framework Node.js basé sur TypeScript, inspiré par Angular pour une structure modulaire." },
+        { "name": "adonis.js", "category": "backend", "description": "Framework backend Node.js offrant une structure MVC complète." },
+        { "name": "sequelize", "category": "database", "description": "ORM Node.js pour interagir avec des bases de données relationnelles comme MySQL ou PostgreSQL." },
+        { "name": "typeorm", "category": "database", "description": "ORM TypeScript/JavaScript pour des bases de données SQL." },
+        { "name": "elasticsearch", "category": "database", "description": "Moteur de recherche et d'analyse distribué pour des requêtes rapides et puissantes." },
+        { "name": "hadoop", "category": "database", "description": "Framework open source pour le stockage et le traitement distribué de grandes données." },
+        { "name": "pandas", "category": "code_language", "description": "Bibliothèque Python pour la manipulation et l'analyse de données." },
+        { "name": "scikit-learn", "category": "code_language", "description": "Bibliothèque Python pour le machine learning et l'exploration de données." },
+        { "name": "rust", "category": "code_language", "description": "Langage de programmation système axé sur la sécurité et la performance." },
+        { "name": "elixir", "category": "code_language", "description": "Langage fonctionnel pour des systèmes distribués, basé sur la machine virtuelle Erlang." },
+        { "name": "graphql", "category": "backend", "description": "Langage de requête pour les APIs, offrant flexibilité et performance dans les données retournées." }
+      ],
+    
+    "Users": [
+      {
+        "tagname" : "test1",
+        "password" : "123",
+        "pseudo" : "Pseudo1",
+        "mail" : "test1@gmail.com",
+        "firstname" : "FirstName",
+        "phone" : "0699999999",
+        "lastname" : "LastName"
+      },
+      {
+        "tagname" : "test2",
+        "password" : "123",
+        "pseudo" : "Pseudo2",
+        "mail" : "test2@gmail.com",
+        "firstname" : "FirstName",
+        "phone" : "0699999999",
+        "lastname" : "LastName"
+      },
+      {
+        "tagname" : "test3",
+        "password" : "123",
+        "pseudo" : "Pseudo3",
+        "mail" : "test3@gmail.com",
+        "firstname" : "FirstName",
+        "phone" : "0699999999",
+        "lastname" : "LastName"
+      }
+    ],
+
+    "Projects": [
+      {
+        "project-name": "Covoit-Tons",
+        "project-description": "Une application de covoiturage qui permet à plusieurs personnes de covoiurer ensemble.",
+        "created_by": 1,
+        "selected-stack": ["Flutter", "Node.js with Express", "Firebase"],
+        "boards": [
+            {
+                "name": "Frontend",
+                "skills": ["Flutter", "Dart", "JavaScript"],
+                "lists": [
+                    {
+                        "name": "Inscription et authentification",
+                        "items": [
+                            {
+                                "name": "Inscription et connexion des utilisateurs",
+                                "description": "Permet aux utilisateurs de s'inscrire en tant que demandeur de covoiturage et de se connecter à l'application."
+                            },
+                            {
+                                "name": "Création de profils utilisateurs",
+                                "description": "Chaque utilisateur peut créer et personnaliser son profil pour refléter ses informations et préférences."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Fonctionnalités de covoiturage",
+                        "items": [
+                            {
+                                "name": "Localisation en temps réel des covoitureurs",
+                                "description": "Affiche la position des covoitureurs disponibles à proximité sur une carte."
+                            },
+                            {
+                                "name": "Affichage des trajets disponibles",
+                                "description": "Liste les trajets proposés, filtrés selon la localisation et la destination."
+                            },
+                            {
+                                "name": "Système de notation des covoitureurs",
+                                "description": "Permet aux utilisateurs d'évaluer leurs expériences avec les covoitureurs."
+                            },
+                            {
+                                "name": "Gestion des demandes de covoiturage",
+                                "description": "Gestion et suivi des demandes de covoiturage envoyées par les utilisateurs."
+                            },
+                            {
+                                "name": "Suggestions de trajets en fonction des préférences",
+                                "description": "Propose des trajets en fonction des préférences de l'utilisateur."
+                            },
+                            {
+                                "name": "Partage d'itinéraires",
+                                "description": "Permet aux utilisateurs de partager leurs itinéraires avec d'autres."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Communication et notifications",
+                        "items": [
+                            {
+                                "name": "Messagerie entre utilisateurs",
+                                "description": "Système de messagerie intégré pour permettre aux utilisateurs de communiquer facilement."
+                            },
+                            {
+                                "name": "Notifications en temps réel",
+                                "description": "Envoie des notifications en temps réel aux utilisateurs pour les mises à jour importantes."
+                            },
+                            {
+                                "name": "Système de messagerie push",
+                                "description": "Envoi de notifications push pour alerter les utilisateurs sur les nouveaux trajets disponibles."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Sécurité et qualité",
+                        "items": [
+                            {
+                                "name": "Système de vérification des utilisateurs",
+                                "description": "Implémente un processus de vérification pour assurer la sécurité des utilisateurs."
+                            },
+                            {
+                                "name": "Rapports d'incidents et de sécurité",
+                                "description": "Permet aux utilisateurs de signaler tout incident ou problème rencontré."
+                            },
+                            {
+                                "name": "Support et assistance aux utilisateurs",
+                                "description": "Offre une assistance aux utilisateurs pour répondre à leurs questions et préoccupations."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Intégrations et fonctionnalités additionnelles",
+                        "items": [
+                            {
+                                "name": "Intégration de Google Maps",
+                                "description": "Utilisation de Google Maps pour la navigation et la localisation."
+                            },
+                            {
+                                "name": "Intégration de paiements en ligne",
+                                "description": "Possibilité de réaliser des paiements en ligne directement via l'application."
+                            },
+                            {
+                                "name": "Disponibilité multilingue",
+                                "description": "Support pour plusieurs langues pour une utilisation internationale."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Backend",
+                "skills": ["Node.js with Express", "JavaScript", "Firebase"],
+                "lists": [
+                    {
+                        "name": "API et gestion de données",
+                        "items": [
+                            {
+                                "name": "Création de l'API",
+                                "description": "Développement d'une API RESTful pour gérer les différents aspects du covoiturage."
+                            },
+                            {
+                                "name": "Gestion des utilisateurs",
+                                "description": "Système de gestion des utilisateurs, y compris l'authentification et la mise à jour des profils."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Gestion des trajets",
+                        "items": [
+                            {
+                                "name": "Gestion des trajets disponibles",
+                                "description": "Base de données pour stocker les trajets créés par les utilisateurs."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Notifications et communication",
+                        "items": [
+                            {
+                                "name": "Envoi de notifications push",
+                                "description": "Configuration de Firebase Cloud Messaging pour envoyer des notifications aux utilisateurs."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Sécurité",
+                        "items": [
+                            {
+                                "name": "Contrôles d'accès",
+                                "description": "Mise en place de contrôles d'accès pour protéger les données sensibles."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Database",
+                "skills": ["Firebase"],
+                "lists": [
+                    {
+                        "name": "Configuration de la base de données",
+                        "items": [
+                            {
+                                "name": "Création de la base de données",
+                                "description": "Configuration de Firebase pour stocker les données des utilisateurs, des trajets et des transactions."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Gestion des données",
+                        "items": [
+                            {
+                                "name": "Sauvegardes régulières",
+                                "description": "Mise en place d'un système de sauvegarde pour protéger les données."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+      },
+      {
+        "project-name": "VroumVroum",
+        "project-description": "Une application qui répertorie toutes les voitures et tous les modèles de chaque marques.",
+        "created_by": 1,
+        "selected-stack": ["Ionic", "Django", "MongoDB"],
+        "boards": [
+            {
+                "name": "Frontend",
+                "skills": ["Ionic", "Angular", "JavaScript"],
+                "lists": [
+                    {
+                        "name": "Affichage des données",
+                        "items": [
+                            {
+                                "name": "Liste des constructeurs",
+                                "description": "Affiche une liste complète de tous les constructeurs automobiles disponibles dans l'application."
+                            },
+                            {
+                                "name": "Détails de chaque modèle de voiture",
+                                "description": "Permet aux utilisateurs de consulter les caractéristiques détaillées de chaque modèle."
+                            },
+                            {
+                                "name": "Recherche des voitures par marque",
+                                "description": "Fonction de recherche qui permet aux utilisateurs de trouver des voitures par marque."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Fonctionnalités interactives",
+                        "items": [
+                            {
+                                "name": "Filtrage avancé par caractéristiques",
+                                "description": "Outils de filtrage pour aider les utilisateurs à trouver exactement ce qu'ils recherchent."
+                            },
+                            {
+                                "name": "Comparaison entre plusieurs modèles",
+                                "description": "Permet aux utilisateurs de comparer les spécifications de plusieurs modèles simultanément."
+                            },
+                            {
+                                "name": "Ajouter des voitures favorites",
+                                "description": "Fonctionnalité permettant aux utilisateurs de sauvegarder leurs modèles préférés."
+                            },
+                            {
+                                "name": "Système de notation des modèles",
+                                "description": "Les utilisateurs peuvent évaluer et exprimer leur satisfaction pour chaque modèle."
+                            },
+                            {
+                                "name": "Avis des utilisateurs sur les modèles",
+                                "description": "Possibilité pour les utilisateurs de laisser des commentaires et des évaluations sur les modèles."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Notifications et actualisations",
+                        "items": [
+                            {
+                                "name": "Notifications sur les nouveaux modèles et marques",
+                                "description": "Envoie des alertes aux utilisateurs concernant les nouveaux modèles ou marques ajoutés."
+                            },
+                            {
+                                "name": "Intégration de photos pour chaque modèle",
+                                "description": "Affiche des images des modèles de voitures pour une meilleure visualisation."
+                            },
+                            {
+                                "name": "Informations sur les spécifications techniques",
+                                "description": "Affiche des données techniques pour chaque modèle de manière précise."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Analyse et données",
+                        "items": [
+                            {
+                                "name": "Historique des modèles par année",
+                                "description": "Affiche l'évolution des modèles sur plusieurs années."
+                            },
+                            {
+                                "name": "Statistiques sur les ventes de chaque marque",
+                                "description": "Fournit des statistiques sur les ventes et tendances de chaque constructeur."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Engagement utilisateur",
+                        "items": [
+                            {
+                                "name": "Gestion des utilisateurs et de leurs profils",
+                                "description": "Permet aux utilisateurs de gérer leurs informations et préférences."
+                            },
+                            {
+                                "name": "Option de partager des modèles sur les réseaux sociaux",
+                                "description": "Permet de partager les modèles préférés sur différentes plateformes."
+                            },
+                            {
+                                "name": "Support et assistance aux utilisateurs",
+                                "description": "Fournit une assistance aux utilisateurs pour toutes leurs questions."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Backend",
+                "skills": ["Django", "Python", "Rest Framework"],
+                "lists": [
+                    {
+                        "name": "API et gestion des données",
+                        "items": [
+                            {
+                                "name": "Création de l'API",
+                                "description": "Développement d'une API RESTful pour interagir avec l'application."
+                            },
+                            {
+                                "name": "Gestion des constructeurs",
+                                "description": "Module permettant d'ajouter, de mettre à jour et de supprimer des constructeurs et leurs modèles."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Scalabilité et sécurité",
+                        "items": [
+                            {
+                                "name": "Systèmes d'authentification",
+                                "description": "Mise en place d'un système sécuritaire d'authentification pour les utilisateurs."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Analyse et suivi",
+                        "items": [
+                            {
+                                "name": "Gestion des avis et des notations",
+                                "description": "Stockage et gestion des évaluations des utilisateurs sur les modèles."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Database",
+                "skills": ["MongoDB"],
+                "lists": [
+                    {
+                        "name": "Configuration de la base de données",
+                        "items": [
+                            {
+                                "name": "Création de la base de données",
+                                "description": "Mise en place de la base de données MongoDB avec les collections nécessaires pour les utilisateurs et les voitures."
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Gestion des données",
+                        "items": [
+                            {
+                                "name": "Sauvegardes régulières",
+                                "description": "Mise en œuvre d'un processus de sauvegarde pour protéger les données."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+      },
+      {
+        "project-name": "BuildIT",
+        "project-description": "Une application web de suivi de projet collaboratif boosté par IA.",
+        "created_by": 2,
+        "selected-stack": ["React", "Flask", "PostgreSQL"],
+        "boards": [
+            {
+                "name": "Frontend",
+                "skills": ["React", "JavaScript", "HTML", "CSS"],
+                "lists": [
+                    {
+                        "name": "React",
+                        "items": [
+                            {
+                                "name": "Créer des tableaux de suivi de projet",
+                                "description": "Fonctionnalité permettant aux utilisateurs de créer des tableaux personnalisés pour suivre l'évolution de leur projet."
+                            },
+                            {
+                                "name": "Collaboration en temps réel",
+                                "description": "Permet à plusieurs utilisateurs de collaborer sur les tableaux simultanément."
+                            },
+                            {
+                                "name": "Notifications par email pour les mises à jour de projet",
+                                "description": "Envoi de notifications par email lors des mises à jour importantes sur le projet."
+                            },
+                            {
+                                "name": "Tableau de bord personnalisable",
+                                "description": "Tableau de bord qui peut être personnalisé par les utilisateurs selon leurs besoins."
+                            },
+                            {
+                                "name": "Filtrage et recherche de projets",
+                                "description": "Fonctionnalité de filtrage et recherche des projets en utilisant divers critères."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Backend",
+                "skills": ["Flask", "Python", "APIs"],
+                "lists": [
+                    {
+                        "name": "Flask",
+                        "items": [
+                            {
+                                "name": "Gestion des tâches et des sous-tâches",
+                                "description": "Implémentation du système de gestion des tâches et sous-tâches."
+                            },
+                            {
+                                "name": "Suivi du temps passé sur chaque tâche",
+                                "description": "Permet aux utilisateurs de suivre le temps qu'ils passent sur chaque tâche."
+                            },
+                            {
+                                "name": "Commentaires et discussions sur les tâches",
+                                "description": "Système de commentaires pour chaque tâche, facilitant la discussion entre utilisateurs."
+                            },
+                            {
+                                "name": "Assignation des tâches aux membres de l'équipe",
+                                "description": "Fonctionnalité permettant d'assigner des tâches spécifiques aux membres de l'équipe."
+                            },
+                            {
+                                "name": "Suivi des bugs et des problèmes",
+                                "description": "Système pour signaler et gérer les bugs au sein du projet."
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Database",
+                "skills": ["PostgreSQL", "SQL", "ORM"],
+                "lists": [
+                    {
+                        "name": "PostgreSQL",
+                        "items": [
+                            {
+                                "name": "Template de projet prédéfini",
+                                "description": "Enregistrement de templates prédéfinis pour la création rapide de nouveaux projets."
+                            },
+                            {
+                                "name": "Intégration avec des outils de gestion de code (GitHub, GitLab)",
+                                "description": "Fonctionnalité d'intégration avec d'autres outils de gestion de version."
+                            },
+                            {
+                                "name": "Importation/extraction de projets depuis des fichiers CSV",
+                                "description": "Facilité d'importation ou d'exportation de projets en format CSV."
+                            },
+                            {
+                                "name": "Exports de rapports d'activité",
+                                "description": "Permet d' exporter des rapports d'activité au format PDF ou CSV."
+                            },
+                            {
+                                "name": "Système de tagging pour les tâches",
+                                "description": "Implémentation d'un système de tags pour faciliter le tri et la recherche des tâches."
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+      }
+    ],
+
+    "ProjectUser" : [
+      {
+        "user" : 2,
+        "project" : 2,
+        "user_role" : "pending"
+      },
+      {
+        "user" : 2,
+        "project" : 1,
+        "user_role" : "pending"
+      }
+    ]
 }
