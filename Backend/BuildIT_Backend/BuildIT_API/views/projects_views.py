@@ -48,7 +48,6 @@ class ProjectCreateView(generics.CreateAPIView):
             user=user,
             project=project,
             user_role='owner',  # Définit comme propriétaire
-            project_placement='main'  # Placement par défaut
         )
 
         # Gestion des boards
@@ -121,17 +120,41 @@ class ProjectFromUserView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedWithToken]
 
     def get(self, request, *args, **kwargs):
-
-        # Récupération de l'id de l'utilisateur après la permission
+        # Récupération de l'utilisateur après la permission
         user = request.user
 
         try:
-            # Recherche de tous les projets de l'utilisateur
-            projects = Projects.objects.filter(created_by=user)
-            serializer = self.get_serializer(projects, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Projects.DoesNotExist:
-            return Response({"error": "Projects not found."}, status=status.HTTP_404_NOT_FOUND)
+            # Récupérer tous les projets où l'utilisateur est lié via UserProjects
+            user_projects = UserProjects.objects.filter(user=user)
+
+            # Filtrer les projets en attente (pending)
+            pending_projects = user_projects.filter(user_role="pending").select_related('project')
+            pending_projects_data = [
+                {
+                    "id": up.project.id,
+                    "name": up.project.name,
+                    "description": up.project.description
+                }
+                for up in pending_projects
+            ]
+
+            # Filtrer les projets actifs (owner ou member)
+            active_projects = user_projects.filter(user_role__in=["owner", "member"]).select_related('project')
+            active_projects_queryset = Projects.objects.filter(id__in=[up.project.id for up in active_projects])
+
+            # Sérialiser les projets actifs
+            active_projects_data = ProjectSerializer(active_projects_queryset, many=True).data
+
+            # Construire la réponse
+            response_data = {
+                "pending_projects": pending_projects_data,
+                "active_projects": active_projects_data
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pour prévoir les nested fields ("boards" : [...] fait planter le code)
     """
@@ -194,3 +217,98 @@ class ProjectDeleteView(generics.DestroyAPIView):
             return Response({"message": "Project deleted successfully."}, status=status.HTTP_200_OK)
         except Projects.DoesNotExist:
             return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ProjectAddUserView(generics.UpdateAPIView):
+    """
+    Ajout d'un utilisateur au projet
+    
+    Méthode POST
+    Permission:
+    - Doit avoir un token JWT valide
+    - Doit faire partie du projet ou il veut ajouter un nouvel utilisateur
+    """
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromProjectId]
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            # Récupération de l'ID projet depuis le corps de la requête
+            project_id_from_body = request.data.get("project_id")
+            project = Projects.objects.get(id=project_id_from_body)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            # Récupération de l'ID utilisateur depuis le tagname de la requete
+            user_tagname_from_body = request.data.get("user_tagname")
+            user = Users.objects.get(tagname=user_tagname_from_body)
+        except Users.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        print(user)
+        print(project)
+        
+        UserProjects.objects.get_or_create(
+            user=user,
+            project=project,
+            user_role='pending'
+        )
+
+        return Response({"message": "User added to project successfully."}, status=status.HTTP_200_OK)
+
+class ProjectAcceptInvitationView(generics.UpdateAPIView):
+    """
+    Acceptation d'une invitation à un projet
+    
+    Méthode POST
+    Permission: Doit avoir un token JWT valide
+    """
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Récupération de l'ID projet depuis le corps de la requête
+            project_id_from_body = request.data.get("project_id")
+            project = Projects.objects.get(id=project_id_from_body)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Récupération de l'utilisateur après la permission
+        user = request.user
+
+        try:
+            # Récupérer l'association UserProjects
+            user_project = UserProjects.objects.get(user=user, project=project, user_role='pending')
+            user_project.user_role = 'member'
+            user_project.save()
+            return Response({"message": "Invitation accepted successfully."}, status=status.HTTP_200_OK)
+        except UserProjects.DoesNotExist:
+            return Response({"error": "Invitation not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ProjectRejectInvitationView(generics.DestroyAPIView):
+    """
+    Refus d'une invitation à un projet
+    
+    Méthode POST
+    Permission: Doit avoir un token JWT valide
+    """
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Récupération de l'ID projet depuis le corps de la requête
+            project_id_from_body = request.data.get("project_id")
+            project = Projects.objects.get(id=project_id_from_body)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Récupération de l'utilisateur après la permission
+        user = request.user
+
+        try:
+            # Supprimer l'association UserProjects
+            user_project = UserProjects.objects.get(user=user, project=project, user_role='pending')
+            user_project.delete()
+            return Response({"message": "Invitation rejected successfully."}, status=status.HTTP_200_OK)
+        except UserProjects.DoesNotExist:
+            return Response({"error": "Invitation not found."}, status=status.HTTP_404_NOT_FOUND)

@@ -221,6 +221,85 @@ export async function processMessage(finalResponse: any, threadID: any) {
     handleError(error);
   }
 }
+
+export async function addUserToProject(projectID: number, userTagName: string) {
+    /*
+    Ajoute un utilisateur à un projet
+    
+    Required fields:
+    - project_id
+    - user tagname
+    */
+    try {
+        const response = await api.post("/project/add_user", { project_id: projectID, user_tagname: userTagName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+
+}
+
+export async function acceptInvitaion(projectID: number) {
+    /*
+    Accepte une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/accept_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function declineInvitation(projectID: number) {
+    /*
+    Refuse une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/reject_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function retriveUserWithTagName(tagname: string) {
+    /*
+    Récupère un utilisateur via son tagname
+    
+    Required fields:
+    - tagname
+    */
+    try {
+        const response = await api.post("/user/retrive/tagname", { tagname: tagname });
+        return response.data.exists;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function addNewBoard(projectID: number, boardName: string) {
+    /*
+    Ajoute un nouveau tableau à un projet
+    
+    Required fields:
+    - project_id
+    - board_name
+    */
+    try {
+        const response = await api.post("/board/create", { project_id: projectID, board_name: boardName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }   
+}
+
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
