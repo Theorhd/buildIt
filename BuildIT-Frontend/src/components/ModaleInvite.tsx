@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { retriveUserWithTagName } from "../utils/api_router";
 
 interface ModaleInviteProps {
   onInvite: (tagname: string, projectId: string) => void;
@@ -8,14 +9,25 @@ interface ModaleInviteProps {
 
 const ModaleInvite: React.FC<ModaleInviteProps> = ({ onInvite, onClose, projectId }) => {
   const [tagname, setTagname] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     if (tagname === '') {
       alert('Please enter a tagname');
       return;
     }
-    onInvite(tagname, projectId);
-    onClose();
+    try {
+      const tagnameExists = await retriveUserWithTagName(tagname);
+      if (!tagnameExists) {
+        setError('User not found. Please try again.');
+        return;
+      } else if (tagnameExists === true) {
+        onInvite(tagname, projectId);
+        onClose();
+      }
+    } catch (err) {
+      setError('Failed to invite user. Please try again.');
+    }
   };
 
   return (
@@ -28,6 +40,7 @@ const ModaleInvite: React.FC<ModaleInviteProps> = ({ onInvite, onClose, projectI
           &#x2715;
         </button>
         <h2 className="text-white text-3xl mt-5 mb-7 font-thin text-center">Invite a new user</h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="space-y-4">
           <div>
             <label className="block text-primary font-medium mb-1">User Tagname</label>

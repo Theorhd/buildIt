@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
+from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView, UserExistTagnameView
 from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView, ProjectAddUserView, ProjectAcceptInvitationView, ProjectRejectInvitationView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
@@ -14,6 +14,7 @@ userpatterns = [
     path('user/update', UserUpdateView.as_view(), name='user-update'),              # Modifier un utilisateur
     path('user/delete/<int:pk>', UserDeleteView.as_view(), name='user-delete'),     # Supprimer un utilisateur par son id
     path('user/login', UserLoginView.as_view(), name='user-login'),                 # Connexion d'un utilisateur
+    path('user/retrive/tagname', UserExistTagnameView.as_view(), name='user-exist-tagname'),  # Vérifier si un tagname existe
 ]
 
 tokenpatterns = [

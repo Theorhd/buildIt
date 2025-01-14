@@ -173,3 +173,16 @@ class UserDeleteView(generics.DestroyAPIView):
         except Users.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
+class UserExistTagnameView(APIView):
+    """
+    Vérifie si un utilisateur existe par son tagname
+
+    Méthode POST
+    """
+    def post(self, request):
+        tagname = request.data.get("tagname")
+        try:
+            Users.objects.get(tagname=tagname)
+            return Response({"exists": True}, status=status.HTTP_200_OK)
+        except Users.DoesNotExist:
+            return Response({"exists": False}, status=status.HTTP_404_NOT_FOUND)

@@ -233,6 +233,21 @@ export async function declineInvitation(projectID: number) {
     }
 }
 
+export async function retriveUserWithTagName(tagname: string) {
+    /*
+    Récupère un utilisateur via son tagname
+    
+    Required fields:
+    - tagname
+    */
+    try {
+        const response = await api.post("/user/retrive/tagname", { tagname: tagname });
+        return response.data.exists;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
