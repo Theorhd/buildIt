@@ -137,6 +137,51 @@
         "firstname" : "FirstName",
         "phone" : "0699999999",
         "lastname" : "LastName"
+      },
+      {
+          "tagname" : "test4",
+          "password" : "123",
+          "pseudo" : "Pseudo4",
+          "mail" : "test4@gmail.com",
+          "firstname" : "FirstName4",
+          "phone" : "0699999994",
+          "lastname" : "LastName4"
+      },
+      {
+          "tagname" : "test5",
+          "password" : "123",
+          "pseudo" : "Pseudo5",
+          "mail" : "test5@gmail.com",
+          "firstname" : "FirstName5",
+          "phone" : "0699999995",
+          "lastname" : "LastName5"
+      },
+      {
+          "tagname" : "test6",
+          "password" : "123",
+          "pseudo" : "Pseudo6",
+          "mail" : "test6@gmail.com",
+          "firstname" : "FirstName6",
+          "phone" : "0699999996",
+          "lastname" : "LastName6"
+      },
+      {
+          "tagname" : "test7",
+          "password" : "123",
+          "pseudo" : "Pseudo7",
+          "mail" : "test7@gmail.com",
+          "firstname" : "FirstName7",
+          "phone" : "0699999997",
+          "lastname" : "LastName7"
+      },
+      {
+          "tagname" : "test8",
+          "password" : "123",
+          "pseudo" : "Pseudo8",
+          "mail" : "test8@gmail.com",
+          "firstname" : "FirstName8",
+          "phone" : "0699999998",
+          "lastname" : "LastName8"
       }
     ],
 
@@ -582,6 +627,86 @@
                 ]
             }
         ]
+      },
+      {
+          "project-name": "DesignHub",
+          "project-description": "Plateforme collaborative pour designers permettant de créer et partager des designs en temps réel.",
+          "created_by": 3,
+          "selected-stack": ["React.js", "Node.js", "MongoDB"],
+          "boards": [
+              {
+                  "name": "Frontend",
+                  "skills": ["React.js", "JavaScript", "CSS3"],
+                  "lists": [
+                      {
+                          "name": "Interface Utilisateur",
+                          "items": [
+                              {
+                                  "name": "Tableau de design en temps réel",
+                                  "description": "Permet aux designers de collaborer simultanément sur un même design."
+                              },
+                              {
+                                  "name": "Galerie des créations",
+                                  "description": "Affiche une galerie des designs créés et partagés par les utilisateurs."
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Backend",
+                  "skills": ["Node.js", "Express.js", "MongoDB"],
+                  "lists": [
+                      {
+                          "name": "API de gestion des designs",
+                          "items": [
+                              {
+                                  "name": "CRUD des designs",
+                                  "description": "Créer, lire, mettre à jour et supprimer des designs."
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "project-name": "DataCrunch",
+          "project-description": "Outil d'analyse de données avancé intégrant des fonctionnalités de machine learning.",
+          "created_by": 4,
+          "selected-stack": ["Python", "FastAPI", "PostgreSQL"],
+          "boards": [
+              {
+                  "name": "Frontend",
+                  "skills": ["React.js", "TypeScript", "Tailwind CSS"],
+                  "lists": [
+                      {
+                          "name": "Visualisation des données",
+                          "items": [
+                              {
+                                  "name": "Tableaux de bord interactifs",
+                                  "description": "Affiche des visualisations dynamiques des données analysées."
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "name": "Backend",
+                  "skills": ["FastAPI", "Python", "PostgreSQL"],
+                  "lists": [
+                      {
+                          "name": "API d'analyse",
+                          "items": [
+                              {
+                                  "name": "Endpoints de machine learning",
+                                  "description": "Endpoints pour exécuter des modèles de machine learning sur les données."
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
       }
     ],
 
@@ -595,6 +720,111 @@
         "user" : 2,
         "project" : 1,
         "user_role" : "pending"
-      }
+      },
+      {
+        "user" : 1,
+        "project" : 1,
+        "user_role" : "owner"
+    },
+    {
+        "user" : 1,
+        "project" : 2,
+        "user_role" : "owner"
+    },
+    {
+        "user" : 2,
+        "project" : 3,
+        "user_role" : "owner"
+    },
+    {
+        "user" : 3,
+        "project" : 4,
+        "user_role" : "owner"
+    },
+    {
+        "user" : 1,
+        "project" : 4,
+        "user_role" : "member"
+    },
+    {
+        "user" : 4,
+        "project" : 4,
+        "user_role" : "member"
+    },
+    {
+        "user" : 5,
+        "project" : 4,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 4,
+        "project" : 5,
+        "user_role" : "owner"
+    },
+    {
+        "user" : 2,
+        "project" : 5,
+        "user_role" : "member"
+    },
+    {
+        "user" : 5,
+        "project" : 5,
+        "user_role" : "member"
+    },
+    {
+        "user" : 6,
+        "project" : 5,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 3,
+        "project" : 1,
+        "user_role" : "member"
+    },
+    {
+        "user" : 3,
+        "project" : 2,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 6,
+        "project" : 2,
+        "user_role" : "member"
+    },
+    {
+        "user" : 7,
+        "project" : 3,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 8,
+        "project" : 3,
+        "user_role" : "member"
+    },
+    {
+        "user" : 5,
+        "project" : 1,
+        "user_role" : "member"
+    },
+    {
+        "user" : 7,
+        "project" : 4,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 8,
+        "project" : 4,
+        "user_role" : "pending"
+    },
+    {
+        "user" : 1,
+        "project" : 5,
+        "user_role" : "member"
+    },
+    {
+        "user" : 7,
+        "project" : 5,
+        "user_role" : "member"
+    }
     ]
 }

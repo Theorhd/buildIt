@@ -15,7 +15,7 @@ from BuildIT_API.models import Users, Projects, Skills, UserProjects, Boards, It
 file_path = os.path.join(os.path.dirname(__file__), 'playground_dataset.json')
 
 def load_data():
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
     for record in data:
