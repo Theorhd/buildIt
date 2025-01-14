@@ -203,6 +203,36 @@ export async function addUserToProject(projectID: number, userTagName: string) {
 
 }
 
+export async function acceptInvitaion(projectID: number) {
+    /*
+    Accepte une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/accept_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function declineInvitation(projectID: number) {
+    /*
+    Refuse une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/reject_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
