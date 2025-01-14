@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../../../public/buildit-logo.png';
-import {login} from '../../utils/api_router';
+import { login } from '../../utils/api_router';
 
 const Login = () => {
     const [mail, setMail] = useState('');
@@ -10,22 +10,9 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // Appel de la route API login
-            const data = await login(mail, password);
-            /* Mise a jour des tokens dans le local storage */
-            localStorage.setItem('access', data.access);
-            localStorage.setItem('refresh', data.refresh);
-            localStorage.setItem('pseudo', data.pseudo);
-            localStorage.setItem('mail', data.mail);
-
-            /* Redirection page principale */
-            if (localStorage.getItem('access') !== undefined) {
-                console.log("Login success");
-                window.location.href = '/';
-            } else {
-                console.error("Access token is undefined or not save in local storage");
-            }
-        } catch (error) {
+            await login(mail, password);
+        } catch (err) {
+            console.warn(err);
             setError('Login failed. Please check your credentials and try again.');
         }
     };

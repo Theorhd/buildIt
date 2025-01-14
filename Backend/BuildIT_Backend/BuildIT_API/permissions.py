@@ -7,6 +7,8 @@ from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Boards import Boards
 from BuildIT_API.models.Lists import Lists
 from BuildIT_API.models.Items import Items
+from BuildIT_API.models.Tags import Tags
+from BuildIT_API.models.ItemTags import ItemTags
 
 class IsAuthenticatedWithToken(BasePermission):
     """
@@ -88,27 +90,31 @@ class IsUserInProjectFromListId(BasePermission):
     Retourne un status HTTP 403 si l'utilisateur n'est pas membre du projet.
     """
 
-    def has_permission(self, request, view):
-        # Récupération flexible de list_id
-        list_id = request.data.get("list_id") or view.kwargs.get("pk")  # POST ou GET
+def has_permission(self, request, view):
+    list_id = request.data.get("list_id") or view.kwargs.get("pk")  # POST ou GET
+    print(f"ID de la liste vérifié : {list_id}")
 
-        # Vérification si list_id est fourni
-        if not list_id:
-            raise ProjectNotFoundException  # Aucun list_id fourni
+    if not list_id:
+        print("Erreur : Aucun list_id fourni.")
+        raise ProjectNotFoundException  # Aucun list_id fourni
 
-        try:
-            # Récupération de la liste et de son projet
-            list = Lists.objects.get(id=list_id)
-            project = list.board.project
+    try:
+        list = Lists.objects.get(id=list_id)
+        project = list.board.project
+        print(f"Liste trouvée : {list}")
+        print(f"Projet associé : {project}")
 
-            # Vérification si l'utilisateur appartient au projet
-            if not UserProjects.objects.filter(user=request.user, project=project).exists():
-                raise UserNotInProjectException
+        # Vérifie si l'utilisateur appartient au projet
+        if not UserProjects.objects.filter(user=request.user, project=project).exists():
+            print(f"Erreur : Utilisateur {request.user} non autorisé.")
+            raise UserNotInProjectException
 
-        except Lists.DoesNotExist:
-            raise ProjectNotFoundException  # Liste introuvable
+    except Lists.DoesNotExist:
+        print(f"Erreur : La liste avec l'ID {list_id} est introuvable.")
+        raise ProjectNotFoundException
 
-        return True
+    return True
+
 
 class IsUserInProjectFromItemId(BasePermission):
     """
@@ -139,5 +145,38 @@ class IsUserInProjectFromItemId(BasePermission):
 
         except Items.DoesNotExist:  # Correction : Items et non Lists
             raise ProjectNotFoundException  # Item introuvable
+
+        return True
+
+class IsUserInProjectFromTagId(BasePermission):
+    """
+    Permission pour vérifier si l'utilisateur est membre d'un projet contenant le tag spécifique.
+    - Compatible avec les métodes HTTP : GET, POST
+    - Doit être appelée apres IsAuthenticatedWithToken.
+
+    Retourne un status HTTP 404 si le tag n'est pas retrouvable.
+    Retourne un status HTTP 403 si l'utilisateur n'est pas membre du projet.
+    """
+
+    def has_permission(self, request, view):
+        # Récupération flexible de tag_id
+        tag_id = request.data.get("tag_id") or view.kwargs.get("pk")  # POST ou GET
+
+        # Vérification si tag_id est fourni
+        if not tag_id:
+            raise ProjectNotFoundException  # Aucun tag_id fourni
+
+        try:
+            # Récupération du tag et de son projet
+            item_tag = ItemTags.objects.get(tag_id=tag_id)
+            item = item_tag.item
+            project = item.list.board.project
+
+            # Vérification si l'utilisateur appartient au projet
+            if not UserProjects.objects.filter(user=request.user, project=project).exists():
+                raise UserNotInProjectException
+
+        except Tags.DoesNotExist:
+            raise ProjectNotFoundException  # Tag introuvable
 
         return True

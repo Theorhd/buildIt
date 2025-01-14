@@ -9,6 +9,10 @@ class BoardSerializer(serializers.ModelSerializer):
 
     board_name = serializers.CharField(source='name')
 
+    # Ajout de project_id et project
+    project_id = serializers.IntegerField(write_only=True)
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Boards
         fields = [
@@ -16,12 +20,12 @@ class BoardSerializer(serializers.ModelSerializer):
             'board_name',
             'placement',
             'project',
+            'project_id',
             'lists',
             'chatroom',
         ]
         extra_kwargs = {
             'placement': {'read_only': True},  # Lecture seule car calculé automatiquement
-            'project': {'read_only': True},   # Lecture seule car passé via la vue
             'chatroom': {'read_only': True},
         }
 

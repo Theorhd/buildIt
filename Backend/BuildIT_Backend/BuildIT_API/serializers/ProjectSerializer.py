@@ -18,6 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'tagname',          # Ajout du tagname
             'description',
             'created_by',
+            'created_by_id',
             'creation_date',
             'boards'
         ]

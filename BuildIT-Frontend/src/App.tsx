@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -9,8 +11,6 @@ import Statistics from "./pages/project/Statistics";
 import Team from "./pages/project/Team";
 import Diagrams from "./pages/project/Diagrams";
 import Board from "./pages/project/Board";
-import Register from "./pages/auth/Register";
-import Login from "./pages/auth/Login";
 import Settings from "./pages/project/Settings";
 import Account from "./pages/Account";
 
@@ -18,6 +18,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Route publique */}
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+
+
+        {/* Route privée */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
 
@@ -35,10 +42,7 @@ function App() {
           
           <Route path="*" element={<NotFound />} />
         </Route>
-
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
-
+        
       </Routes>
     </BrowserRouter>
   );

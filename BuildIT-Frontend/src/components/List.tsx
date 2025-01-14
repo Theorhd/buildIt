@@ -15,6 +15,7 @@ export default function List({
   setSelectedItem: (args: { item: ItemInterface; list: ListInterface }) => void;
 }) {
   const [itemValues, setItemValues] = useState<{ [key: number]: string }>({});
+  const [localTitle, setLocalTitle] = useState(list.list_name || "");
 
   // Ajouter un item
   const addItem = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,14 +31,14 @@ export default function List({
         item_name: value,
         description: "",
         status: "To Do",
-        placement: list.items.length,
+        placement: list.items?.length || 0, // Ajout d'un fallback si list.items est undefined
         created_by: 1, // Exemple d'utilisateur par défaut
         creation_date: new Date().toISOString(),
-        list: list.id,
+        list_id: list.id, // Correction : utilisation de list_id
       };
       const updatedList = {
         ...list,
-        items: [...list.items, newItem],
+        items: [...(list.items || []), newItem], // Ajout d'un fallback si list.items est undefined
       };
       updateList(updatedList);
       setItemValues({ ...itemValues, [list.id]: "" });
@@ -46,13 +47,10 @@ export default function List({
 
   // Supprimer un item
   const deleteItem = (itemIndex: number) => {
-    const updatedItems = list.items.filter((_, index) => index !== itemIndex);
+    const updatedItems = (list.items || []).filter(
+      (_, index) => index !== itemIndex
+    );
     updateList({ ...list, items: updatedItems });
-  };
-
-  // Effacer le titre
-  const clearTitle = () => {
-    updateList({ ...list, list_name: "" });
   };
 
   // Retourner la classe CSS pour le statut
@@ -75,7 +73,14 @@ export default function List({
     <li className="list h-full block px-2 shrink-0 self-start drop-shadow-lg whitespace-nowrap">
       <div className="w-64 flex relative flex-col bg-bgPrimary rounded-md p-4 max-h-full scroll-m-2">
         <button
-          onClick={() => list.id && deleteList(list.id)}
+          onClick={() => {
+            if (list.id) {
+              console.log("Suppression de la liste" + list.id);
+              deleteList(list.id);
+            } else {
+              console.error("Erreur : l'ID de la liste est manquant.");
+            }
+          }}
           className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
         >
           &#x2715;
@@ -85,64 +90,81 @@ export default function List({
           <input
             className="text-secondary font-montserrat list-input"
             placeholder="List name"
-            value={list.list_name}
-            onFocus={clearTitle}
-            onChange={(e) => updateList({ ...list, list_name: e.target.value })}
+            value={localTitle}
+            onChange={(e) => setLocalTitle(e.target.value)} // Mise à jour de l'état local
+            onBlur={() => {
+              if (
+                localTitle.trim().length > 0 &&
+                localTitle.trim().length <= 22
+              ) {
+                if (localTitle !== list.list_name) {
+                  updateList({ ...list, list_name: localTitle });
+                }
+              } else {
+                setLocalTitle(list.list_name); // Réinitialise si invalide
+              }
+            }}
           />
+
           <PencilIcon className="size-4 absolute right-12" />
         </div>
 
         <ol className="flex flex-col overflow-x-hidden overflow-y-auto">
-          {list.items.map((item, itemIndex) => (
-            <li
-              className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
-              key={itemIndex}
-              onClick={() =>
-                setSelectedItem({
-                  list,
-                  item,
-                })
-              }
-            >
-              <div className="pb-3">
-                {item.tags?.map((tag) => (
-                  <span
-                    key={tag.id}
-                    style={{ backgroundColor: tag.color }}
-                    className="text-xs rounded-md px-2 py-1 mr-2"
-                  >
-                    {tag.tag_name}
-                  </span>
-                ))}
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteItem(itemIndex);
-                }}
-                className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
+          {(list.items || []).map(
+            (
+              item,
+              itemIndex // Ajout d'un fallback si list.items est undefined
+            ) => (
+              <li
+                className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
+                key={itemIndex}
+                onClick={() =>
+                  setSelectedItem({
+                    list,
+                    item,
+                  })
+                }
               >
-                &#x2715;
-              </button>
-              <div className="flex flex-col">
-                <p className="text-center mb-5">{item.item_name}</p>
-                <p
-                  className={`text-center text-sm uppercase ${getStatusClass(
-                    item.status
-                  )}`}
+                <div className="pb-3">
+                  {item.tags?.map((tag) => (
+                    <span
+                      key={tag.id}
+                      style={{ backgroundColor: tag.color }}
+                      className="text-xs rounded-md px-2 py-1 mr-2"
+                    >
+                      {tag.tag_name}
+                    </span>
+                  ))}
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteItem(itemIndex);
+                  }}
+                  className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
                 >
-                  {item.status}
-                </p>
-              </div>
-            </li>
-          ))}
+                  &#x2715;
+                </button>
+                <div className="flex flex-col">
+                  <p className="text-center mb-5">{item.item_name}</p>
+                  <p
+                    className={`text-center text-sm uppercase ${getStatusClass(
+                      item.status
+                    )}`}
+                  >
+                    {item.status}
+                  </p>
+                </div>
+              </li>
+            )
+          )}
         </ol>
 
         <form className="list-add-item mt-4" onSubmit={addItem}>
           <input
             type="text"
             placeholder="Add an item"
-            value={list.id ? itemValues[list.id] || "" : ""}
+            value={list.id ? itemValues[list.id] || "" : ""} // Ajout d'un fallback pour éviter undefined
             onChange={(e) =>
               list.id &&
               setItemValues({ ...itemValues, [list.id]: e.target.value })

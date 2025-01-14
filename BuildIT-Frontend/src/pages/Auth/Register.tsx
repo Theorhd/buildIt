@@ -76,7 +76,15 @@ const Register: React.FC = () => {
             </div>
             <div className="flex mb-2">
               <div className="flex flex-col w-1/2">
-                <label>Pseudo</label>
+                <label>
+                  Pseudo{" "}
+                  <span
+                    title="Required"
+                    className="text-red-500 cursor-pointer"
+                  >
+                    *
+                  </span>
+                </label>
                 <input
                   type="text"
                   name="pseudo"
@@ -98,7 +106,12 @@ const Register: React.FC = () => {
               </div>
             </div>
             <div className="flex flex-col mb-2">
-              <label>Email</label>
+              <label>
+                Email{" "}
+                <span title="Required" className="text-red-500 cursor-pointer">
+                  *
+                </span>
+              </label>
               <input
                 type="email"
                 name="mail"
@@ -109,7 +122,12 @@ const Register: React.FC = () => {
               />
             </div>
             <div className="flex flex-col mb-2">
-              <label>Tagname</label>
+              <label>
+                Tagname{" "}
+                <span title="Required" className="text-red-500 cursor-pointer">
+                  *
+                </span>
+              </label>
               <input
                 type="text"
                 name="tagname"
@@ -121,7 +139,15 @@ const Register: React.FC = () => {
             </div>
             <div className="flex mb-2">
               <div className="flex flex-col w-1/2">
-                <label>Password</label>
+                <label>
+                  Password{" "}
+                  <span
+                    title="Required"
+                    className="text-red-500 cursor-pointer"
+                  >
+                    *
+                  </span>
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -132,7 +158,15 @@ const Register: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col w-1/2 ml-5">
-                <label>Confirm Password</label>
+                <label>
+                  Confirm Password{" "}
+                  <span
+                    title="Required"
+                    className="text-red-500 cursor-pointer"
+                  >
+                    *
+                  </span>
+                </label>
                 <input
                   type="password"
                   name="confirmPassword"

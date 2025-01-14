@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import '../styles/ModaleIA.css';
-import axios from 'axios';
+import { createThread, updateThread, processMessage } from '../utils/api_router';
 
 { 
   /*
   Prochaines étapes sur les modales:
-  - Rendre obligatoire la saisie des champs
-  - Ajouter les appels au backend Django pour envoyer les datas et récupérer les réponses de l'IA
-  - Mettre en place le système de traitement des réponses de l'IA afin d'afficher les éléments correctement
   - Optimisation du code
   */
- }
+}
 
 interface ModaleIAProps {
   onSave: (data: { name: string; type: string; description: string; features: string; targets: string }) => void;
   onClose: () => void;
 }
-
-const BackendUrl = 'http://127.0.0.1:8000/'
 
 const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
@@ -36,7 +31,9 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const [databaseStacks, setDatabaseStacks] = useState<string[]>([]);
   const [featuresRecommendations, setFeaturesRecommendations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [finalMessage, setFinalMessage] = useState('');
+  const [frontendCustonStack, setFrontendCustomStack] = useState('');
+  const [backendCustonStack, setBackendCustomStack] = useState('');
+  const [databaseCustonStack, setDatabaseCustomStack] = useState('');
 
   const handlePrevious = () => setStep(step - 1);
 
@@ -48,92 +45,102 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         setStep(nextStep);
       }, 1000);
     };
-
     try {
       setLoading(true);
+      /* Gestion de la partie 1 de la Modale */
       if (step === 1) {
+        /* Verifie la saisie des champs */
+        if (name === '' || type === '' || description === '' || features === '' || targets === '') {
+          alert('Please fill all fields');
+          return;
+        }
         /* Creation du Thread */
-        const createThread = await axios.post(BackendUrl+'api/assistant/create-thread', {});
-        const threadId = createThread.data.thread_id;
+        const thread = await createThread();
+        const threadId = thread;
         setThreadId(threadId); 
-        console.log('Thread ID:', threadId);
         /* Mis a jour du Thread */
-        const response_part1 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
-          thread_id: threadId,
-          content: { "Nom du projet": name, "Type de projet": type, "Description détaillé": description, "Fonctionnalités clés": features, "Public cible": targets },
-        });
-        const runId = response_part1.data.run_id;
-        console.log('Run ID:', runId);
-        /* Récupère la réponse de l'IA */
-        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
-          thread_id: threadId,
-          run_id: runId,
-        });
-        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
+        const content1 = { "Nom du projet": name, "Type de projet": type, "Description détaillé": description, "Fonctionnalités clés": features, "Public cible": targets };
+        const response_part1 = await updateThread(threadId, content1);
 
-        const recommendationJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        const recommendationJSON = JSON.parse(response_part1); /* Parse les recommendations de l'IA */
         recommendationJSON.recommendations.frontend.push('Other');
         recommendationJSON.recommendations.backend.push('Other');
         recommendationJSON.recommendations.database.push('Other');
         setFrontendStacks(recommendationJSON.recommendations.frontend); /* Stocke les stacks frontend */
-        console.log(frontendStacks);
         setBackendStacks(recommendationJSON.recommendations.backend); /* Stocke les stacks backend */
-        console.log(backendStacks);
         setDatabaseStacks(recommendationJSON.recommendations.database); /* Stocke les stacks database */
-        console.log(databaseStacks);
 
         showLoaderAndLoaded(2);
-
+        /* Gestion de la partie 2 de la Modale */
       } else if (step === 2) {
+        /* Verifie la saisie des champs */
+        if (frontend === '' || backend === '' || database === '') {
+          alert('Please select a stack for each part');
+          return;
+        }
         setLoading(true); /* Affiche le loader */
-        console.log('Frontend:', frontend); /* Affiche le frontend */
-        console.log('Backend:', backend); /* Affiche le backend */
-        console.log('Database:', database); /* Affiche le database */
-        /* Mis a jour du Thread */
-        const response_part2 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
-          thread_id: threadId,
-          content: { "Frontend": frontend, "Backend": backend, "Database": database },
-        });
-        const runId = response_part2.data.run_id; /* Récupère le run ID */
-        console.log('Run ID:', runId);
-        /* Récupérer la réponse de l'IA */
-        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
-          thread_id: threadId,
-          run_id: runId,
-        });
-        console.log(get_response.data.assistant_reply); /* Affiche la réponse de l'IA */
-
-        const featuresRecommendationsJSON = JSON.parse(get_response.data.assistant_reply); /* Parse les recommendations de l'IA */
+        /* Definition des variables contenant la stack final choisi par l'user */
+        let finalChoiceDatabase = '';
+        let finalChoiceFrontend = '';
+        let finalChoiceBackend = '';
+        /* Verifie si l'user a choisi une stack custom et remplit les variables finales */
+        if (frontend === 'Other') {
+          if (frontendCustonStack === '') {
+            alert('Please enter your custom frontend stack');
+            return;
+          } else {
+            finalChoiceFrontend = frontendCustonStack;
+            console.log(finalChoiceFrontend);
+          }
+        } else {
+          finalChoiceFrontend = frontend;
+          console.log(finalChoiceFrontend);
+        }
+        if (backend === 'Other') {
+          if (backendCustonStack === '') {
+            alert('Please enter your custom backend stack');
+            return;
+          } else {
+            finalChoiceBackend = backendCustonStack;
+            console.log(finalChoiceBackend);
+          }
+        } else {
+          finalChoiceBackend = backend;
+          console.log(finalChoiceBackend);
+        }
+        if (database === 'Other') {
+          if (databaseCustonStack === '') {
+            alert('Please enter your custom database stack');
+            return;
+          } else {
+            finalChoiceDatabase = databaseCustonStack;
+            console.log(finalChoiceDatabase);
+          }
+        } else {
+          finalChoiceDatabase = database;
+          console.log(finalChoiceDatabase);
+        }
+        const content2 = { "Frontend": finalChoiceFrontend, "Backend": finalChoiceBackend, "Database": finalChoiceDatabase };
+        const response_part2 = await updateThread(threadId, content2); // Request BuildIT IA
+        const featuresRecommendationsJSON = JSON.parse(response_part2); /* Parse les recommendations de l'IA */
         const featuresRecommendationsArray: string[] = Object.values(featuresRecommendationsJSON.features_recommendations) as string[];
         setFeaturesRecommendations(featuresRecommendationsArray); /* Stocke les features recommandées */
-
         showLoaderAndLoaded(3);
 
+        /* Gestion de la partie 3 de la Modale */
       } else if (step === 3) {
-        const response_part3 = await axios.post(BackendUrl+'api/assistant/update-run-thread', {
-          thread_id: threadId,
-          content: { featuresSelected },
-        });
-        const runId = response_part3.data.run_id;
-        console.log('Run ID:', runId);
-
-        const get_response = await axios.post(BackendUrl+'api/assistant/get-assistant-response', {
-          thread_id: threadId,
-          run_id: runId,
-        });
-        const finalResponse = get_response.data.assistant_reply;
-        setFinalMessage(finalResponse); /* Stocke la réponse de l'IA */
-        console.log(finalResponse); /* Affiche la réponse de l'IA */
-
-        const deleteThread = await axios.post(BackendUrl+'api/assistant/delete-thread', {
-          thread_id: threadId,
-        });
-        console.log('Thread deleted:', deleteThread.data.deleted);
-        setThreadId('');
-        showLoaderAndLoaded(5);
-        setTimeout(() => onClose(), 2000);
+        const content3 = { featuresSelected };
+        const response_part3 = await updateThread(threadId, content3); // Request BuildIT IA
+        const finalResponse = response_part3;
+        const process = await processMessage(finalResponse, threadId); // Envoie les données au backend Django pour créer le projet
+        if (process === true) { // Si le projet est créé
+          setThreadId('');
+          showLoaderAndLoaded(5);
+          setTimeout(() => onClose(), 2000);
+        } else { // Si le projet n'est pas créé
+          console.error('Error creating project:', process);
+        }
       }
-
     } catch (error) {
       console.error('Error communicating with backend:', error);
     } finally {
@@ -152,6 +159,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
       prev.includes(feature) ? prev.filter((f) => f !== feature) : [...prev, feature]
     );
   };
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
@@ -243,7 +251,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {frontendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('frontend', stack)}
                   >
@@ -251,12 +259,19 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                   </div>
                 ))}
               </div>
+              {frontend === 'Other' && (
+                    <input
+                      onChange={(e) => setFrontendCustomStack(e.target.value)}
+                      placeholder="Enter your frontend stack"
+                      className="mt-2 p-2 rounded bg-bgSecondary text-white focus:outline-none border-none"
+                    />
+                )}
               <h3 className='text-primary font-bold text-lg mt-5'>Backend Stack</h3>
               <div className="backend-stack-select flex">
                 {backendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('backend', stack)}
                   >
@@ -264,12 +279,19 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                   </div>
                 ))}
               </div>
+              {backend === 'Other' && (
+                    <input
+                      onChange={(e) => setBackendCustomStack(e.target.value)}
+                      placeholder="Enter your backend stack"
+                      className="mt-2 p-2 rounded bg-bgSecondary text-white focus:outline-none border-none"
+                    />
+                )}
               <h3 className='text-primary font-bold text-lg mt-5'>Database Stack</h3>
               <div className="database-stack-select flex">
                 {databaseStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack bg-bgSecondary p-2 pl-3 pr-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('database', stack)}
                   >
@@ -277,6 +299,13 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                   </div>
                 ))}
               </div>
+              {database === 'Other' && (
+                    <input
+                      onChange={(e) => setDatabaseCustomStack(e.target.value)}
+                      placeholder="Enter your database stack"
+                      className="mt-2 p-2 rounded bg-bgSecondary text-white focus:outline-none border-none"
+                    />
+                )}
               <div className="mt-6 text-center">
                 <button
                   onClick={handlePrevious}

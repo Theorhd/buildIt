@@ -7,12 +7,12 @@ import {
   ItemInterface,
 } from "../../utils/interfaces";
 import {
-  createList,
-  updateListApi,
-  deleteListApi,
-  createItem,
-  updateItem,
-  deleteItemApi,
+  addList as addListApi,
+  updateList as updateListApi,
+  deleteList as deleteListApi,
+  addItem as addItemApi,
+  updateItem as updateItemApi,
+  deleteItem as deleteItemApi,
 } from "../../utils/api_router";
 import List from "../../components/List";
 import ListModal from "../../components/ListModal";
@@ -32,22 +32,22 @@ export default function Board() {
     const newBoard: BoardInterface = location.state?.board; // Récupère la board depuis l'état de navigation
     if (newBoard && newBoard.board_name === board_name) {
       setBoard(newBoard);
-      setLists(newBoard.lists);
+      setLists(newBoard.lists || []); // Fallback pour éviter undefined
     }
-  }, [location.state, board_name, board]);
+  }, [location.state, board_name]);
 
   // Ajouter une nouvelle liste
   const addNewList = async () => {
     if (!board) return; // Si aucune board n'est sélectionnée, on ne fait rien
 
-    const newList: Partial<ListInterface> = {
+    const newList: ListInterface = {
       list_name: "New List",
-      board: board.id,
-      items: [],
+      board_id: board.id!,
+      board: board,
     };
 
     try {
-      const createdList = await createList(newList); // Appel API pour créer une nouvelle liste
+      const createdList = await addListApi(newList); // Appel API pour créer une nouvelle liste
       setLists([...lists, createdList]); // Mise à jour des listes locales
     } catch (error) {
       console.error("Erreur lors de la création d'une liste :", error);
@@ -57,7 +57,7 @@ export default function Board() {
   // Supprimer une liste
   const deleteList = async (listId: number) => {
     try {
-      await deleteListApi(listId); // Appel API pour supprimer la liste
+      await deleteListApi(listId); // On passe uniquement l'ID
       setLists(lists.filter((list) => list.id !== listId)); // Mise à jour des listes locales
     } catch (error) {
       console.error("Erreur lors de la suppression de la liste :", error);
@@ -80,14 +80,21 @@ export default function Board() {
 
   // Ajouter un item à une liste
   const addItem = async (listId: number, newItem: Partial<ItemInterface>) => {
+    if (!newItem.item_name) {
+      console.error("item_name est obligatoire.");
+      return;
+    }
     try {
-      const createdItem = await createItem(newItem); // Appel API pour créer un nouvel item
+      const createdItem = await addItemApi({
+        ...newItem,
+        list_id: listId,
+      } as ItemInterface); // Appel API pour créer un nouvel item
       const updatedList = lists.find((list) => list.id === listId);
 
       if (updatedList) {
         updateList({
           ...updatedList,
-          items: [...updatedList.items, createdItem],
+          items: [...(updatedList.items || []), createdItem],
         }); // Mise à jour de la liste avec l'item créé
       }
     } catch (error) {
@@ -102,8 +109,8 @@ export default function Board() {
     details: ItemInterface
   ) => {
     try {
-      const updatedItem = await updateItem({ ...details, id: itemId }); // Appel API pour mettre à jour l'item
-      const updatedItems = list.items.map((item) =>
+      const updatedItem = await updateItemApi({ ...details, id: itemId }); // Appel API pour mettre à jour l'item
+      const updatedItems = (list.items || []).map((item) =>
         item.id === itemId ? updatedItem : item
       );
       updateList({ ...list, items: updatedItems }); // Mise à jour de la liste avec l'item modifié
@@ -115,12 +122,12 @@ export default function Board() {
   // Supprimer un item
   const deleteItem = async (listId: number, itemId: number) => {
     try {
-      await deleteItemApi(itemId); // Appel API pour supprimer l'item
+      await deleteItemApi({ id: itemId } as ItemInterface); // Appel API pour supprimer l'item
       const updatedList = lists.find((list) => list.id === listId);
       if (updatedList) {
         updateList({
           ...updatedList,
-          items: updatedList.items.filter((item) => item.id !== itemId),
+          items: (updatedList.items || []).filter((item) => item.id !== itemId),
         }); // Mise à jour de la liste sans l'item supprimé
       }
     } catch (error) {
@@ -132,7 +139,6 @@ export default function Board() {
   if (!board) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="relative h-full flex mt-2">
       <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 mb-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">

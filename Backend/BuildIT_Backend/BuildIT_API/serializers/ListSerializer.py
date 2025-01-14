@@ -8,12 +8,17 @@ class ListSerializer(serializers.ModelSerializer):
 
     list_name = serializers.CharField(source='name')
 
+    # Ajout de board_id et board
+    board_id = serializers.IntegerField(write_only=True)
+    board = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Lists
         fields = [
             'id',
             'list_name',
             'placement',
+            'board_id',
             'board',
             'items',
         ]
