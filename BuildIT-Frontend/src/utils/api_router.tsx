@@ -248,6 +248,22 @@ export async function retriveUserWithTagName(tagname: string) {
     }
 }
 
+export async function addNewBoard(projectID: number, boardName: string) {
+    /*
+    Ajoute un nouveau tableau à un projet
+    
+    Required fields:
+    - project_id
+    - board_name
+    */
+    try {
+        const response = await api.post("/board/create", { project_id: projectID, board_name: boardName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }   
+}
+
 export async function addList(data: ListInterface) {
     /*
     Ajoute une nouvelle liste
