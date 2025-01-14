@@ -38,9 +38,12 @@ export default function Navbar() {
     <nav>
         {projects.pending_projects && projects.pending_projects.length > 0 && projects.pending_projects.map((project) => (
           <div className="p-2 m-3 bg-bgSecondary rounded-lg drop-shadow">
-            <p className="text-lg">{project.name}</p>
-            <button className="bg-secondary rounded p-2 text-sm font-bold drop-shadow" onClick={ () => { acceptInvitaion(project.id); window.location.reload(); } }>Accept</button>
-            <button className="bg-red-700 rounded ml-2 p-2 text-sm font-bold drop-shadow" onClick={ () => { declineInvitation(project.id); window.location.reload(); } }>Reject</button>
+            <div className="flex justify-between">
+              <p className="text-lg">{project.name}</p>
+              <div className="ping"></div>
+            </div>
+            <button className="bg-secondary rounded p-2 text-sm font-bold drop-shadow-lg border-none hover:scale-105 transition-all" onClick={ () => { acceptInvitaion(project.id); window.location.reload(); } }>Accept</button>
+            <button className="bg-red-600 rounded ml-2 p-2 text-sm font-bold drop-shadow-lg border-none hover:scale-105 transition-all" onClick={ () => { declineInvitation(project.id); window.location.reload(); } }>Reject</button>
           </div>
         ))}
         {projects.active_projects && projects.active_projects.length > 0 && projects.active_projects.map((project) => (

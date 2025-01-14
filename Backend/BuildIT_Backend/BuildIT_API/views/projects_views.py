@@ -248,7 +248,7 @@ class ProjectAddUserView(generics.UpdateAPIView):
         print(user)
         print(project)
         
-        UserProjects.objects.create(
+        UserProjects.objects.get_or_create(
             user=user,
             project=project,
             user_role='pending'
@@ -289,7 +289,7 @@ class ProjectRejectInvitationView(generics.DestroyAPIView):
     """
     Refus d'une invitation à un projet
     
-    Méthode DELETE
+    Méthode POST
     Permission: Doit avoir un token JWT valide
     """
     permission_classes = [IsAuthenticatedWithToken]
