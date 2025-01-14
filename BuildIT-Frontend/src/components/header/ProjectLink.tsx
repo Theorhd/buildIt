@@ -3,6 +3,8 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Tooltip from "../ToolTip";
 import { ProjectInterface } from "../../utils/interfaces";
+import ModaleInvite from "../ModaleInvite";
+import { addUserToProject } from "../../utils/api_router";
 
 
 export default function ProjectLink({project}: { project: ProjectInterface }) {
@@ -12,6 +14,9 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
     const toggleProjectLink = () => {
         setIsProjectLinkOpen(!isProjectLinkOpen);
     };
+
+    const [inviteModaleOpen, setInviteModale] = useState(false);
+    const [projectId, setProjectId] = useState<string>('');
 
   return (
     <div key={project.tagname} className="flex flex-col px-4 py-1">
@@ -32,7 +37,13 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
             </div>
             <div className="flex items-center gap-1">
                 <Tooltip text="Invite user" position="top">
-                    <UserPlusIcon className="w-4 h-4 cursor-pointer"/>
+                    <UserPlusIcon 
+                        className="w-4 h-4 cursor-pointer" 
+                        onClick={() => {
+                            setInviteModale(true);
+                            setProjectId(project.id);
+                        }}
+                    />
                 </Tooltip>
                 
                 <Tooltip text="New board" position="top">
@@ -54,6 +65,13 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
                 </NavLink>
             </div>
         ))}
+        {inviteModaleOpen && (
+            <ModaleInvite
+                onInvite={(tagname, projectId) => addUserToProject(projectId, tagname)}
+                onClose={() => setInviteModale(false)}
+                projectId={projectId}
+            />
+        )}
     </div>
   )
 }
