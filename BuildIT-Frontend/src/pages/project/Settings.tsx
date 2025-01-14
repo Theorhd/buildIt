@@ -1,8 +1,20 @@
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { ProjectInterface } from "../../utils/interfaces";
 
 export default function Settings() {
+
+    // Récupération du projet passé par ProjectLink
+    const [project, setProject] = useState<ProjectInterface>();
+    useEffect(() => {
+        const newProject: ProjectInterface = location.state?.project
+
+        if (newProject) {
+            setProject(newProject);
+        }
+    })
+    
     const [projectName, setProjectName] = useState("Projet 1");
     const [description, setDescription] = useState("Description du projet...");
     const [link, setLink] = useState("https://build-it.com/partage/Gr43TR53Vr");

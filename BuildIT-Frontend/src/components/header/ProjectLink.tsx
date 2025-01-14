@@ -34,6 +34,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
             
                 <NavLink
                     to={`/${project.tagname}`}
+                    state={{ project: project }}
                     className={({ isActive }) => (isActive ? "text-secondary hover:text-secondary font-semibold" : "text-primary hover:text-primary font-semibold")}
                 >
                     {project.project_name}
