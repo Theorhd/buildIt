@@ -124,6 +124,8 @@ class UserUpdateView(generics.UpdateAPIView):
         if not user_id_from_body or str(user_id_from_body) != str(user_id_from_token):
             return Response({"error": "You can only update your own account."}, status=status.HTTP_403_FORBIDDEN)
 
+        # Vérification password
+
         # Mise à jour de l'utilisateur
         try:
             user = Users.objects.get(id=user_id_from_body)
@@ -146,24 +148,8 @@ class UserDeleteView(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
 
-        # Vérification de l'existence du token
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Token "):
-            return Response({"error": "Invalid or missing token."}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Vérification de la validité du token
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-
         # Recuperation de l'id de l'utilisateur depuis le token
-        user_id_from_token = validated_token.get("user_id")
-
-        # Récupération de l'id de l'utilisateur depuis l'url
-        user_id_from_url = kwargs.get("pk")
-
-        # Vérification que l'id de l'url correspond au token
-        if user_id_from_url != user_id_from_token:
-            return Response({"error": "You can only delete your own account."}, status=status.HTTP_403_FORBIDDEN)
+        user_id_from_token = request.user.id
 
         # Suppression de l'utilisateur
         try:
@@ -173,3 +159,24 @@ class UserDeleteView(generics.DestroyAPIView):
         except Users.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
+class UserFromTokenView(generics.RetrieveAPIView): #TODO ajouter les permissions
+    """
+    Recherche d'un utilisateur par son Token
+
+    Méthode GET
+    Permission: Doit avoir un token JWT valide
+    """
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticatedWithToken]
+
+    def get(self, request, *args, **kwargs):
+
+        # Récupération de l'id de l'utilisateur après la permission
+        user = request.user
+
+        # Renvoie l'utilisateur
+        try:
+            serializer = self.get_serializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Users.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

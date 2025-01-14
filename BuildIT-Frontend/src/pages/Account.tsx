@@ -1,45 +1,86 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { deleteUser, getUserFromToken, logout, updateUser } from "../utils/api_router";
+import ConfirmModale from "../components/Modale/ConfirmModale";
 
 export default function Account() {
-    const [formData, setFormData] = useState({
-        pseudo: "JD",
-        firstname: "John",
-        lastname: "Doe",
-        email: "john.doe@example.com",
-        phone: "0606060606",
-        password: "",
-        confirmPassword: "",
-      });
-    
-      const [successMessage, setSuccessMessage] = useState("");
+
+  const [formData, setFormData] = useState({
+    pseudo: "",
+    tagname: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    password: "",
+    new_password: "",
+    confirmPassword: ""
+  })
+
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la modale
+
+  // Utilisation de useEffect pour récupérer les projets
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        await getUserFromToken().then((fetchedUser) => {
+          Object.entries(fetchedUser).forEach(([key, value]) => {
+            if(key in formData) {
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                [key]: value,
+              }));
+            }
+          });
+        });
+      } catch (err) {
+        setError("Failed to load user : " + err);
+      }
+    };
+
+    fetchUser();
+  }, []); // Le tableau vide [] garantit que l'effet est exécuté une seule fois
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if(validate()){
+      try {
+        updateUser(formData);
+        setSuccessMessage(t("Your information has been successfully updated."));
+      } catch (error) {
+        setError("Error: " + error)
+      }
+    }
+  }
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const validate = () => {
+
+    if (!/\d/.test(formData.new_password) || formData.new_password.length < 6) {
+      setError(t("The password must contain a number and be at least 6 characters long"))
+      return false;
+    }
+
+    if (formData.new_password !== formData.confirmPassword) {
+      setError(t("Passwords do not match"))
+      return false;
+    }
+
+    return true;
+
+  }
 
       const { t } = useTranslation();
     
-      const handleChange = (e: { target: { name: string; value: string; }; }) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      };
-    
-      const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-    
-        if (formData.password && formData.password !== formData.confirmPassword) {
-          alert("Les mots de passe ne correspondent pas.");
-          return;
-        }
-    
-        // Simuler une requête API pour sauvegarder les modifications
-        console.log("Données envoyées :", formData);
-        setSuccessMessage("Vos informations ont été mises à jour avec succès.");
-      };
-    
       return (
-        <div className="flex justify-center items-center">
-          <div className="w-full p-8">
+        <div className="h-full overflow-y-auto">
+          <div className="w-full p-16">
             <h2 className="text-3xl font-semibold mb-6">
               {t("Update my account")}
             </h2>
@@ -47,6 +88,12 @@ export default function Account() {
             {successMessage && (
               <div className="mb-4 p-3 text-green-800 bg-green-100 border border-green-400 rounded">
                 {successMessage}
+              </div>
+            )}
+
+            {error && (
+              <div className="mb-4 p-3 text-red-800 bg-red-100 border border-red-400 rounded">
+                {error}
               </div>
             )}
     
@@ -57,7 +104,7 @@ export default function Account() {
                     htmlFor="pseudo"
                     className="block text-sm font-medium"
                     >
-                    Pseudo
+                    {t("Nickname")}
                     </label>
                     <input
                     type="text"
@@ -68,6 +115,23 @@ export default function Account() {
                     className="mt-1 p-3 block w-full bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary"
                     />
                 </div>
+                {/* Tagname */}
+                <div>
+                    <label
+                    htmlFor="tagname"
+                    className="block text-sm font-medium"
+                    >
+                    {t("Tagname")}
+                    </label>
+                    <input
+                    type="text"
+                    id="tagname"
+                    name="tagname"
+                    value={formData.tagname}
+                    className="mt-1 p-3 block w-full text-gray-600 bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary cursor-not-allowed"
+                    disabled
+                    />
+                </div>
                 <div className="flex space-between gap-5">
                     {/* Prénom */}
                     <div className="w-1/2">
@@ -75,7 +139,7 @@ export default function Account() {
                         htmlFor="firstname"
                         className="block text-sm font-medium"
                         >
-                        Firstname
+                        {t("Firstname")}
                         </label>
                         <input
                         type="text"
@@ -93,7 +157,7 @@ export default function Account() {
                         htmlFor="lastname"
                         className="block text-sm font-medium"
                         >
-                        Lastname
+                        {t("Lastname")}
                         </label>
                         <input
                         type="text"
@@ -112,7 +176,7 @@ export default function Account() {
                   htmlFor="email"
                   className="block text-sm font-medium"
                 >
-                  Email
+                  {t("Email")}
                 </label>
                 <input
                   type="email"
@@ -130,7 +194,7 @@ export default function Account() {
                   htmlFor="phone"
                   className="block text-sm font-medium"
                 >
-                  Phone
+                  {t("Phone")}
                 </label>
                 <input
                   type="tel"
@@ -145,18 +209,18 @@ export default function Account() {
               {/* Nouveau mot de passe */}
               <div>
                 <label
-                  htmlFor="password"
+                  htmlFor="new_password"
                   className="block text-sm font-medium"
                 >
-                  Nouveau mot de passe
+                  {t("New password")}
                 </label>
                 <input
                   type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
+                  id="new_password"
+                  name="new_password"
+                  value={formData.new_password}
                   onChange={handleChange}
-                  placeholder="Laisser vide pour ne pas modifier"
+                  placeholder={t("Leave blank to not modify")}
                   className="mt-1 p-3 block w-full bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary"
                 />
               </div>
@@ -167,7 +231,7 @@ export default function Account() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-medium"
                 >
-                  Confirmer le mot de passe
+                  {t("Confirm new password")}
                 </label>
                 <input
                   type="password"
@@ -175,7 +239,25 @@ export default function Account() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  placeholder="Confirmer le nouveau mot de passe"
+                  placeholder={t("Confirm new password")}
+                  className="mt-1 p-3 block w-full bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary"
+                />
+              </div>
+              {/* Confirmer avec le mot de passe actuel */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium"
+                >
+                  {t("Current password")}
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder={t("Confirm changes with current password")}
                   className="mt-1 p-3 block w-full bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary"
                 />
               </div>
@@ -186,7 +268,7 @@ export default function Account() {
                   type="submit"
                   className="px-6 py-3 bg-secondary text-white rounded-md shadow hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
                 >
-                  Sauvegarder les modifications
+                  {t("Save changes")}
                 </button>
               </div>
             </form>
@@ -194,9 +276,20 @@ export default function Account() {
             {/* Delete account*/}
             <div className="">
                 <h2 className="text-3xl font-bold my-6">{t("Danger Zone")}</h2>
-                <button type="button" className="text-red-600 font-semibold border border-red-600 px-4 py-2 rounded-md hover:text-primary hover:bg-red-600">{t("Delete account")}</button>
+                <div className="flex flex-col gap-4">
+                  <button type="button" className="w-fit text-red-600 font-semibold border border-red-600 px-4 py-2 rounded-md hover:text-primary hover:bg-red-600" onClick={logout}>{t("Logout")}</button>
+                  <button type="button" className="w-fit text-red-600 font-semibold border border-red-600 px-4 py-2 rounded-md hover:text-primary hover:bg-red-600" onClick={() => setIsModalOpen(true)}>{t("Delete account")}</button>
+                </div>
             </div>
           </div>
+
+          {/* Modale */}
+          {isModalOpen && (
+            <ConfirmModale
+              onSave={() => deleteUser()}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
         </div>
       );
     }

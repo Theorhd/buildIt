@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
+from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView, UserFromTokenView
 from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
@@ -11,8 +11,9 @@ from BuildIT_API.views.tag_views import TagCreateView, TagRetrieveView, TagUpdat
 userpatterns = [
     path('user/create', UserCreateView.as_view(), name='register'),                 # Créer un utilisateur
     path('user/get/<int:pk>', UserRetrieveView.as_view(), name='user-detail'),      # Rechercher un utilisateur par son id
+    path('user/get_from_token', UserFromTokenView.as_view(), name='user-data'),   # Recupérer les données d'un utilisateur
     path('user/update', UserUpdateView.as_view(), name='user-update'),              # Modifier un utilisateur
-    path('user/delete/<int:pk>', UserDeleteView.as_view(), name='user-delete'),     # Supprimer un utilisateur par son id
+    path('user/delete', UserDeleteView.as_view(), name='user-delete'),     # Supprimer un utilisateur par son id
     path('user/login', UserLoginView.as_view(), name='user-login'),                 # Connexion d'un utilisateur
 ]
 
