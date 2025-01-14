@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -104,18 +104,8 @@ class UserUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticatedWithToken]
 
     def put(self, request, *args, **kwargs):
-
-        # Vérification de l'existence du token
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Token "):
-            return Response({"error": "Invalid or missing token."}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Vérification de la validité du token
-        auth = JWTAuthentication()
-        validated_token = auth.get_validated_token(request.headers.get("Authorization").split()[1])
-
-        # Recuperation de l'id de l'utilisateur depuis le token
-        user_id_from_token = validated_token.get("user_id")
+        # Récupération de l'id de l'utilisateur depuis le token
+        user_id_from_token = request.user.id
 
         # Récupération de l'ID utilisateur depuis le corps de la requête
         user_id_from_body = request.data.get("id")
@@ -124,13 +114,26 @@ class UserUpdateView(generics.UpdateAPIView):
         if not user_id_from_body or str(user_id_from_body) != str(user_id_from_token):
             return Response({"error": "You can only update your own account."}, status=status.HTTP_403_FORBIDDEN)
 
-        # Mise à jour de l'utilisateur
         try:
+            # Récupération de l'utilisateur
             user = Users.objects.get(id=user_id_from_body)
+
+            # Vérification du mot de passe actuel
+            password = request.data.get("password")
+            if not password or not check_password(password, user.password):
+                return Response({"error": "Invalid current password."}, status=status.HTTP_401_UNAUTHORIZED)
+
+            # Vérification et mise à jour avec new_password si fourni
+            new_password = request.data.get("new_password")
+            if new_password:
+                request.data["password"] = new_password
+
+            # Sérialiser et mettre à jour les autres champs
             serializer = self.get_serializer(user, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Users.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 

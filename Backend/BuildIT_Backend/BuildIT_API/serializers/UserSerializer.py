@@ -11,6 +11,16 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password']) # Hachage du password
+        # Hachage du mot de passe avant la création
+        validated_data['password'] = make_password(validated_data['password'])
         user = Users.objects.create(**validated_data)
         return user
+
+    def update(self, instance, validated_data):
+        # Vérification et hachage si le mot de passe est présent dans les données à mettre à jour
+        password = validated_data.get('password', None)
+        if password:
+            validated_data['password'] = make_password(password)
+
+        # Appeler la méthode de mise à jour parente
+        return super(UserSerializer, self).update(instance, validated_data)

@@ -14,7 +14,7 @@ export default function Navbar() {
     const fetchProjects = async () => {
       try {
         const fetchedProjects = await getProjectsFromToken();
-        setProjects(fetchedProjects);
+        setProjects(fetchedProjects["active_projects"]);
       } catch (err) {
         setError("Failed to load projects : " + err);
       } finally {
