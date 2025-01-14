@@ -14,7 +14,7 @@ export default function Layout() {
 
   return (
 
-    <div className="w-screen h-screen flex text-primary overflow-hidden relative">
+    <div className="h-screen w-screen overflow-hidden flex text-primary relative">
       <div
         className={`${
           isNavbarOpen ? "w-2/12" : "w-0"

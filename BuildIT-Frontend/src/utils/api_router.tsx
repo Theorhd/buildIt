@@ -37,15 +37,6 @@ export async function refresh() {
     localStorage.setItem('refresh', response.data.refresh);
 };
 
-// Logout
-
-function logout() {
-  localStorage.removeItem("user");
-  localStorage.removeItem("refresh");
-  localStorage.removeItem("access");
-  window.location.href = '/login';
-}
-
 // Gestion des erreurs
 const handleError = async (error: any) => {
     // Si l'erreur est une réponse de l'API
@@ -115,19 +106,23 @@ export async function register(data: UserInterface) {
     - tagname
     */
     try {
-      await api.post("/user/create", data);
-      console.log("Account created successfully");
-      window.location.href = '/login';
         const response = await api.post("/user/create", data);
-      
-        localStorage.setItem('access', response.data.tokens.access);
-        localStorage.setItem('refresh', response.data.tokens.refresh);
+
         console.log("Account created successfully");
         window.location.href = '/login';
+        return response.data
     } catch (error) {
         handleError(error);
     }
 };
+
+// Logout
+export function logout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("access");
+    window.location.href = '/login';
+}
 
 export async function getProjectsFromToken() {
     /*
@@ -140,6 +135,47 @@ export async function getProjectsFromToken() {
         handleError(error);
     }
 };
+
+export async function getUserFromToken() {
+  /*
+  Récupérer l'utilisateur connecté via le token
+  */
+  try {
+      const response = await api.get(`/user/get_from_token`);
+      return response.data;
+  } catch (error) {
+      handleError(error);
+  }
+};
+
+export async function updateUser(data) {
+    /* */
+    try {
+        const response = await api.post("/user/update", data);
+      
+        localStorage.setItem('access', response.data.tokens.access);
+        localStorage.setItem('refresh', response.data.tokens.refresh);
+        console.log("Account created successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function deleteUser() {
+    /* */
+    try {
+        const response = await api.delete("/user/delete");
+      
+        localStorage.removeItem("user");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("access");
+        console.log("Account deleted successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
+}
 
 // Crée un Thread
 export async function createThread() {
