@@ -18,6 +18,7 @@ const ModaleNewBoard: React.FC<ModaleNewBoardProps> = ({ onNewBoardCreation, onC
         try {
             onNewBoardCreation(projectId, boardName);
             onClose();
+            window.location.reload();
         } catch (err) {
             setError('Failed to create new board. Please try again.');
         }

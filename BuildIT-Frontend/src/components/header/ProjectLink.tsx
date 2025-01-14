@@ -85,7 +85,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
         {newBoardModaleOpen && (
             <ModaleNewBoard
                 onNewBoardCreation={(projectId, boardName) => addNewBoard(projectId, boardName)}
-                onClose={() => {setNewBoardModale(false); setTimeout(() => window.location.reload(), 100)}}
+                onClose={() => setNewBoardModale(false)}
                 projectId={boardId}
             />
         )}
