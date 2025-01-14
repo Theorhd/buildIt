@@ -52,7 +52,7 @@ const ModaleNewBoard: React.FC<ModaleNewBoardProps> = ({ onNewBoardCreation, onC
             onClick={handleNewBoardCreation}
             className="bg-secondary text-white px-6 py-2 rounded-full border-none hover:shadow-lg hover:shadow-slate-700 hover:scale-105 transition"
           >
-            Invite
+            Create New Board
           </button>
         </div>
       </div>
