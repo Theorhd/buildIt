@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { BoardInterface, ListInterface, ItemInterface, TagInterface } from "../../utils/interfaces";
+import { addList, apiDeleteList, apiUpdateList } from "../../utils/api_router";
 import List from "../../components/List";
 import ListModal from "../../components/ListModal";
 
@@ -27,29 +28,43 @@ export default function Board() {
   }, [location.state, board_name]); // Déclencher à chaque changement d'URL ou de state
 
   // Ajouter une nouvelle liste
-  const addNewList = () => {
+  const addNewList = async () => {
     if (!board) return;
 
     const newList: ListInterface = {
-      id: Date.now(),
       list_name: "New List",
-      board: board.id,
-      items: [],
+      board_id: board.id,
     };
-    setLists([...lists, newList]);
+    const validatedList = await addList(newList);
+    setLists([...lists, validatedList]);
+    console.log("New list added:", validatedList);
   };
 
   // Supprimer une liste
   const deleteList = (listId: number) => {
+
+    // Suppression de la list en base de donnée
+    const listToDelete: Partial<ListInterface> = {
+      id: listId,
+    }
+    apiDeleteList(listToDelete);
+
+    // Suppression de la list du front
     setLists(lists.filter((list) => list.id !== listId));
+    console.log("List deleted:", listId);
   };
 
   // Mettre à jour une liste spécifique
   const updateList = (updatedList: ListInterface) => {
+    // validatedList = apiUpdateList(updatedList);
     setLists(
       lists.map((list) => (list.id === updatedList.id ? updatedList : list))
     );
   };
+
+  const updateListInDatabase = (updatedList: ListInterface) => {
+    const validatedList = apiUpdateList(updatedList);
+  }
 
   if (!board) {
     return <div>Loading...</div>; // Afficher un loader pendant la récupération des données
@@ -76,6 +91,7 @@ export default function Board() {
             list={list}
             deleteList={deleteList}
             updateList={updateList}
+            updateListInDatabase={updateListInDatabase}
             setSelectedItem={setSelectedItem}
           />
         ))}

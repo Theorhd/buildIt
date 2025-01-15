@@ -316,22 +316,26 @@ export async function addList(data: ListInterface) {
     }
 }
 
-export async function updateList(data: ListInterface) {
+export async function apiUpdateList(data: ListInterface) {
     /*
     Modifie la liste depuis son ID
     
     Required fields:
     - id
+
+    Ne prend pas en compte les items
     */
     try {
-        const response = await api.put("/list/update", data);
+        delete data.items
+        const x = {...data, list_id: data.id};
+        const response = await api.put("/list/update", x);
         return response.data;
     } catch (error) {
         handleError(error);
     }
 }
 
-export async function deleteList(data: ListInterface) {
+export async function apiDeleteList(data: ListInterface) {
     /*
     Supprime la liste depuis son ID
     
@@ -346,7 +350,7 @@ export async function deleteList(data: ListInterface) {
     }
 }
 
-export async function addItem(data: ItemInterface) {
+export async function apiAddItem(data: ItemInterface) {
     /*
     Ajoute un nouvel item
     
@@ -355,7 +359,9 @@ export async function addItem(data: ItemInterface) {
     - item_name
     */
     try {
+        console.log(data);
         const response = await api.post("/item/create", data);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -377,7 +383,7 @@ export async function updateItem(data: ItemInterface) {
     }
 }
 
-export async function deleteItem(data: ItemInterface) {
+export async function apiDeleteItem(data: ItemInterface) {
     /*
     Supprime l'item depuis son ID
     

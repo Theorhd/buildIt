@@ -20,7 +20,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'created_by',
             'created_by_id',
             'creation_date',
-            'boards'
+            'boards',
+            'markdown'
         ]
 
     # Tri des boards par placement
