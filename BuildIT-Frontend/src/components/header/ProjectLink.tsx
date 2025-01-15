@@ -34,6 +34,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
             
                 <NavLink
                     to={`/${project.tagname}`}
+                    state={{ project: project }}
                     className={({ isActive }) => (isActive ? "text-secondary hover:text-secondary font-semibold" : "text-primary hover:text-primary font-semibold")}
                 >
                     {project.project_name}
@@ -68,7 +69,7 @@ export default function ProjectLink({project}: { project: ProjectInterface }) {
             <div key={board.board_name} className="ps-6 py-0.5">
                 <NavLink
                 to={`/${project.tagname}/${board.board_name}`}
-                state={{ board: board }} // Passer l'objet board en state
+                state={{ board_id: board.id }} // Passer l'objet board en state
                 className={({ isActive }) => (isActive ? "font-normal text-secondary hover:text-secondary" : "font-normal text-primary hover:text-primary")}
                 >
                     {board.board_name}

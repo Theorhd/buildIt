@@ -12,8 +12,8 @@ class ItemSerializer(serializers.ModelSerializer):
     # Champs existants
     description = serializers.CharField(required=False, allow_blank=True)
     priority = serializers.IntegerField(required=False)
-    risk = serializers.CharField(required=False, allow_blank=True)
-    effort = serializers.CharField(required=False, allow_blank=True)
+    risk = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    effort = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     placement = serializers.IntegerField(required=False)
     date_start = serializers.DateField(required=False, allow_null=True)
     date_end = serializers.DateField(required=False, allow_null=True)

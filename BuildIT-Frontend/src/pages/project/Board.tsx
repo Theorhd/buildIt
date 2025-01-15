@@ -7,12 +7,11 @@ import {
   ItemInterface,
 } from "../../utils/interfaces";
 import {
-  addList as addListApi,
-  updateList as updateListApi,
-  deleteList as deleteListApi,
-  addItem as addItemApi,
-  updateItem as updateItemApi,
-  deleteItem as deleteItemApi,
+  addList,
+  apiDeleteList,
+  apiUpdateList,
+  apiUpdateItem,
+  getBoard,
 } from "../../utils/api_router";
 import List from "../../components/List";
 import ListModal from "../../components/ListModal";
@@ -25,119 +24,90 @@ export default function Board() {
   const [selectedItem, setSelectedItem] = useState<{
     item: ItemInterface;
     list: ListInterface;
-  } | null>(null); // Stocke l'item sélectionné pour affichage dans la modal
+  } | null>(null);
+
+  // Récupérer le nouveau board depuis le state passé
+  const board_id: number = location.state?.board_id;
 
   // Charger les listes depuis le backend lorsque la board change
   useEffect(() => {
-    const newBoard: BoardInterface = location.state?.board; // Récupère la board depuis l'état de navigation
-    if (newBoard && newBoard.board_name === board_name) {
-      setBoard(newBoard);
-      setLists(newBoard.lists || []); // Fallback pour éviter undefined
-    }
-  }, [location.state, board_name]);
-
+    const mafonctiondesesmorts = async () => {
+      try {
+        const newBoard = await getBoard(board_id);
+        setBoard(newBoard);
+        setLists(newBoard.lists);
+      } catch (error) {
+        console.error("Error fetching board:", error);
+      }
+    };
+    mafonctiondesesmorts();
+  }, [location.state]); // Déclencher à chaque changement d'URL ou de state
   // Ajouter une nouvelle liste
   const addNewList = async () => {
-    if (!board) {
-      console.error(
-        "Erreur : La board n'est pas définie. Impossible de créer une liste."
-      );
-      return;
-    }
+    if (!board) return;
 
+    // Création de la nouvelle list
     const newList: ListInterface = {
       list_name: "New List",
-      board_id: board.id!,
-      board: board,
+      board_id: board.id,
     };
 
-    try {
-      const createdList = await addListApi(newList); // Appel API pour créer une nouvelle liste
-      setLists([...lists, createdList]); // Mise à jour des listes locales
-    } catch (error) {
-      console.error("Erreur lors de la création d'une liste :", error);
-    }
+    // Ajout de la list en base de donnée
+    const validatedList = await addList(newList);
+
+    // Ajout de la list au front
+    setLists([...lists, validatedList]);
+
+    console.log("New list added:", validatedList.id);
   };
 
   // Supprimer une liste
-  const deleteList = async (listId: number) => {
-    try {
-      await deleteListApi(listId); // On passe uniquement l'ID
-      setLists(lists.filter((list) => list.id !== listId)); // Mise à jour des listes locales
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la liste :", error);
-    }
+  const deleteList = (listId: number) => {
+    // Création de la liste à supprimer
+    const listToDelete: Partial<ListInterface> = {
+      id: listId,
+    };
+
+    // Supprime la liste en base de donnée
+    apiDeleteList(listToDelete);
+
+    // Suppression de la list du front
+    setLists(lists.filter((list) => list.id !== listId));
+    console.log("List deleted:", listId);
   };
 
-  // Mettre à jour une liste
-  const updateList = async (updatedList: ListInterface) => {
-    try {
-      const updatedFromApi = await updateListApi(updatedList); // Appel API pour mettre à jour la liste
-      setLists(
-        lists.map((list) =>
-          list.id === updatedFromApi.id ? updatedFromApi : list
-        )
-      ); // Mise à jour de la liste locale avec la version API
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour de la liste :", error);
-    }
+  // Mettre à jour une liste spécifique
+  const updateList = (updatedList: ListInterface) => {
+    // validatedList = apiUpdateList(updatedList);
+    setLists(
+      lists.map((list) => (list.id === updatedList.id ? updatedList : list))
+    );
   };
 
-  // Ajouter un item à une liste
-  const addItem = async (listId: number, newItem: Partial<ItemInterface>) => {
-    if (!newItem.item_name) {
-      console.error("item_name est obligatoire.");
-      return;
-    }
-    try {
-      const createdItem = await addItemApi({
-        ...newItem,
-        list_id: listId,
-      } as ItemInterface); // Appel API pour créer un nouvel item
-      const updatedList = lists.find((list) => list.id === listId);
-
-      if (updatedList) {
-        updateList({
-          ...updatedList,
-          items: [...(updatedList.items || []), createdItem],
-        }); // Mise à jour de la liste avec l'item créé
-      }
-    } catch (error) {
-      console.error("Erreur lors de la création de l'item :", error);
-    }
+  const updateListInDatabase = (updatedList: ListInterface) => {
+    apiUpdateList(updatedList);
+    console.log("List updated in database:", updatedList.id);
   };
 
-  // Mettre à jour un item existant
+  if (!board) {
+    return <div>Loading...</div>; // Afficher un loader pendant la récupération des données
+  }
+
   const updateItemDetails = async (
     list: ListInterface,
     itemId: number,
     details: ItemInterface
   ) => {
-    try {
-      const updatedItem = await updateItemApi({ ...details, id: itemId }); // Appel API pour mettre à jour l'item
-      const updatedItems = (list.items || []).map((item) =>
-        item.id === itemId ? updatedItem : item
-      );
-      updateList({ ...list, items: updatedItems }); // Mise à jour de la liste avec l'item modifié
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour de l'item :", error);
-    }
-  };
+    // Appel de la route de mise à jour de l'item
+    const validatedItem = await apiUpdateItem(details);
 
-  // Supprimer un item
-  const deleteItem = async (listId: number, itemId: number) => {
-    try {
-      await deleteItemApi({ id: itemId } as ItemInterface); // Appel API pour supprimer l'item
-      const updatedList = lists.find((list) => list.id === listId);
-      if (updatedList) {
-        updateList({
-          ...updatedList,
-          items: (updatedList.items || []).filter((item) => item.id !== itemId),
-        }); // Mise à jour de la liste sans l'item supprimé
-      }
-    } catch (error) {
-      console.error("Erreur lors de la suppression de l'item :", error);
-    }
+    // Met à jour la list du front
+    const updatedItems = list.items.map((item) =>
+      item.id === itemId ? { ...item, ...validatedItem } : item
+    );
+    updateList({ ...list, items: updatedItems });
+
+    console.log("Item updated:", validatedItem.id);
   };
 
   // Si aucune board n'est sélectionnée, afficher un loader
@@ -145,18 +115,18 @@ export default function Board() {
     return <div>Loading...</div>;
   }
   return (
-    <div className="relative h-full flex mt-2">
-      <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 mb-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
-        {lists?.length > 0 &&
-          lists.map((list) => (
-            <List
-              key={list.id}
-              list={list}
-              deleteList={deleteList}
-              updateList={updateList}
-              setSelectedItem={setSelectedItem}
-            />
-          ))}
+    <div className="relative h-full flex">
+      <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 my-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
+        {lists.map((list) => (
+          <List
+            key={list.id}
+            list={list}
+            deleteList={deleteList}
+            updateList={updateList}
+            updateListInDatabase={updateListInDatabase}
+            setSelectedItem={setSelectedItem}
+          />
+        ))}
 
         <div className="h-full block shrink-0 self-start px-2">
           <button

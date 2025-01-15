@@ -1,51 +1,84 @@
 import { useState } from "react";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { ListInterface, ItemInterface } from "../utils/interfaces";
-import "../styles/List.css";
+import {
+  ListInterface,
+  ItemInterface,
+  TagInterface,
+} from "../utils/interfaces";
+import { apiAddItem, apiDeleteItem } from "../utils/api_router";
+import "../styles/List.css"; // Ajout explicite du CSS manquant
 
 export default function List({
   list,
   deleteList,
   updateList,
+  updateListInDatabase,
   setSelectedItem,
 }: {
   list: ListInterface;
   deleteList: (listId: number) => void;
   updateList: (list: ListInterface) => void;
-  setSelectedItem: (args: { item: ItemInterface; list: ListInterface }) => void;
+  updateListInDatabase: (list: ListInterface) => void;
+  setSelectedItem: ({
+    item,
+    list,
+  }: {
+    item: ItemInterface;
+    list: ListInterface;
+  }) => void;
 }) {
-  const [itemValues, setItemValues] = useState<{ [key: number]: string }>({});
-  const [localTitle, setLocalTitle] = useState(list.list_name || "");
+  const [itemNameInput, setItemNameInput] = useState("");
+
+  const statusOptions = ["To Do", "In Progress", "Done"];
 
   // Ajouter un item
-  const addItem = (e: React.FormEvent<HTMLFormElement>) => {
+  const addItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!list.id) {
-      console.error("list.id is undefined");
+
+    // Si le champ est vide, on quite la fonction
+    if (itemNameInput.trim() === "") {
       return;
     }
-    const value = itemValues[list.id]?.trim();
-    if (value && value !== "") {
-      const newItem: ItemInterface = {
-        item_name: value,
-        status: "To Do",
-        list_id: list.id, // Correction : utilisation de list_id
-      };
-      const updatedList = {
-        ...list,
-        items: [...(list.items || []), newItem], // Ajout d'un fallback si list.items est undefined
-      };
-      updateList(updatedList);
-      setItemValues({ ...itemValues, [list.id]: "" });
-    }
+
+    // On crée l'item selon un item Interface
+    const newItem: Partial<ItemInterface> = {
+      item_name: itemNameInput,
+      list_id: list.id,
+    };
+
+    // On ajoute l'item dans la base de donnée
+    const validatedItem = await apiAddItem(newItem);
+    console.log("Item added to database:", validatedItem.id);
+
+    setItemNameInput("");
+
+    // On met à jour la liste du board pour le front
+    const updatedList = {
+      ...list,
+      items: [...list.items, validatedItem],
+    };
+    updateList(updatedList);
   };
 
   // Supprimer un item
-  const deleteItem = (itemIndex: number) => {
-    const updatedItems = (list.items || []).filter(
-      (_, index) => index !== itemIndex
-    );
+  const deleteItem = (item_id: number) => {
+    // Suppression de l'item en base de donnée
+    const itemToDelete: Partial<ItemInterface> = {
+      id: item_id,
+    };
+    apiDeleteItem(itemToDelete);
+
+    // Suppression de l'item du front via le board
+    const updatedItems = list.items.filter((item) => item.id !== item_id);
     updateList({ ...list, items: updatedItems });
+
+    console.log("Item deleted:", item_id);
+  };
+
+  // Mettre à jour un item dans la base de donnée
+  // Appelée lorsque on sors de l'input
+  const recallTitle = () => {
+    updateListInDatabase(list);
   };
 
   // Retourner la classe CSS pour le statut
@@ -85,63 +118,54 @@ export default function List({
           <input
             className="text-secondary font-montserrat list-input"
             placeholder="List name"
-            value={localTitle}
-            onChange={(e) => setLocalTitle(e.target.value)} // Mise à jour de l'état local
-            onBlur={() => {
-              if (
-                localTitle.trim().length > 0 &&
-                localTitle.trim().length <= 22
-              ) {
-                if (localTitle !== list.list_name) {
-                  updateList({ ...list, list_name: localTitle });
-                }
-              } else {
-                setLocalTitle(list.list_name); // Réinitialise si invalide
-              }
-            }}
+            value={list.list_name}
+            onBlur={recallTitle}
+            onChange={(e) => updateList({ ...list, list_name: e.target.value })}
           />
 
           <PencilIcon className="size-4 absolute right-12" />
         </div>
 
-        <ol className="flex flex-col overflow-x-hidden overflow-y-auto">
-          {(list.items || []).map(
-            (
-              item,
-              itemIndex // Ajout d'un fallback si list.items est undefined
-            ) => (
+        <ol className="flex flex-col overflow-x-hidden w-full overflow-y-auto">
+          {list.items &&
+            list.items.map((item) => (
               <li
                 className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
-                key={itemIndex}
+                key={item.id}
                 onClick={() =>
                   setSelectedItem({
-                    list,
-                    item,
+                    list: list,
+                    item: item,
                   })
                 }
               >
-                <div className="pb-3">
-                  {item.tags?.map((tag) => (
-                    <span
-                      key={tag.id}
-                      style={{ backgroundColor: tag.color }}
-                      className="text-xs rounded-md px-2 py-1 mr-2"
-                    >
-                      {tag.tag_name}
-                    </span>
-                  ))}
-                </div>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    deleteItem(itemIndex);
+                    deleteItem(item.id);
                   }}
                   className="absolute top-1 right-4 text-gray-400 transition-all hover:text-white focus:outline-none border-none"
                 >
                   &#x2715;
                 </button>
+
+                {/* Affichage des tags */}
+                <div className="flex gap-2">
+                  {item.tags?.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="text-xs rounded-md px-2 py-1"
+                      style={{ backgroundColor: tag.color }}
+                    >
+                      {tag.tag_name}
+                    </span>
+                  ))}
+                </div>
+
                 <div className="flex flex-col">
-                  <p className="text-center mb-5">{item.item_name}</p>
+                  <p className="text-center pt-5 mb-5 text-wrap">
+                    {item.item_name}
+                  </p>
                   <p
                     className={`text-center text-sm uppercase ${getStatusClass(
                       item.status
@@ -151,19 +175,15 @@ export default function List({
                   </p>
                 </div>
               </li>
-            )
-          )}
+            ))}
         </ol>
 
         <form className="list-add-item mt-4" onSubmit={addItem}>
           <input
             type="text"
             placeholder="Add an item"
-            value={list.id ? itemValues[list.id] || "" : ""} // Ajout d'un fallback pour éviter undefined
-            onChange={(e) =>
-              list.id &&
-              setItemValues({ ...itemValues, [list.id]: e.target.value })
-            }
+            value={itemNameInput}
+            onChange={(e) => setItemNameInput(e.target.value)}
             className="list-input w-full text-primary"
           />
           <button

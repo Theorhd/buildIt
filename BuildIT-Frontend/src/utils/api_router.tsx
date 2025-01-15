@@ -323,23 +323,27 @@ export async function addList(data: ListInterface) {
   }
 }
 
-export async function updateList(data: ListInterface) {
-  /*
+export async function apiUpdateList(data: ListInterface) {
+    /*
     Modifie la liste depuis son ID
     
     Required fields:
     - id
+
+    Ne prend pas en compte les items
     */
-  try {
-    const response = await api.put("/list/update", data);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+    try {
+        if (data.items !== null) delete data.items;
+        data = {...data, list_id: data.id};
+        const response = await api.put("/list/update", data);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-export async function deleteList(id: number) {
-  /*
+export async function apiDeleteList(data: ListInterface) {
+    /*
     Supprime la liste depuis son ID
   */
   try {
@@ -350,39 +354,48 @@ export async function deleteList(id: number) {
   }
 }
 
-export async function addItem(data: ItemInterface) {
-  /*
+export async function apiAddItem(data: ItemInterface) {
+    /*
     Ajoute un nouvel item
     
     Required fields:
     - list_id
     - item_name
     */
-  try {
-    const response = await api.post("/item/create", data);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+    try {
+        console.log(data);
+        const response = await api.post("/item/create", data);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-export async function updateItem(data: ItemInterface) {
-  /*
+export async function apiUpdateItem(data: ItemInterface) {
+    /*
     Modifie l'item depuis son ID
     
     Required fields:
     - id
     */
-  try {
-    const response = await api.put("/item/update", data);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
+    try {
+        // Si il y a des tags, on les supprime car le back ne les prend pas en compte
+        if (data.tags !== null) delete data.tags;
+
+        // Rajout de item_id car il est nécéssaire pour les permissions dans le back
+        data = {...data, item_id: data.id};
+
+        // Modifie l'iten et rend le nouvel item
+        const response = await api.put("/item/update", data);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-export async function deleteItem(data: ItemInterface) {
-  /*
+export async function apiDeleteItem(data: ItemInterface) {
+    /*
     Supprime l'item depuis son ID
     
     Required fields:
@@ -396,13 +409,16 @@ export async function deleteItem(data: ItemInterface) {
   }
 }
 
-export async function addTag(data: { tag: TagInterface; item_id: number }) {
-  /*
+export async function apiAddTag(data: {
+    tag: TagInterface,
+    item_id: number
+}) {
+    /*
     Ajoute un nouveau tag
     
     Required fields:
     ==> tag:
-        - name
+        - tag_name
         - color
     
     - item_id
@@ -430,8 +446,8 @@ export async function updateTag(data: TagInterface) {
   }
 }
 
-export async function deleteTag(data: TagInterface) {
-  /*
+export async function apiDeleteTag(data: TagInterface) {
+    /*
     Supprime le tag depuis son ID
     
     Required fields:
@@ -443,4 +459,19 @@ export async function deleteTag(data: TagInterface) {
   } catch (error) {
     handleError(error);
   }
+}
+
+export async function getBoard(board_id: number) {
+    /*
+    Récupère un tableau via son ID
+    
+    Required fields:
+    - board_id
+    */
+    try {
+        const response = await api.get("/board/get/"+board_id);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
