@@ -27,13 +27,8 @@ export default function List({
     const value = itemValues[list.id]?.trim();
     if (value && value !== "") {
       const newItem: ItemInterface = {
-        id: Date.now(),
         item_name: value,
-        description: "",
         status: "To Do",
-        placement: list.items?.length || 0, // Ajout d'un fallback si list.items est undefined
-        created_by: 1, // Exemple d'utilisateur par défaut
-        creation_date: new Date().toISOString(),
         list_id: list.id, // Correction : utilisation de list_id
       };
       const updatedList = {

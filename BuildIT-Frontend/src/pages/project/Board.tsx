@@ -18,7 +18,7 @@ import List from "../../components/List";
 import ListModal from "../../components/ListModal";
 
 export default function Board() {
-  const location = useLocation();
+  const location = useLocation(); // Permet de récupérer l'état de navigation
   const { board_name } = useParams(); // Permet de récupérer le nom de la board depuis l'URL
   const [board, setBoard] = useState<BoardInterface | null>(null); // Stocke la board actuelle
   const [lists, setLists] = useState<ListInterface[]>([]); // Stocke les listes
@@ -38,7 +38,12 @@ export default function Board() {
 
   // Ajouter une nouvelle liste
   const addNewList = async () => {
-    if (!board) return; // Si aucune board n'est sélectionnée, on ne fait rien
+    if (!board) {
+      console.error(
+        "Erreur : La board n'est pas définie. Impossible de créer une liste."
+      );
+      return;
+    }
 
     const newList: ListInterface = {
       list_name: "New List",
