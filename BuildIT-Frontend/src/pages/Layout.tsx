@@ -3,6 +3,7 @@ import Header from "../components/header/Header";
 import { useState } from "react";
 import logo from "/buildit-logo.png";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ProjectProvider } from "../context/ProjectContext";
 
 export default function Layout() {
 
@@ -29,7 +30,9 @@ export default function Layout() {
         } bg-bgSecondary transition-all duration-300 ease-in-out`}
         id="content"
       >
-        <Outlet />
+        <ProjectProvider>
+          <Outlet />
+        </ProjectProvider>
       </div>
       <div
         className={`w-full absolute transition-all duration-300 ease-in-out select-none ${

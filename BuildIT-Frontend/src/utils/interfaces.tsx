@@ -47,9 +47,10 @@ export interface ProjectInterface {
     project_name: string; // max length = 22
     tagname: string;
     description?: string;
-    created_by?: UserInterface; // Read only
+    created_by: UserInterface; // Read only
     creation_date?: string; // Format ISO - Read only
     boards: BoardInterface[];
+    markdown?: string; 
 }
 
 export interface UserInterface {
@@ -60,4 +61,15 @@ export interface UserInterface {
     mail: string;
     phone?: string; // max length = 20
     password?: string; // Write only
+}
+
+export interface ProjectUserInterface {
+    id?: number;
+    pseudo?: string;
+    tagname: string; // max length = 22
+    firstname?: string; // max length = 50
+    lastname?: string; // max length = 50
+    mail: string;
+    phone?: string; // max length = 20
+    role: string;
 }

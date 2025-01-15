@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from '/buildit-logo.png';
 import { useTranslation } from 'react-i18next';
 import ModaleIA from "../ModaleIA";
@@ -6,16 +6,17 @@ import { useState } from 'react';
 
 import {
   ChevronLeftIcon,
-  PlusIcon
+  PlusIcon,
+  ArrowRightStartOnRectangleIcon
 } from '@heroicons/react/24/outline'
 import Navbar from "./Navbar";
-import Tooltip from "../ToolTip";
+import Tooltip from "../Tooltip";
+import { logout } from "../../utils/api_router";
 
 export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boolean, toggleNavbar: () => void }) {
 
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const accountLink = `/account/`;
 
   return (
     <header className='h-full bg-bgPrimary flex flex-col justify-between select-none'>
@@ -44,15 +45,17 @@ export default function Header({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: b
       </div>
       <div className="p-4">
         <div className="w-40 border-b border-bgSecondary mb-5 mx-auto"></div>
-        <div className="flex items-center">
-          <Link to={accountLink}>
-            <div className="w-12 h-12 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm">
-              {localStorage.getItem('pseudo')?.charAt(0).toUpperCase()} {/* Afficher la première lettre du Pseudo de l'user */}
-            </div>
-          </Link>
-          <div className="ml-4">
-            <h4 className="text-center text-sm font-bold">{localStorage.getItem('pseudo')}</h4> {/* Afficher le Pseudo de l'user */}
-          </div>
+        <div className="flex justify-between items-center px-4">
+          <NavLink
+            to="account"
+            className={({ isActive }) => (isActive ? "w-11 h-11 rounded-full bg-secondary flex justify-center items-center cursor-pointer text-sm" : "w-11 h-11 rounded-full bg-bgPrimary border-2 border-bgSecondary flex justify-center items-center cursor-pointer text-sm")}
+          >
+            <img src="https://i.pravatar.cc/150?u=maelbelliard" className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center"/>
+          </NavLink>
+          <Tooltip text="Logout" position="top">
+            <ArrowRightStartOnRectangleIcon onClick={logout} className="w-6 h-6 cursor-pointer text-red-600"/>
+          </Tooltip>
+          
         </div>
       </div>
       {isModalOpen && (
