@@ -249,7 +249,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {frontendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('frontend', stack)}
                   >
@@ -269,7 +269,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {backendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('backend', stack)}
                   >
@@ -289,7 +289,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {databaseStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('database', stack)}
                   >
