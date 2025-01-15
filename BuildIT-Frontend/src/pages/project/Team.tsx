@@ -88,7 +88,7 @@ export default function Team() {
                                         <span className="text-secondary">@{user.tagname}</span>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                        <XMarkIcon onClick={() => {declineInvitation(user.tagname)}} className="w-8 h-8 p-1 text-red-600 rounded-md cursor-pointer hover:bg-bgSecondary" />
+                                        <XMarkIcon onClick={ () => { declineInvitation(user.id); window.location.reload(); } } className="w-8 h-8 p-1 text-red-600 rounded-md cursor-pointer hover:bg-bgSecondary" />
                                         {/* <CheckIcon onClick={() => {acceptInvitation(user.tagname)}} className="w-8 h-8 p-1 text-secondary rounded-md cursor-pointer hover:bg-bgSecondary" /> */}
                                     </div>
                                 </div>
