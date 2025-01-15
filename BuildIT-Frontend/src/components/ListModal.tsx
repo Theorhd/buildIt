@@ -17,9 +17,7 @@ export default function ListModal({
   const [tags, setTags] = useState<TagInterface[]>(item.tags || []);
 
   // Variables pour modifier un item
-  const [description, setDescription] = useState<string>(
-    item.description || ""
-  );
+  const [description, setDescription] = useState<string>(item.description || "");
   const [status, setStatus] = useState<string>(item.status || "In Progress");
 
   // Variables pour modifier un tag
@@ -27,7 +25,7 @@ export default function ListModal({
   const [newTagColor, setNewTagColor] = useState<string>("#34d399");
   const [showTagInput, setShowTagInput] = useState<boolean>(false);
 
-  // Fonction pour enregistrer l'item
+  // Fonction pour modifier l'item
   const saveItem = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newItem: Partial<ItemInterface> = {
@@ -41,32 +39,33 @@ export default function ListModal({
 
   // Fonction pour ajouter un tag en base de donnée
   const addNewTag = async () => {
-    if (newTagTitle.trim() !== "") {
+    
+    // Si le nom du tag est vide alors return
+    if (newTagTitle.trim() === "") return;
 
-      // Création d'un tag
-      const newTag: Partial<TagInterface> = {
-        tag_name: newTagTitle,
-        color: newTagColor,
-      }
-
-      // Appel de l'API
-      const validatedTag = await apiAddTag({
-        tag: newTag,
-        item_id: item.id
-      });
-
-      // Mise à jour de la liste des tags
-      setTags([...tags, validatedTag]);
-
-      // Reset les fields pour la création d'un tag
-      setNewTagTitle("");
-      setNewTagColor("#34d399");
-
-      // Ferme la fenetre pour créer un tag
-      setShowTagInput(false);
-
-      console.log("Tag added:", validatedTag.id);
+    // Création d'un tag
+    const newTag: Partial<TagInterface> = {
+      tag_name: newTagTitle,
+      color: newTagColor,
     }
+
+    // Appel de l'API
+    const validatedTag = await apiAddTag({
+      tag: newTag,
+      item_id: item.id
+    });
+
+    // Mise à jour de la liste des tags
+    setTags([...tags, validatedTag]);
+
+    // Reset les fields pour la création d'un tag
+    setNewTagTitle("");
+    setNewTagColor("#34d399");
+
+    // Ferme la fenetre pour créer un tag
+    setShowTagInput(false);
+
+    console.log("Tag added:", validatedTag.id);
   };
 
   const deleteTag = (id: number) => {

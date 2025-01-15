@@ -33,7 +33,6 @@ export default function List({
     // On crée l'item selon un item Interface
     const newItem: Partial<ItemInterface> = {
       item_name: itemNameInput,
-      status: "To Do",
       list_id: list.id,
     };
 

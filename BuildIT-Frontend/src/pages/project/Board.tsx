@@ -31,22 +31,30 @@ export default function Board() {
   const addNewList = async () => {
     if (!board) return;
 
+    // Création de la nouvelle list
     const newList: ListInterface = {
       list_name: "New List",
       board_id: board.id,
     };
+
+    // Ajout de la list en base de donnée
     const validatedList = await addList(newList);
+
+    // Ajout de la list au front
     setLists([...lists, validatedList]);
-    console.log("New list added:", validatedList);
+
+    console.log("New list added:", validatedList.id);
   };
 
   // Supprimer une liste
   const deleteList = (listId: number) => {
 
-    // Suppression de la list en base de donnée
+    // Création de la liste à supprimer
     const listToDelete: Partial<ListInterface> = {
       id: listId,
     }
+
+    // Supprime la liste en base de donnée
     apiDeleteList(listToDelete);
 
     // Suppression de la list du front
@@ -63,7 +71,7 @@ export default function Board() {
   };
 
   const updateListInDatabase = (updatedList: ListInterface) => {
-    const validatedList = apiUpdateList(updatedList);
+    apiUpdateList(updatedList);
     console.log("List updated in database:", updatedList.id);
   }
 
@@ -81,7 +89,7 @@ export default function Board() {
 
     // Met à jour la list du front
     const updatedItems = list.items.map((item) =>
-      item.id === itemId ? { ...item, ...details } : item
+      item.id === itemId ? { ...item, ...validatedItem } : item
     );
     updateList({ ...list, items: updatedItems });
 

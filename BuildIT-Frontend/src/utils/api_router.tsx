@@ -326,7 +326,7 @@ export async function apiUpdateList(data: ListInterface) {
     Ne prend pas en compte les items
     */
     try {
-        delete data.items
+        if (data.items !== null) delete data.items;
         data = {...data, list_id: data.id};
         const response = await api.put("/list/update", data);
         return response.data;
@@ -414,7 +414,7 @@ export async function apiAddTag(data: {
     
     Required fields:
     ==> tag:
-        - name
+        - tag_name
         - color
     
     - item_id
