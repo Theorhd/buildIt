@@ -9,6 +9,7 @@ class Projects(models.Model):
     description = models.TextField()
     created_by = models.ForeignKey(Users, on_delete=models.CASCADE)
     creation_date = models.DateTimeField(auto_now_add=True)
+    markdown = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Vérifie si le tagname est vide

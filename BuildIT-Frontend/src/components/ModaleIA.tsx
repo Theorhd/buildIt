@@ -136,7 +136,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         if (process === true) { // Si le projet est créé
           setThreadId('');
           showLoaderAndLoaded(5);
-          setTimeout(() => onClose(), 2000);
+          setTimeout(() => {onClose(); window.location.reload();}, 2000);
         } else { // Si le projet n'est pas créé
           console.error('Error creating project:', process);
         }

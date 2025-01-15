@@ -37,18 +37,9 @@ export async function refresh() {
   const refresh = localStorage.getItem("refresh");
   const response = await api.post("/token/refresh", { refresh: refresh });
 
-  localStorage.setItem("access", response.data.access);
-  localStorage.setItem("refresh", response.data.refresh);
-}
-
-// Logout
-
-function logout() {
-  localStorage.removeItem("user");
-  localStorage.removeItem("refresh");
-  localStorage.removeItem("access");
-  //   window.location.href = '/login';
-}
+    localStorage.setItem('access', response.data.access);
+    localStorage.setItem('refresh', response.data.refresh);
+};
 
 // Gestion des erreurs
 const handleError = async (error: any) => {
@@ -120,31 +111,76 @@ export async function register(data: UserInterface) {
     - pseudo
     - tagname
     */
-  try {
-    await api.post("/user/create", data);
-    console.log("Account created successfully");
-    window.location.href = "/login";
-    const response = await api.post("/user/create", data);
+    try {
+        const response = await api.post("/user/create", data);
 
-    localStorage.setItem("access", response.data.tokens.access);
-    localStorage.setItem("refresh", response.data.tokens.refresh);
-    console.log("Account created successfully");
-    window.location.href = "/login";
-  } catch (error) {
-    handleError(error);
-  }
+        console.log("Account created successfully");
+        window.location.href = '/login';
+        return response.data
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+// Logout
+export function logout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("access");
+    window.location.href = '/login';
 }
 
 export async function getProjectsFromToken() {
   /*
     Récupérer les projets de l'utilisateur connecté via le token
     */
+    try {
+        const response = await api.get(`/project/get_from_token`);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export async function getUserFromToken() {
+  /*
+  Récupérer l'utilisateur connecté via le token
+  */
   try {
-    const response = await api.get(`/project/get_from_token`);
-    return response.data;
+      const response = await api.get(`/user/get_from_token`);
+      return response.data;
   } catch (error) {
-    handleError(error);
+      handleError(error);
   }
+};
+
+export async function updateUser(data) {
+    /* */
+    try {
+        const response = await api.post("/user/update", data);
+      
+        localStorage.setItem('access', response.data.tokens.access);
+        localStorage.setItem('refresh', response.data.tokens.refresh);
+        console.log("Account created successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function deleteUser() {
+    /* */
+    try {
+        const response = await api.delete("/user/delete");
+      
+        localStorage.removeItem("user");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("access");
+        console.log("Account deleted successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
 }
 
 // Crée un Thread
@@ -191,6 +227,85 @@ export async function processMessage(finalResponse: any, threadID: any) {
     handleError(error);
   }
 }
+
+export async function addUserToProject(projectID: number, userTagName: string) {
+    /*
+    Ajoute un utilisateur à un projet
+    
+    Required fields:
+    - project_id
+    - user tagname
+    */
+    try {
+        const response = await api.post("/project/add_user", { project_id: projectID, user_tagname: userTagName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+
+}
+
+export async function acceptInvitaion(projectID: number) {
+    /*
+    Accepte une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/accept_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function declineInvitation(projectID: number) {
+    /*
+    Refuse une invitation à un projet
+    
+    Required fields:
+    - project_id
+    */
+    try {
+        const response = await api.post("/project/reject_invitation", { project_id: projectID });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function retriveUserWithTagName(tagname: string) {
+    /*
+    Récupère un utilisateur via son tagname
+    
+    Required fields:
+    - tagname
+    */
+    try {
+        const response = await api.post("/user/retrive/tagname", { tagname: tagname });
+        return response.data.exists;
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+export async function addNewBoard(projectID: number, boardName: string) {
+    /*
+    Ajoute un nouveau tableau à un projet
+    
+    Required fields:
+    - project_id
+    - board_name
+    */
+    try {
+        const response = await api.post("/board/create", { project_id: projectID, board_name: boardName });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }   
+}
+
 export async function addList(data: ListInterface) {
   /*
     Ajoute une nouvelle liste

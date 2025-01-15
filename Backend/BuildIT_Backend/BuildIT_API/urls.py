@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView
-from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView
+from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView, UserExistTagnameView, UserFromTokenView
+from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView, ProjectAddUserView, ProjectAcceptInvitationView, ProjectRejectInvitationView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 from BuildIT_API.views.list_views import ListCreateView, ListRetrieveView, ListUpdateView, ListDeleteView
@@ -11,9 +11,11 @@ from BuildIT_API.views.tag_views import TagCreateView, TagRetrieveView, TagUpdat
 userpatterns = [
     path('user/create', UserCreateView.as_view(), name='register'),                 # Créer un utilisateur
     path('user/get/<int:pk>', UserRetrieveView.as_view(), name='user-detail'),      # Rechercher un utilisateur par son id
+    path('user/get_from_token', UserFromTokenView.as_view(), name='user-data'),   # Recupérer les données d'un utilisateur
     path('user/update', UserUpdateView.as_view(), name='user-update'),              # Modifier un utilisateur
-    path('user/delete/<int:pk>', UserDeleteView.as_view(), name='user-delete'),     # Supprimer un utilisateur par son id
+    path('user/delete', UserDeleteView.as_view(), name='user-delete'),     # Supprimer un utilisateur par son id
     path('user/login', UserLoginView.as_view(), name='user-login'),                 # Connexion d'un utilisateur
+    path('user/retrive/tagname', UserExistTagnameView.as_view(), name='user-exist-tagname'),  # Vérifier si un tagname existe
 ]
 
 tokenpatterns = [
@@ -21,11 +23,14 @@ tokenpatterns = [
 ]
 
 projectpatterns = [
-    path('project/create', ProjectCreateView.as_view(), name='project-create'),             # Créer un projet (accepte board, lists, items)
-    path('project/get_single/<int:project_id>', ProjectRetriveView.as_view(), name='project-detail'),      # Rechercher un projet par son id + token de ID créaeur
-    path('project/get_from_token', ProjectFromUserView.as_view(), name='project-detail'),      # Rechercher tous les projets d'un utilisateur
-    path('project/update', ProjectUpdateView.as_view(), name='project-update'),             # Modifier un projet + token de ID créateur
-    path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),    # Supprimer un projet par son id + token de ID créatieur
+    path('project/create', ProjectCreateView.as_view(), name='project-create'),                                        # Créer un projet (accepte board, lists, items)
+    path('project/get_single/<int:project_id>', ProjectRetriveView.as_view(), name='project-detail'),                  # Rechercher un projet par son id + token de ID créaeur
+    path('project/get_from_token', ProjectFromUserView.as_view(), name='project-detail'),                              # Rechercher tous les projets d'un utilisateur
+    path('project/update', ProjectUpdateView.as_view(), name='project-update'),                                        # Modifier un projet + token de ID créateur
+    path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),                               # Supprimer un projet par son id + token de ID créatieur
+    path('project/add_user', ProjectAddUserView.as_view(), name='project-add-user'),                                   # Ajouter un utilisateur à un projet
+    path('project/accept_invitation', ProjectAcceptInvitationView.as_view(), name='project-accept-invitation'),        # Accepter une invitation à un projet
+    path('project/reject_invitation', ProjectRejectInvitationView.as_view(), name='project-reject-invitation'),        # Refuser une invitation à un projet
 ]
 
 boardpatterns = [
