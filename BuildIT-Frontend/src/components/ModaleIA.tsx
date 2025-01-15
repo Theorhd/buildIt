@@ -40,10 +40,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const handleSendToBack = async () => {
     const showLoaderAndLoaded = (nextStep: number) => {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setStep(nextStep);
-      }, 1000);
+      setStep(nextStep);
+      setLoading(false);
     };
     try {
       setLoading(true);
@@ -136,7 +134,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         if (process === true) { // Si le projet est créé
           setThreadId('');
           showLoaderAndLoaded(5);
-          setTimeout(() => {onClose(); window.location.reload();}, 2000);
+          setTimeout(() => {onClose(); window.location.reload();}, 500);
         } else { // Si le projet n'est pas créé
           console.error('Error creating project:', process);
         }
