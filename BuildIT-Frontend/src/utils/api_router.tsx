@@ -124,18 +124,6 @@ export function logout() {
     window.location.href = '/login';
 }
 
-export async function getProjectsFromToken() {
-    /*
-    Récupérer les projets de l'utilisateur connecté via le token
-    */
-    try {
-        const response = await api.get(`/project/get_from_token`);
-        return response.data;
-    } catch (error) {
-        handleError(error);
-    }
-};
-
 export async function getUserFromToken() {
   /*
   Récupérer l'utilisateur connecté via le token
@@ -147,6 +135,18 @@ export async function getUserFromToken() {
       handleError(error);
   }
 };
+
+export async function getUserFromID(id: number) {
+    /*
+    Récupérer l'utilisateur connecté via l'ID
+    */
+    try {
+        const response = await api.get(`/user/get/` + id);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+  };
 
 export async function updateUser(data) {
     /* */
@@ -174,6 +174,63 @@ export async function deleteUser() {
         return response.data
     } catch (error) {
         handleError(error)
+    }
+}
+
+export async function getProjectsFromToken() {
+    /*
+    Récupérer les projets de l'utilisateur connecté via le token
+    */
+    try {
+        const response = await api.get(`/project/get_from_token`);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export async function getProjectFromTagname(tagname: string | undefined) {
+    /*
+    Récupérer les projets de l'utilisateur connecté via le token
+    */
+    try {
+        const response = await api.get(`/project/get_from_tagname/` + tagname);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export async function updateProject(data){
+    try {
+        const response = await api.put("/project/update", data);
+      
+        console.log("Project update successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function deleteProject() {
+    /* */
+    try {
+        const response = await api.delete("/project/delete");
+      
+        console.log("Project deleted successfully");
+        return response.data
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function getUsersFromProjectID(projectID: number) {
+    /* Get Users from Project ID */
+    try {
+        const response = await api.get("/project/get_users/" + projectID);
+        return response.data;
+    } catch (error) {
+        handleError(error);
     }
 }
 

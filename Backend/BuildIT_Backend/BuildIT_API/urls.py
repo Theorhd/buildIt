@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 from BuildIT_API.views.users_views import  UserLoginView, UserCreateView, UserDeleteView, UserRetrieveView, UserUpdateView, UserExistTagnameView, UserFromTokenView
-from BuildIT_API.views.projects_views import ProjectCreateView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView, ProjectAddUserView, ProjectAcceptInvitationView, ProjectRejectInvitationView
+from BuildIT_API.views.projects_views import ProjectCreateView, ProjectFromTagnameView, ProjectRetriveView, ProjectDeleteView, ProjectUpdateView, ProjectFromUserView, ProjectAddUserView, ProjectAcceptInvitationView, ProjectRejectInvitationView, ProjectGetUsersView
 from BuildIT_API.views.board_views import BoardCreateView, BoardRetrieveView, BoardUpdateView, BoardDeleteView
 from BuildIT_API.views.modale_ia_views import CreateThread, UpdateRunThread, GetAssistantResponse, DeleteThread
 from BuildIT_API.views.list_views import ListCreateView, ListRetrieveView, ListUpdateView, ListDeleteView
@@ -26,8 +26,10 @@ projectpatterns = [
     path('project/create', ProjectCreateView.as_view(), name='project-create'),                                        # Créer un projet (accepte board, lists, items)
     path('project/get_single/<int:project_id>', ProjectRetriveView.as_view(), name='project-detail'),                  # Rechercher un projet par son id + token de ID créaeur
     path('project/get_from_token', ProjectFromUserView.as_view(), name='project-detail'),                              # Rechercher tous les projets d'un utilisateur
+    path('project/get_from_tagname/<str:tagname>', ProjectFromTagnameView.as_view(), name='project-detail'),           # Rechercher tous les projets d'un utilisateur à partir du tagname user
     path('project/update', ProjectUpdateView.as_view(), name='project-update'),                                        # Modifier un projet + token de ID créateur
-    path('project/delete/<int:pk>', ProjectDeleteView.as_view(), name='project-delete'),                               # Supprimer un projet par son id + token de ID créatieur
+    path('project/delete/<str:tagname>', ProjectDeleteView.as_view(), name='project-delete'),                          # Supprimer un projet par son id + token de ID créatieur
+    path('project/get_users/<int:project_id>', ProjectGetUsersView.as_view(), name='project-users'),                      # 
     path('project/add_user', ProjectAddUserView.as_view(), name='project-add-user'),                                   # Ajouter un utilisateur à un projet
     path('project/accept_invitation', ProjectAcceptInvitationView.as_view(), name='project-accept-invitation'),        # Accepter une invitation à un projet
     path('project/reject_invitation', ProjectRejectInvitationView.as_view(), name='project-reject-invitation'),        # Refuser une invitation à un projet

@@ -5,7 +5,8 @@ import remarkGfm from 'remark-gfm';
 import 'prism-themes/themes/prism-dracula.css';
 import '../styles/Markdown.css';
 
-export default function Markdown({text}: {text: string}) {
+export default function Markdown({text}: {text: string | null}) {
+
   return (
     <ReactMarkdown rehypePlugins={[rehypePrism, remarkGfm]} className="md">{text}</ReactMarkdown>
   )

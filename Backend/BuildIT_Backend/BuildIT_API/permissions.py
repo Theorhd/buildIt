@@ -3,6 +3,7 @@ from rest_framework.permissions import BasePermission
 
 from BuildIT_API.exceptions import InvalidTokenException, UserNotInProjectException, ProjectNotFoundException
 from BuildIT_API.models import Users
+from BuildIT_API.models.Projects import Projects
 from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Boards import Boards
 from BuildIT_API.models.Lists import Lists
@@ -44,6 +45,33 @@ class IsUserInProjectFromProjectId(BasePermission):
 
         # Si l'utilisateur n'est pas membre du projet erreur 403 'user_not_in_project'
         if not UserProjects.objects.filter(user=request.user, project_id=project_id).exists():
+            raise UserNotInProjectException
+
+        return True
+    
+class IsUserInProjectFromTagname(BasePermission):
+    """
+    Permission pour vérifier si l'utilisateur est membre d'un projet.
+    - Compatible avec les méthodes HTTP : GET, POST
+    - Doit être appelée après IsAuthenticatedWithToken.
+
+    Retourne un status HTTP 404 si le projet n'est pas retrouvable.
+    Retourne un status HTTP 403 si l'utilisateur n'est pas membre du projet.
+    """
+
+    def has_permission(self, request, view):
+
+        # Récupération du project_id POST ou GET
+        project_tagname = request.data.get("tagname") or view.kwargs.get("tagname")
+
+        project = Projects.objects.get(tagname=project_tagname)
+
+        # Si le projet n'est pas fourni erreur 404 'project_not_found'
+        if not project:
+            raise ProjectNotFoundException
+
+        # Si l'utilisateur n'est pas membre du projet erreur 403 'user_not_in_project'
+        if not UserProjects.objects.filter(user=request.user, project=project).exists():
             raise UserNotInProjectException
 
         return True

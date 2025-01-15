@@ -10,7 +10,7 @@ export default function Account() {
     tagname: "",
     firstname: "",
     lastname: "",
-    email: "",
+    mail: "",
     phone: "",
     password: "",
     new_password: "",
@@ -62,10 +62,10 @@ export default function Account() {
 
   const validate = () => {
 
-    if (!/\d/.test(formData.new_password) || formData.new_password.length < 6) {
-      setError(t("The password must contain a number and be at least 6 characters long"))
-      return false;
-    }
+    // if (!/\d/.test(formData.new_password) || formData.new_password.length < 6) {
+    //   setError(t("The password must contain a number and be at least 6 characters long"))
+    //   return false;
+    // }
 
     if (formData.new_password !== formData.confirmPassword) {
       setError(t("Passwords do not match"))
@@ -182,7 +182,7 @@ export default function Account() {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
+                  value={formData.mail}
                   onChange={handleChange}
                   className="mt-1 p-3 block w-full bg-bgPrimary rounded-md border-gray-300 shadow-sm focus:ring-secondary focus:border-secondary"
                 />

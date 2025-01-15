@@ -1,7 +1,7 @@
 import { ChevronDownIcon, UserPlusIcon, PlusIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import Tooltip from "../ToolTip";
+import Tooltip from "../Tooltip";
 import { ProjectInterface } from "../../utils/interfaces";
 import ModaleInvite from "../ModaleInvite";
 import { addUserToProject, addNewBoard } from "../../utils/api_router";
