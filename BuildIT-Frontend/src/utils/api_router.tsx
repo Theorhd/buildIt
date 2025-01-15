@@ -327,8 +327,8 @@ export async function apiUpdateList(data: ListInterface) {
     */
     try {
         delete data.items
-        const x = {...data, list_id: data.id};
-        const response = await api.put("/list/update", x);
+        data = {...data, list_id: data.id};
+        const response = await api.put("/list/update", data);
         return response.data;
     } catch (error) {
         handleError(error);
@@ -368,7 +368,7 @@ export async function apiAddItem(data: ItemInterface) {
     }
 }
 
-export async function updateItem(data: ItemInterface) {
+export async function apiUpdateItem(data: ItemInterface) {
     /*
     Modifie l'item depuis son ID
     
@@ -376,6 +376,13 @@ export async function updateItem(data: ItemInterface) {
     - id
     */
     try {
+        // Si il y a des tags, on les supprime car le back ne les prend pas en compte
+        if (data.tags !== null) delete data.tags;
+
+        // Rajout de item_id car il est nécéssaire pour les permissions dans le back
+        data = {...data, item_id: data.id};
+
+        // Modifie l'iten et rend le nouvel item
         const response = await api.put("/item/update", data);
         return response.data;
     } catch (error) {
@@ -398,7 +405,7 @@ export async function apiDeleteItem(data: ItemInterface) {
     }
 }
 
-export async function addTag(data: {
+export async function apiAddTag(data: {
     tag: TagInterface,
     item_id: number
 }) {
@@ -435,7 +442,7 @@ export async function updateTag(data: TagInterface) {
     }
 }
 
-export async function deleteTag(data: TagInterface) {
+export async function apiDeleteTag(data: TagInterface) {
     /*
     Supprime le tag depuis son ID
     

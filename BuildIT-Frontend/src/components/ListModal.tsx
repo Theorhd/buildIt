@@ -1,37 +1,88 @@
 import { useState } from "react";
 import { PlusCircleIcon, PaintBrushIcon } from "@heroicons/react/24/outline";
 import { ItemInterface , TagInterface } from "../utils/interfaces";
+import { apiAddTag, apiDeleteTag } from "../utils/api_router";
 
-interface ListModalProps {
-  item: ItemInterface;
-  onClose: () => void;
-  onSave: (details: ItemInterface) => void;
-}
-
-export default function ListModal({ item, onClose, onSave }: ListModalProps) {
+export default function ListModal({
+   item,
+   onClose,
+   onSave
+  }: {
+    item: ItemInterface;
+    onClose: () => void;
+    onSave: (details: ItemInterface) => void;
+  }) {
+  
+  // Liste des tags de l'item actuel
   const [tags, setTags] = useState<TagInterface[]>(item.tags || []);
+
+  // Variables pour modifier un item
   const [description, setDescription] = useState<string>(
     item.description || ""
   );
   const [status, setStatus] = useState<string>(item.status || "In Progress");
+
+  // Variables pour modifier un tag
   const [newTagTitle, setNewTagTitle] = useState<string>("");
   const [newTagColor, setNewTagColor] = useState<string>("#34d399");
   const [showTagInput, setShowTagInput] = useState<boolean>(false);
 
-  const addNewTag = () => {
+  // Fonction pour enregistrer l'item
+  const saveItem = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newItem: Partial<ItemInterface> = {
+      id : item.id,
+      description : description,
+      status : status,
+    }
+    onSave(newItem);
+    onClose();
+  };
+
+  // Fonction pour ajouter un tag en base de donnée
+  const addNewTag = async () => {
     if (newTagTitle.trim() !== "") {
-      setTags([
-        ...tags,
-        { id: Date.now(), tag_name: newTagTitle, color: newTagColor },
-      ]);
+
+      // Création d'un tag
+      const newTag: Partial<TagInterface> = {
+        tag_name: newTagTitle,
+        color: newTagColor,
+      }
+
+      // Appel de l'API
+      const validatedTag = await apiAddTag({
+        tag: newTag,
+        item_id: item.id
+      });
+
+      // Mise à jour de la liste des tags
+      setTags([...tags, validatedTag]);
+
+      // Reset les fields pour la création d'un tag
       setNewTagTitle("");
       setNewTagColor("#34d399");
+
+      // Ferme la fenetre pour créer un tag
       setShowTagInput(false);
+
+      console.log("Tag added:", validatedTag.id);
     }
   };
 
   const deleteTag = (id: number) => {
+
+    // Créer le tag à supprimer
+    const tagToDelete: Partial<TagInterface> = {
+      id: id
+    }
+
+    // Appel de l'API
+    apiDeleteTag(tagToDelete);
+
+    // Mise à jour de la liste des tags
     setTags(tags.filter((tag) => tag.id !== id));
+
+    console.log("Tag deleted:", id);
   };
 
   return (
@@ -133,10 +184,7 @@ export default function ListModal({ item, onClose, onSave }: ListModalProps) {
 
         <div className="flex justify-between mt-4">
           <button
-            onClick={() => {
-              onSave({ description, tags, status }); // Inclut le statut dans les détails sauvegardés
-              onClose();
-            }}
+            onClick={saveItem}
             className="btn-comp text-xs transition-all"
           >
             Save

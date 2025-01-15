@@ -7,7 +7,7 @@
   gap: 5px;
 }
 .list-input {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   border: none;
   border-radius: 6px;
   padding: 5px;

@@ -71,7 +71,6 @@ export default function List({
   // Appelée lorsque on sors de l'input
   const recallTitle = () => {
     updateListInDatabase(list);
-    console.log("List updated in database:", list.id);
   };
 
 

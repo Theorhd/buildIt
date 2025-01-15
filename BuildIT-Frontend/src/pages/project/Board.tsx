@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { BoardInterface, ListInterface, ItemInterface, TagInterface } from "../../utils/interfaces";
-import { addList, apiDeleteList, apiUpdateList } from "../../utils/api_router";
+import { addList, apiDeleteList, apiUpdateList, apiUpdateItem } from "../../utils/api_router";
 import List from "../../components/List";
 import ListModal from "../../components/ListModal";
 
@@ -64,22 +64,28 @@ export default function Board() {
 
   const updateListInDatabase = (updatedList: ListInterface) => {
     const validatedList = apiUpdateList(updatedList);
+    console.log("List updated in database:", updatedList.id);
   }
 
   if (!board) {
     return <div>Loading...</div>; // Afficher un loader pendant la récupération des données
   }
 
-  const updateItemDetails = (
+  const updateItemDetails = async (
     list: ListInterface,
     itemId: number,
     details: ItemInterface, 
   ) => {
-    console.log(details);
+    // Appel de la route de mise à jour de l'item
+    const validatedItem = await apiUpdateItem(details);
+
+    // Met à jour la list du front
     const updatedItems = list.items.map((item) =>
       item.id === itemId ? { ...item, ...details } : item
     );
     updateList({ ...list, items: updatedItems });
+
+    console.log("Item updated:", validatedItem.id);
   };
 
   return (
