@@ -456,3 +456,18 @@ export async function apiDeleteTag(data: TagInterface) {
         handleError(error);
     }
 }
+
+export async function getBoard(board_id: number) {
+    /*
+    Récupère un tableau via son ID
+    
+    Required fields:
+    - board_id
+    */
+    try {
+        const response = await api.get("/board/get/"+board_id);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { BoardInterface, ListInterface, ItemInterface, TagInterface } from "../../utils/interfaces";
-import { addList, apiDeleteList, apiUpdateList, apiUpdateItem } from "../../utils/api_router";
+import { addList, apiDeleteList, apiUpdateList, apiUpdateItem, getBoard } from "../../utils/api_router";
 import List from "../../components/List";
 import ListModal from "../../components/ListModal";
 
@@ -16,17 +16,22 @@ export default function Board() {
     list: ListInterface;
   } | null>(null);
 
+  // Récupérer le nouveau board depuis le state passé
+  const board_id : number = location.state?.board_id;
+
   // Mettre à jour le board lors du changement de route
   useEffect(() => {
-    // Récupérer le nouveau board depuis le state passé
-    const newBoard: BoardInterface = location.state?.board;
-
-    if (newBoard && newBoard.board_name === board_name) {
-      setBoard(newBoard);
-      setLists(newBoard.lists);
+    const mafonctiondesesmorts = async () => {
+      try {
+        const newBoard = await getBoard(board_id);
+        setBoard(newBoard);
+        setLists(newBoard.lists);
+      } catch (error) {
+        console.error("Error fetching board:", error);
+      }
     }
-  }, [location.state, board_name]); // Déclencher à chaque changement d'URL ou de state
-
+    mafonctiondesesmorts();
+  }, [location.state]); // Déclencher à chaque changement d'URL ou de state
   // Ajouter une nouvelle liste
   const addNewList = async () => {
     if (!board) return;
