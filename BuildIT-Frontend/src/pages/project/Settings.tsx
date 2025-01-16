@@ -1,86 +1,46 @@
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ProjectInterface } from "../../utils/interfaces";
+import { useLocation } from "react-router-dom";
+import ConfirmModale from "../../components/Modale/ConfirmModale";
+import { deleteProject, updateProject } from "../../utils/api_router";
+import { useProjectContext } from "../../context/ProjectContext";
 
 export default function Settings() {
 
+    const { triggerProjectUpdate } = useProjectContext(); // Utilisation du contexte
+
     // Récupération du projet passé par ProjectLink
-    const [project, setProject] = useState<ProjectInterface>();
-    useEffect(() => {
-        const newProject: ProjectInterface = location.state?.project
+    const project = useLocation().state.project
 
-        if (newProject) {
-            setProject(newProject);
-        }
+    const [formData, setFormData] = useState({
+        project_name: project.project_name,
+        tagname: project.tagname,
+        description: project.description,
+        markdown: project.markdown || ""
     })
-    
-    const [projectName, setProjectName] = useState("Projet 1");
-    const [description, setDescription] = useState("Description du projet...");
-    const [link, setLink] = useState("https://build-it.com/partage/Gr43TR53Vr");
 
-    const [usersPending, setUsersPending] = useState([
-        {
-            pseudo: "LouisE",
-            tagname: "louiservay",
-            avatar: "https://i.pravatar.cc/150?u=louiservay"
-        },
-        {
-            pseudo: "ThéoR",
-            tagname: "theorichard",
-            avatar: "https://i.pravatar.cc/150?u=theorichard"
-        },
-        {
-            pseudo: "JulienC",
-            tagname: "juliencharpentier",
-            avatar: "https://i.pravatar.cc/150?u=juliencharpentier"
-        },
-        {
-            pseudo: "MaelB",
-            tagname: "maelbelliard",
-            avatar: "https://i.pravatar.cc/150?u=maelbelliard"
-        },
-    ]);
+    const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // État pour contrôler la modale
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await updateProject(formData);
+            setSuccessMessage(t("Your information has been successfully updated."));
+            triggerProjectUpdate();
+            console.log(response, project);
+        } catch (error) {
+            setError("Error: " + error)
+        }
+    }
+    
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
 
     const { t } = useTranslation();
-  
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      // Logique pour sauvegarder les modifications
-      console.log({ projectName, description });
-    };
-
-    function generateRandomString() {
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < 10) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
-        }
-        return result;
-    }
-
-    const generateNewLink = () => {
-        let newLink = generateRandomString();
-        // Vérifier si le lien n'existe pas déjà
-        while(newLink === link) {
-            if (newLink !== link) {
-                break;
-            }
-            newLink = generateRandomString();
-        }
-        setLink('https://build-it.com/partage/' + newLink);
-    }
-
-    const declineInvitation = (tagname: string) => {
-        setUsersPending(usersPending.filter(user => user.tagname !== tagname));
-    }
-
-    const acceptInvitation = (tagname: string) => {
-        setUsersPending(usersPending.filter(user => user.tagname !== tagname));
-    }
   
     return (
       <div className="flex items-center justify-center px-2">
@@ -89,24 +49,55 @@ export default function Settings() {
             <h2 className="text-3xl font-bold my-6">
                 {t("Update project")}
             </h2>
+
+            {successMessage && (
+              <div className="mb-4 p-3 text-green-800 bg-green-100 border border-green-400 rounded">
+                {successMessage}
+              </div>
+            )}
+
+            {error && (
+              <div className="mb-4 p-3 text-red-800 bg-red-100 border border-red-400 rounded">
+                {error}
+              </div>
+            )}
   
             {/* Formulaire */}
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Nom du projet */}
                 <div>
                     <label
-                        htmlFor="projectName"
+                        htmlFor="project_name"
                         className="block text-sm font-medium mb-2"
                     >
                         {t("Name of the project")}
                     </label>
                     <input
-                        id="projectName"
+                        id="project_name"
+                        name="project_name"
                         type="text"
-                        value={projectName}
-                        onChange={(e) => setProjectName(e.target.value)}
+                        value={formData.project_name}
+                        onChange={handleChange}
                         className="w-full px-4 py-2 bg-bgPrimary rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         placeholder="Entrez le nom du projet"
+                    />
+                </div>
+
+                {/* Tagname */}
+                <div>
+                    <label
+                        htmlFor="tagname"
+                        className="block text-sm font-medium mb-2"
+                    >
+                        {t("Tagname")}
+                    </label>
+                    <input
+                        id="tagname"
+                        name="tagname"
+                        type="text"
+                        value={formData.tagname}
+                        className="w-full px-4 py-2 text-gray-600 bg-bgPrimary rounded-md focus:outline-none focus:ring-2 focus:ring-secondary cursor-not-allowed"
+                        disabled
                     />
                 </div>
   
@@ -120,57 +111,36 @@ export default function Settings() {
                     </label>
                     <input
                         id="description"
+                        name="description"
                         type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        value={formData.description}
+                        onChange={handleChange}
                         className="w-full px-4 py-2 bg-bgPrimary rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         placeholder="Entrez une description"
                     />
                 </div>
 
-
-                {/* Link for share the project */}
+                {/* Markdown */}
                 <div>
                     <label
-                        htmlFor="share-link"
+                        htmlFor="markdown"
                         className="block text-sm font-medium mb-2"
                     >
-                        {t("Share link")}
+                        {t("Description plus précise")}
                     </label>
-                    <input
-                        id="share-link"
-                        type="text"
-                        value={link}
-                        disabled
-                        className="w-full disabled:text-gray-400 disabled:cursor-not-allowed px-4 py-2 bg-bgPrimary rounded-md mb-2"
-                    />
-                    <div className="flex justify-start space-x-4">
-                        <button
-                            type="button"
-                            onClick={generateNewLink}
-                            className="px-4 py-1 text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-md transition"
-                        >
-                            {t("Generate new link")}
-                        </button>
-                        <button
-                            type="button"
-                            className="px-4 py-2 bg-secondary rounded-md transition"
-                            onClick={() => {navigator.clipboard.writeText(link)}}
-                        >
-                            {t("Copy link")}
-                        </button>
-                    </div>
+                    <textarea
+                        id="markdown"
+                        name="markdown"
+                        value={formData.markdown}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 bg-bgPrimary rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
+                        placeholder="Entrez une description plus précise. Markdown autorisé."
+                        rows={5}
+                    ></textarea>
                 </div>
-
   
                 {/* Boutons */}
                 <div className="flex justify-end space-x-4">
-                    <button
-                        type="button"
-                        className="px-4 py-2 text-gray-300 bg-gray-600 hover:bg-gray-500 rounded-md transition"
-                    >
-                        {t("Cancel")}
-                    </button>
                     <button
                         type="submit"
                         className="px-4 py-2 bg-secondary rounded-md transition"
@@ -180,35 +150,19 @@ export default function Settings() {
                 </div>
             </form>
 
-            {/* Invitation pending */}
-            <h2 className="text-3xl font-bold my-6">
-                {t("Invitation pending")}
-            </h2>
-            <div className="">
-                {usersPending && usersPending.length > 0 ? usersPending.map((user) => (
-                    <div key={user.tagname} className="inline-block w-1/3 ">
-                        <div className="flex items-center justify-between bg-bgPrimary rounded-md p-4 m-2">
-                        <div className="flex items-center gap-4 ">
-                            <img src={user.avatar} className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center"/>
-                            <span className="font-semibold">{user.pseudo}</span>
-                            <span className="text-secondary">@{user.tagname}</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <XMarkIcon onClick={() => {declineInvitation(user.tagname)}} className="w-8 h-8 p-1 text-red-600 rounded-md cursor-pointer hover:bg-bgSecondary" />
-                            <CheckIcon onClick={() => {acceptInvitation(user.tagname)}} className="w-8 h-8 p-1 text-secondary rounded-md cursor-pointer hover:bg-bgSecondary" />
-                        </div>
-                        </div>
-                    </div>
-                ))
-                : <span className="text-gray-400">{t("No invitation pending")}</span>}
-            </div>
-
             {/* Delete project*/}
             <div className="">
                 <h2 className="text-3xl font-bold my-6">{t("Danger Zone")}</h2>
-                <button type="button" className="text-red-600 font-semibold border border-red-600 px-4 py-2 rounded-md hover:text-primary hover:bg-red-600">{t("Delete project")}</button>
+                <button type="button" className="text-red-600 font-semibold border border-red-600 px-4 py-2 rounded-md hover:text-primary hover:bg-red-600" onClick={() => setIsModalOpen(true)}>{t("Delete project")}</button>
             </div>
         </div>
+        {/* Modale */}
+        {isModalOpen && (
+            <ConfirmModale
+                onSave={() => deleteProject()}
+                onClose={() => setIsModalOpen(false)}
+            />
+        )}
       </div>
     );
 };

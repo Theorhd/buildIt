@@ -11,7 +11,8 @@ from BuildIT_API.models.BoardSkills import BoardSkills
 from BuildIT_API.models.UserProjects import UserProjects
 from BuildIT_API.models.Users import Users
 from BuildIT_API.serializers.ProjectSerializer import ProjectSerializer
-from BuildIT_API.permissions import IsAuthenticatedWithToken, IsUserInProjectFromProjectId
+from BuildIT_API.serializers.UserSerializer import UserSerializer
+from BuildIT_API.permissions import IsAuthenticatedWithToken, IsUserInProjectFromProjectId, IsUserInProjectFromTagname
 
 
 
@@ -109,6 +110,32 @@ class ProjectRetriveView(generics.RetrieveAPIView):
         except Projects.DoesNotExist:
             return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
 
+class ProjectFromTagnameView(generics.RetrieveAPIView):
+    """
+    Recherche d'un projet par son Tagname
+    
+    Méthode GET
+    Permission:
+    - Doit avoir un token JWT valide
+    - Doit faire partie du projet
+    """
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromTagname]
+
+    def get(self, request, *args, **kwargs):
+        
+        # Récupération de l'ID projet depuis l'URL
+        project_tagname_url = kwargs.get("tagname")
+
+        # Recherche du projet dans la base de données selon l'ID projet
+        try:
+            project = Projects.objects.get(tagname=project_tagname_url)
+            serializer = self.get_serializer(project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Projects.DoesNotExist:
+            return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
 class ProjectFromUserView(generics.ListAPIView):
     """
     Recherche de tous les projets d'un utilisateur
@@ -167,17 +194,17 @@ class ProjectUpdateView(generics.UpdateAPIView): # TODO Faire des sécurité pou
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromProjectId]
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromTagname]
 
     def put(self, request, *args, **kwargs):
 
-        # Récupération de l'ID projet depuis le corps de la requête
-        project_id_from_body = request.data.get("project_id")    
+        # Récupération de l'ID projet depuis l'URL
+        project_tagname_url = request.data.get("tagname")
 
-        # Recherche du projet dans la base de données selon l'ID projet
+        # Recherche du projet dans la base de données selon le tagname du projet
         # Mise à jour du projet
         try:
-            project = Projects.objects.get(id=project_id_from_body)
+            project = Projects.objects.get(tagname=project_tagname_url)
             serializer = self.get_serializer(project, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -196,11 +223,11 @@ class ProjectDeleteView(generics.DestroyAPIView):
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedWithToken]
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromTagname]
 
     def delete(self, request, *args, **kwargs):
         # Récupération de l'ID projet depuis l'URL
-        project_id_url = kwargs.get("pk")
+        project_tagname_url = kwargs.get("tagname")
 
         # Vérification de la validité du token
         auth = JWTAuthentication()
@@ -212,7 +239,7 @@ class ProjectDeleteView(generics.DestroyAPIView):
         # Recherche du projet dans la base de données selon l'ID projet & l'ID utilisateur
         # Suppression du projet
         try:
-            project = Projects.objects.get(id=project_id_url, created_by_id=user_id_from_token)
+            project = Projects.objects.get(tagname=project_tagname_url, created_by_id=user_id_from_token)
             project.delete()
             return Response({"message": "Project deleted successfully."}, status=status.HTTP_200_OK)
         except Projects.DoesNotExist:
@@ -312,3 +339,35 @@ class ProjectRejectInvitationView(generics.DestroyAPIView):
             return Response({"message": "Invitation rejected successfully."}, status=status.HTTP_200_OK)
         except UserProjects.DoesNotExist:
             return Response({"error": "Invitation not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class ProjectGetUsersView(generics.ListAPIView):
+    """
+    Recherche de tous les utilisateurs d'un projet
+    
+    Méthode GET
+    Permission: Doit avoir un token JWT valide
+    """
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticatedWithToken, IsUserInProjectFromProjectId]
+
+    def get(self, request, *args, **kwargs):
+
+        # Récupération de l'ID projet depuis l'URL
+        project_id_url = kwargs.get("project_id")
+        
+        try:
+            # Récupérer tous les projets où l'utilisateur est lié via UserProjects
+            project_users = UserProjects.objects.filter(project_id=project_id_url)
+            users = {}
+            for project_user in project_users:
+                user = Users.objects.get(id=project_user.user_id)
+                serializer = self.get_serializer(user)
+                users[user.id] = serializer.data
+                users[user.id]["role"] = project_user.user_role
+            
+            return Response(users, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

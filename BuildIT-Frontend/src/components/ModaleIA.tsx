@@ -40,10 +40,8 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
   const handleSendToBack = async () => {
     const showLoaderAndLoaded = (nextStep: number) => {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setStep(nextStep);
-      }, 1000);
+      setStep(nextStep);
+      setLoading(false);
     };
     try {
       setLoading(true);
@@ -136,7 +134,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
         if (process === true) { // Si le projet est créé
           setThreadId('');
           showLoaderAndLoaded(5);
-          setTimeout(() => {onClose(); window.location.reload();}, 2000);
+          setTimeout(() => {onClose(); window.location.reload();}, 500);
         } else { // Si le projet n'est pas créé
           console.error('Error creating project:', process);
         }
@@ -251,7 +249,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {frontendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${frontend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('frontend', stack)}
                   >
@@ -271,7 +269,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {backendStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${backend === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('backend', stack)}
                   >
@@ -291,7 +289,7 @@ const ModaleIA: React.FC<ModaleIAProps> = ({ onClose }) => {
                 {databaseStacks.map((stack) => (
                   <div
                     key={stack}
-                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
+                    className={`card-stack w-1/4 text-center bg-bgSecondary p-3 rounded-lg shadow-lg ml-3 text-wrap hover:bg-secondary hover:scale-105 transition-all cursor-pointer ${database === stack ? 'bg-secondary scale-105' : ''}`}
                     data-value={stack}
                     onClick={() => handleStackSelection('database', stack)}
                   >
