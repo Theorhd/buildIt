@@ -31,7 +31,7 @@ export default function Board() {
 
   // Charger les listes depuis le backend lorsque la board change
   useEffect(() => {
-    const mafonctiondesesmorts = async () => {
+    const loadBoard = async () => {
       try {
         const newBoard = await getBoard(board_id);
         setBoard(newBoard);
@@ -40,7 +40,7 @@ export default function Board() {
         console.error("Error fetching board:", error);
       }
     };
-    mafonctiondesesmorts();
+    loadBoard();
   }, [location.state]); // Déclencher à chaque changement d'URL ou de state
   // Ajouter une nouvelle liste
   const addNewList = async () => {
