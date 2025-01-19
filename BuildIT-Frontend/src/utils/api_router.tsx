@@ -404,7 +404,7 @@ export async function apiUpdateList(data: ListInterface) {
     */
     try {
         if (data.items !== null) delete data.items;
-        data = { ...data, list_id: data.id };
+        data = { ...data, id: data.id };
         const response = await api.put("/list/update", data);
         return response.data;
     } catch (error) {
@@ -417,7 +417,8 @@ export async function apiDeleteList(data: ListInterface) {
     Supprime la liste depuis son ID
   */
     try {
-        const response = await api.delete(`/list/delete/${id}`);
+        console.log(data);
+        const response = await api.delete(`/list/delete/${data.id}`);
         return response.data;
     } catch (error) {
         handleError(error);
