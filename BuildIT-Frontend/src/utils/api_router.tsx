@@ -43,7 +43,7 @@ export async function refresh() {
 }
 
 // Gestion des erreurs
-const handleError = async (error: any) => {
+async function handleError(error: any) {
     // Si l'erreur est une réponse de l'API
     if (error.response) {
         console.error("Erreur de réponse API:", error.response);
@@ -78,7 +78,7 @@ const handleError = async (error: any) => {
     }
 
     throw error; // Propage l'erreur après traitement
-};
+}
 
 // Fonctions pour les appels API
 

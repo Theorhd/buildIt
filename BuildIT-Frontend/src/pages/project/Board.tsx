@@ -118,7 +118,7 @@ export default function Board() {
     }
     return (
         <div className="relative h-full flex">
-            <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 px-4 pb-6 my-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
+            <ol className="absolute flex flex-row top-0 bottom-0 right-0 left-0 pt-16 px-4 pb-6 my-2 overflow-x-auto overflow-y-hidden select-none whitespace-nowrap">
                 {lists.map((list) => (
                     <List
                         key={list.id}
