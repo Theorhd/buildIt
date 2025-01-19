@@ -1,5 +1,3 @@
 export default function LogModale() {
-  return (
-    <div>LogModale</div>
-  )
+    return <div>LogModale</div>;
 }

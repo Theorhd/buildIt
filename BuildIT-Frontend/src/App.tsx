@@ -15,37 +15,37 @@ import Settings from "./pages/project/Settings";
 import Account from "./pages/Account";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
+    return (
+        <BrowserRouter>
+            <Routes>
+                {/* Route publique */}
+                <Route path="register" element={<Register />} />
+                <Route path="login" element={<Login />} />
 
-        {/* Route publique */}
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
+                {/* Route privée */}
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
 
+                    <Route path="/:project_tagname" element={<Project />}>
+                        <Route index element={<About />} />
+                        <Route path="features" element={<Features />} />
+                        <Route path="statistics" element={<Statistics />} />
+                        <Route path="diagrams" element={<Diagrams />} />
+                        <Route path="team" element={<Team />} />
+                        <Route path="settings" element={<Settings />} />
+                    </Route>
 
-        {/* Route privée */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+                    <Route
+                        path="/:project_tagname/:board_name"
+                        element={<Board />}
+                    />
+                    <Route path="/account/" element={<Account />} />
 
-          <Route path="/:project_tagname" element={<Project/>}>
-            <Route index element={<About />} />
-            <Route path="features" element={<Features />} />
-            <Route path="statistics" element={<Statistics />} />
-            <Route path="diagrams" element={<Diagrams />} />
-            <Route path="team" element={<Team />} />
-            <Route path="settings" element={<Settings />} />
-          </Route>
-
-          <Route path="/:project_tagname/:board_name" element={<Board />} />
-          <Route path="/account/" element={<Account />} />
-          
-          <Route path="*" element={<NotFound />} />
-        </Route>
-        
-      </Routes>
-    </BrowserRouter>
-  );
+                    <Route path="*" element={<NotFound />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
