@@ -157,7 +157,7 @@ export async function getUserFromID(id: number) {
 export async function updateUser(data) {
     /* */
     try {
-        const response = await api.post("/user/update", data);
+        const response = await api.put("/user/update", data);
       
         localStorage.setItem('access', response.data.tokens.access);
         localStorage.setItem('refresh', response.data.tokens.refresh);
