@@ -30,8 +30,6 @@ export default function List({
 }) {
     const [itemNameInput, setItemNameInput] = useState("");
 
-    const statusOptions = ["To Do", "In Progress", "Done"];
-
     // Ajouter un item
     const addItem = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

@@ -160,7 +160,8 @@ export async function getUserFromID(id: number) {
 export async function updateUser(data: UserInterface) {
     /* */
     try {
-        const response = await api.post("/user/update", data);
+        console.log(data);
+        const response = await api.put("/user/update", data);
 
         console.log("User updated successfully");
         return response.data;

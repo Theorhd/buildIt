@@ -110,6 +110,9 @@ class UserUpdateView(generics.UpdateAPIView):
         # Récupération de l'ID utilisateur depuis le corps de la requête
         user_id_from_body = request.data.get("id")
 
+        print(user_id_from_token)
+        print(user_id_from_body)
+
         # Vérification que l'id du body correspond au token
         if not user_id_from_body or str(user_id_from_body) != str(user_id_from_token):
             return Response({"error": "You can only update your own account."}, status=status.HTTP_403_FORBIDDEN)

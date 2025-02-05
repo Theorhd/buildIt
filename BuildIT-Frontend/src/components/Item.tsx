@@ -32,6 +32,8 @@ export default function Item({
         }
     };
 
+    const statusOptions = ["To Do", "In Progress", "Done"];
+
     return (
         <li
             className="bg-bgSecondary py-4 px-5 mb-2 rounded-md drop-shadow-lg relative cursor-pointer"
