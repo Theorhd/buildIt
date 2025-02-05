@@ -13,7 +13,6 @@
   ```
 - Puis créer la base de donnée :
   ```shell
-  cd ./BuildIT_Backend
   python manage.py makemigrations
   python manage.py migrate
   ```
@@ -40,7 +39,6 @@
   ```shell
   cd .\Backend\
   .\.venv\Scripts\activate
-  cd .\BuildIT_Backend\
   python manage.py runserver
   ```
 
